@@ -131,9 +131,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="config\constants.json" />
+    <None Include="config\score.json" />
     <None Include="config\settings.json" />
     <None Include="info\gameDoc\description.md" />
-    <None Include="info\gameDoc\tron.md" />
     <None Include="info\instrumentDoc\json.md" />
     <None Include="info\instrumentDoc\markDown.md" />
     <None Include="info\instrumentDoc\sfml.md" />

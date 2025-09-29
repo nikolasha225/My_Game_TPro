@@ -56,13 +56,13 @@
     <None Include="info\gameDoc\description.md">
       <Filter>Documentation\ForGame</Filter>
     </None>
-    <None Include="info\gameDoc\tron.md">
-      <Filter>Documentation\ForGame</Filter>
-    </None>
     <None Include="config\constants.json">
       <Filter>Configs</Filter>
     </None>
     <None Include="config\settings.json">
+      <Filter>Configs</Filter>
+    </None>
+    <None Include="config\score.json">
       <Filter>Configs</Filter>
     </None>
   </ItemGroup>
