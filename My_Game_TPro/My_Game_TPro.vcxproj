@@ -127,11 +127,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GameLogic.cpp" />
-    <ClCompile Include="GameVisual.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MainMenu.cpp" />
-    <ClCompile Include="Zastavki.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config\constants.json" />
+    <None Include="config\settings.json" />
+    <None Include="info\gameDoc\description.md" />
+    <None Include="info\gameDoc\tron.md" />
+    <None Include="info\instrumentDoc\json.md" />
+    <None Include="info\instrumentDoc\markDown.md" />
+    <None Include="info\instrumentDoc\sfml.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\gif\Art Camping GIF.gif" />
+    <Image Include="textures\gif\gif.gif" />
+    <Image Include="textures\gif\Glow Daft Punk GIF.gif" />
+    <Image Include="textures\gif\Loop Glow GIF by Psyklon.gif" />
+    <Image Include="textures\gif\Raining Neon Lights Tour GIF by vrammsthevale.gif" />
+    <Image Include="textures\gif\space driving GIF.gif" />
+    <Image Include="textures\gif\Tech Tron GIF by mag3.giphy.gif" />
+    <Image Include="textures\gif\Tron GIF.gif" />
+    <Image Include="textures\gif\Vintage Thomas GIF by Bleed Gfx.gif" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

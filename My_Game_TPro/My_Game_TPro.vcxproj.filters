@@ -1,34 +1,98 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Исходные файлы">
+    <Filter Include="Documentation">
+      <UniqueIdentifier>{587db0dd-56b0-4c3f-8ea2-4d19a65e1d6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Documentation\ForGame">
+      <UniqueIdentifier>{8178e77b-3a8e-49af-befc-4e955627d73e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Documentation\ForInstruments">
+      <UniqueIdentifier>{3d6967f9-0699-46e4-bd61-6423ad06b702}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SourseCode">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Файлы заголовков">
+    <Filter Include="Heder">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Файлы ресурсов">
+    <Filter Include="Libray">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Textures">
+      <UniqueIdentifier>{633e9042-98a0-4939-805b-8e611b8f6155}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Textures\img">
+      <UniqueIdentifier>{24c20259-6271-461f-ba90-cbd657c5ce1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Textures\gif">
+      <UniqueIdentifier>{76b09eb7-bb97-4d4d-82d2-da3e8a569035}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Textures\video">
+      <UniqueIdentifier>{6a59c622-71e4-4053-8282-3f16a713e941}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Configs">
+      <UniqueIdentifier>{2bd47455-becb-4100-9b94-24d877b48e67}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Zastavki.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="MainMenu.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="GameVisual.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="GameLogic.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>SourseCode</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="info\instrumentDoc\json.md">
+      <Filter>Documentation\ForInstruments</Filter>
+    </None>
+    <None Include="info\instrumentDoc\sfml.md">
+      <Filter>Documentation\ForInstruments</Filter>
+    </None>
+    <None Include="info\instrumentDoc\markDown.md">
+      <Filter>Documentation\ForInstruments</Filter>
+    </None>
+    <None Include="info\gameDoc\description.md">
+      <Filter>Documentation\ForGame</Filter>
+    </None>
+    <None Include="info\gameDoc\tron.md">
+      <Filter>Documentation\ForGame</Filter>
+    </None>
+    <None Include="config\constants.json">
+      <Filter>Configs</Filter>
+    </None>
+    <None Include="config\settings.json">
+      <Filter>Configs</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\gif\Art Camping GIF.gif">
+      <Filter>Textures\gif</Filter>
+    </Image>
+    <Image Include="textures\gif\gif.gif">
+      <Filter>Textures\gif</Filter>
+    </Image>
+    <Image Include="textures\gif\Glow Daft Punk GIF.gif">
+      <Filter>Textures\gif</Filter>
+    </Image>
+    <Image Include="textures\gif\Loop Glow GIF by Psyklon.gif">
+      <Filter>Textures\gif</Filter>
+    </Image>
+    <Image Include="textures\gif\Raining Neon Lights Tour GIF by vrammsthevale.gif">
+      <Filter>Textures\gif</Filter>
+    </Image>
+    <Image Include="textures\gif\space driving GIF.gif">
+      <Filter>Textures\gif</Filter>
+    </Image>
+    <Image Include="textures\gif\Tech Tron GIF by mag3.giphy.gif">
+      <Filter>Textures\gif</Filter>
+    </Image>
+    <Image Include="textures\gif\Tron GIF.gif">
+      <Filter>Textures\gif</Filter>
+    </Image>
+    <Image Include="textures\gif\Vintage Thomas GIF by Bleed Gfx.gif">
+      <Filter>Textures\gif</Filter>
+    </Image>
   </ItemGroup>
 </Project>
