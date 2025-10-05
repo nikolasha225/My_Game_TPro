@@ -127,3 +127,5 @@ private:
 sf::Vector2f getCoordinate(sf::Vector2f, sf::RenderWindow);//функция пересчёта координат из 1920x1080 в текущий дисплей(относительно центра экрана)
 bool game(sf::RenderWindow*);//основная функция игры
 bool pause(sf::RenderWindow*);//функция паузы
+
+sf::Vector2f wayToCoordinate(float pos, uint8_t level);//функция пути
