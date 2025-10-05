@@ -31,15 +31,30 @@
     <Filter Include="Textures\gif">
       <UniqueIdentifier>{76b09eb7-bb97-4d4d-82d2-da3e8a569035}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Textures\video">
-      <UniqueIdentifier>{6a59c622-71e4-4053-8282-3f16a713e941}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Configs">
       <UniqueIdentifier>{2bd47455-becb-4100-9b94-24d877b48e67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Textures\debug">
+      <UniqueIdentifier>{144defc4-db41-4a0a-8cad-7b7ed7d81911}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Textures\video">
+      <UniqueIdentifier>{6a59c622-71e4-4053-8282-3f16a713e941}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
+      <Filter>SourseCode</Filter>
+    </ClCompile>
+    <ClCompile Include="mainMenu.cpp">
+      <Filter>SourseCode</Filter>
+    </ClCompile>
+    <ClCompile Include="game.cpp">
+      <Filter>SourseCode</Filter>
+    </ClCompile>
+    <ClCompile Include="CONSTANTS.cpp">
+      <Filter>Libray</Filter>
+    </ClCompile>
+    <ClCompile Include="functions.cpp">
       <Filter>SourseCode</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,9 +71,6 @@
     <None Include="info\gameDoc\description.md">
       <Filter>Documentation\ForGame</Filter>
     </None>
-    <None Include="config\constants.json">
-      <Filter>Configs</Filter>
-    </None>
     <None Include="config\settings.json">
       <Filter>Configs</Filter>
     </None>
@@ -67,32 +79,22 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="textures\gif\Art Camping GIF.gif">
-      <Filter>Textures\gif</Filter>
+    <Image Include="textures\debug\test1.png">
+      <Filter>Textures\debug</Filter>
     </Image>
-    <Image Include="textures\gif\gif.gif">
-      <Filter>Textures\gif</Filter>
+    <Image Include="textures\debug\base.png">
+      <Filter>Textures\debug</Filter>
     </Image>
-    <Image Include="textures\gif\Glow Daft Punk GIF.gif">
-      <Filter>Textures\gif</Filter>
-    </Image>
-    <Image Include="textures\gif\Loop Glow GIF by Psyklon.gif">
-      <Filter>Textures\gif</Filter>
-    </Image>
-    <Image Include="textures\gif\Raining Neon Lights Tour GIF by vrammsthevale.gif">
-      <Filter>Textures\gif</Filter>
-    </Image>
-    <Image Include="textures\gif\space driving GIF.gif">
-      <Filter>Textures\gif</Filter>
-    </Image>
-    <Image Include="textures\gif\Tech Tron GIF by mag3.giphy.gif">
-      <Filter>Textures\gif</Filter>
-    </Image>
-    <Image Include="textures\gif\Tron GIF.gif">
-      <Filter>Textures\gif</Filter>
-    </Image>
-    <Image Include="textures\gif\Vintage Thomas GIF by Bleed Gfx.gif">
-      <Filter>Textures\gif</Filter>
-    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="game.h">
+      <Filter>Heder</Filter>
+    </ClInclude>
+    <ClInclude Include="mainMenu.h">
+      <Filter>Heder</Filter>
+    </ClInclude>
+    <ClInclude Include="functions.h">
+      <Filter>Heder</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

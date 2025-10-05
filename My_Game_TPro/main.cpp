@@ -1,40 +1,42 @@
-#include <SFML/Graphics.hpp>
-#include <nlohmann/json.hpp>
-#include <fstream>
-
-using json = nlohmann::json;
-
-using namespace sf;
+#include "functions.h"
 
 int main()
 {
-    json config;
-    config["window_width"] = 800;
-    config["window_height"] = 600;
-    config["game_title"] = "My Game";
+    // —оздаем окно
+    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
 
-    std::ofstream file("config.json");
-    file << config.dump(4); // красивый вывод с отступами
-    RenderWindow window(VideoMode(400, 400), L"Ќовый проект", Style::Default);
+    sf::RenderWindow window(
+        desktopMode,
+        (std::string)JSONSettings["GENERAL"]["title"],
+        sf::Style::Fullscreen //Titelbar/Default
+    );
 
-    window.setVerticalSyncEnabled(true);
-
-    CircleShape shape(100.f, 3);
-    shape.setPosition(100, 100);
-    shape.setFillColor(Color::Magenta);
-
+    //базовые определени€
+    bool pauseState = 0;
+    // √лавный цикл
     while (window.isOpen())
     {
-        Event event;
+        sf::Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == Event::Closed)
+            if (event.type == sf::Event::Closed)
                 window.close();
+            //другие событи€
+            //  пауза на esc
         }
-
-        window.clear(Color::Blue);
-        window.draw(shape);
+        //логика игры
+       /* while (pauseState) {
+            //чтото
+            pauseState = puase(window*);
+            window.clear(sf::Color::Black);
+            window.display();
+        }
+        if (game(window&)) {
+            //чтото
+        }*/
+        window.clear(sf::Color::Black);
         window.display();
     }
+
     return 0;
 }
