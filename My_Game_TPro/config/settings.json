@@ -1,5 +1,39 @@
 {
   "GENERAL": {
     "title": "Guards of ELBRUS"
+  },
+  "ENEMY": {
+    "velocityCoeficent": 0.01,
+    "layer": 20,
+    "basic": {
+      "hp": 100,
+      "velocity": 5,
+      "size": [ 50, 50 ],
+      "texture": "./textures/img/virus-d.png"
+    },
+    "fast": {
+      "hp": 50,
+      "velocity": 8,
+      "size": [ 35, 35 ],
+      "texture": "./textures/img/virus-d.png"
+    },
+    "tank": {
+      "hp": 1000,
+      "velocity": 2,
+      "size": [ 65, 65 ],
+      "texture": "./textures/img/virus-d.png"
+    },
+    "miniBoss": {
+      "hp": 3000,
+      "velocity": 4,
+      "size": [ 80, 80 ],
+      "texture": "./textures/img/virus-d.png"
+    },
+    "boss": {
+      "hp": 8000,
+      "velocity": 1,
+      "size": [ 100, 100 ],
+      "texture": "./textures/img/virus-d.png"
+    }
   }
 }

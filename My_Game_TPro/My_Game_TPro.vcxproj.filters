@@ -96,5 +96,11 @@
     <Image Include="textures\debug\test1.png">
       <Filter>Textures\debug</Filter>
     </Image>
+    <Image Include="textures\img\tower-d.png">
+      <Filter>Textures\img</Filter>
+    </Image>
+    <Image Include="textures\img\virus-d.png">
+      <Filter>Textures\img</Filter>
+    </Image>
   </ItemGroup>
 </Project>

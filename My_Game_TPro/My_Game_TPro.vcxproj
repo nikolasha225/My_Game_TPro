@@ -149,6 +149,8 @@
   <ItemGroup>
     <Image Include="textures\debug\base.png" />
     <Image Include="textures\debug\test1.png" />
+    <Image Include="textures\img\tower-d.png" />
+    <Image Include="textures\img\virus-d.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -8,11 +8,13 @@ int main()
     sf::RenderWindow window(
         desktopMode,
         (std::string)JSONSettings["GENERAL"]["title"],
-        sf::Style::Fullscreen //Titelbar/Default
+        sf::Style::Fullscreen //Fullscreen/Titlebar/Default
     );
 
     //базовые определения
     bool pauseState = 0;
+    Enemy enemy;
+
     // Главный цикл
     while (window.isOpen())
     {
@@ -34,7 +36,12 @@ int main()
         if (game(window&)) {
             //чтото
         }*/
+
         window.clear(sf::Color::Black);
+        //тут вся отрисовка
+        enemy.draw(&window);
+
+
         window.display();
     }
 
