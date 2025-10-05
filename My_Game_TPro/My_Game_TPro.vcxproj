@@ -142,13 +142,13 @@
     <None Include="info\instrumentDoc\sfml.md" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="textures\debug\base.png" />
-    <Image Include="textures\debug\test1.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="functions.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="mainMenu.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\debug\base.png" />
+    <Image Include="textures\debug\test1.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

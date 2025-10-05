@@ -79,14 +79,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="textures\debug\test1.png">
-      <Filter>Textures\debug</Filter>
-    </Image>
-    <Image Include="textures\debug\base.png">
-      <Filter>Textures\debug</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="game.h">
       <Filter>Heder</Filter>
     </ClInclude>
@@ -96,5 +88,13 @@
     <ClInclude Include="functions.h">
       <Filter>Heder</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\debug\base.png">
+      <Filter>Textures\debug</Filter>
+    </Image>
+    <Image Include="textures\debug\test1.png">
+      <Filter>Textures\debug</Filter>
+    </Image>
   </ItemGroup>
 </Project>
