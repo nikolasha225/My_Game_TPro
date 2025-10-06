@@ -4,7 +4,7 @@
 //=================================JSON=============================================
 json JSONSettings = json::parse(std::ifstream("./config/settings.json"));
 //json JSONScore = json::parse(std::ifstream("./config/score.json"));
-
+uint8_t LEVEL = 2;
 
 //==================================ENEMY==============================================
 Enemy::Enemy(EnumEnemyType type, float startPos, float hp, float velocity, std::string texture, sf::Vector2f textureScale)
@@ -104,6 +104,7 @@ sf::Vector2f Enemy::getSize()
 //-----------------------------------------------------
 sf::Vector2f Enemy::getPos()
 {
+	uint8_t LEVEL;
 	return sf::Vector2f();
 }
 

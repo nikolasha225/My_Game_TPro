@@ -11,7 +11,9 @@
 
 using json = nlohmann::json;
 extern json JSONSettings;
-extern json JSONScore;
+//extern json JSONScore;
+
+extern uint8_t LEVEL;
 
 enum EnumGameObjects
 {

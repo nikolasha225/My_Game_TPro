@@ -1,6 +1,6 @@
 #include "functions.h"
 
-int main()
+int main(bool volume = 1, uint8_t difficult = 2, unsigned id = 0)
 {
     // Создаем окно
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
@@ -13,9 +13,14 @@ int main()
 
     //базовые определения
     bool pauseState = 0;
+    //LEVEL;
+
+    //отладка
+
     Enemy enemy;
 
-    // Главный цикл
+
+    //===========================================
     while (window.isOpen())
     {
         sf::Event event;
@@ -39,6 +44,8 @@ int main()
 
         window.clear(sf::Color::Black);
         //тут вся отрисовка
+
+        //отладка
         enemy.draw(&window);
 
 
