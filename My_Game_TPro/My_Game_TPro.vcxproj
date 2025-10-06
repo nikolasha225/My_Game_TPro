@@ -131,7 +131,6 @@
     <ClCompile Include="functions.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="mainMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config\score.json" />
@@ -144,7 +143,6 @@
   <ItemGroup>
     <ClInclude Include="functions.h" />
     <ClInclude Include="game.h" />
-    <ClInclude Include="mainMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\debug\base.png" />

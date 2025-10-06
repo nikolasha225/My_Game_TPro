@@ -1,6 +1,8 @@
 {
   "GENERAL": {
-    "title": "Guards of ELBRUS"
+    "title": "Guards of ELBRUS",
+    "vsync": true,
+    "framerate": 10
   },
   "ENEMY": {
     "velocityCoeficent": 0.01,
