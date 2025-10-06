@@ -3,7 +3,7 @@
 
 //=================================JSON=============================================
 json JSONSettings = json::parse(std::ifstream("./config/settings.json"));
-json JSONScore = json::parse(std::ifstream("./config/score.json"));
+//json JSONScore = json::parse(std::ifstream("./config/score.json"));
 
 
 //==================================ENEMY==============================================
@@ -91,21 +91,14 @@ float Enemy::getPosPercent()
 	return POS;
 }
 
-//-----------------------------------------------------
-void Enemy::tick()
-{
-}
-
-//-----------------------------------------------------
 uint8_t Enemy::getLayer()
 {
-	return 0;
+	return LAYER;
 }
 
-//-----------------------------------------------------
 sf::Vector2f Enemy::getSize()
 {
-	return sf::Vector2f();
+	return SIZE;
 }
 
 //-----------------------------------------------------

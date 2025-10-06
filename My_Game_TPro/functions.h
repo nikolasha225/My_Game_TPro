@@ -83,7 +83,6 @@ public:
 	bool isDie();
 	EnumEnemyType getEnemyType();
 	float getPosPercent();
-	void tick();//тик игрового времени
 
 	//общие
 	uint8_t getLayer();//слой отрисовки
