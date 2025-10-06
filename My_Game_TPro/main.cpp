@@ -72,3 +72,18 @@ int main(bool volume = 1, uint8_t difficult = 2, unsigned id = 0)
 
     return 0;
 }
+
+/*
+getElapsedTime() - возвращает sf::Time прошедшее время
+
+sf::Time elapsed = timer.getElapsedTime();
+
+float seconds = timer.getElapsedTime().asSeconds();
+int milliseconds = timer.getElapsedTime().asMilliseconds();
+int microseconds = timer.getElapsedTime().asMicroseconds();
+
+
+restart() - перезапускает и возвращает прошедшее время
+
+sf::Time elapsed = timer.restart();
+*/
