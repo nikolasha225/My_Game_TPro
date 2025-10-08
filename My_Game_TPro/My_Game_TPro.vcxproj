@@ -127,7 +127,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CONSTANTS.cpp" />
     <ClCompile Include="functions.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />

@@ -15,6 +15,7 @@ extern json JSONSettings;
 //extern json JSONScore;
 
 extern uint8_t LEVEL;
+extern unsigned MONEY;
 
 //енам игроввых объектов
 enum EnumGameObjects
@@ -69,6 +70,7 @@ public:
 	virtual EnumGameObjects getTypeObjet() = 0;//возвращает тип объекта;
 	virtual IGameObject* getPtr() = 0;//ссылка на сам объект
 	virtual void tick() =0;
+	virtual sf::RectangleShape* getShape() = 0;
 private:
 	/*
 	В каждом дочернем должно быть (для игры, меню сам решай):
@@ -84,7 +86,7 @@ private:
 			перегруженный оператор bool operator<(const NameClass& other) const {слой} для функции std::sort(vectorObj.begin(), vectorObj.end());
 	*/
 };
-
+//======================================ENEMY======================================
 class Enemy :public IGameObject
 {
 public:
@@ -114,6 +116,7 @@ public:
 	EnumEnemyType getEnemyType();
 	float getPosPercent();
 	void tick();//игровой тик
+	bool checkBullet(Bullet& bullet);
 
 	//общие
 	void setPos(sf::Vector2f pos, bool toMiddle = 1);
@@ -127,11 +130,10 @@ public:
 	EnumGameObjects getTypeObjet();//возвращает тип объекта;
 	Enemy* getPtr();//ссылка на сам объект
 	bool getDrowStatus();
+	sf::RectangleShape* getShape();
 
 	bool operator<(const Enemy& other) const;
 	
-	void checkBullet(Bullet& bullet);
-
 private:
 	float POS;	//путь каждого врага делится на 100% и двигается враг в %
 	sf::RectangleShape OBJ;
@@ -146,10 +148,28 @@ private:
 
 };
 
+//======================================TOWER======================================
+
+class Tower : public IGameObject {
+public:
+	enum EnumTowerType {
+		tower1,
+		tower2,
+		tower3,
+		tower4
+	};
+
+private:
+
+};
+
+//======================================BULLET======================================
+
 class Bullet : public IGameObject
 {
 public:
-	Bullet();
+
+	Bullet(Tower::EnumTowerType type = Tower::tower1, Enemy* target = nullptr, sf::Vector2f startPos = sf::Vector2f(100, 100));
 	~Bullet() {};
 
 	//baza
@@ -165,15 +185,16 @@ public:
 	EnumGameObjects getTypeObjet();//возвращает тип объекта;
 	IGameObject* getPtr();//ссылка на сам объект
 	void tick();
+	sf::RectangleShape* getShape();
 
 	//свои
-	sf::Vector2f getVectorToTarget();
+	sf::Vector2f getVectorToTarget(bool isNormalise = 1);
 	bool operator<(const Bullet& other) const;
 	void move();//через вектор до цели домноженный на скорость двигается сетмувом
-
+	void complete();//попадание зафиксировано
+	bool isCompleted(); //возвращает статус
 
 private:
-	bool FLY;
 	sf::Vector2f POS;
 	Enemy* TARGET;
 	float DAMAGE;
@@ -183,7 +204,8 @@ private:
 	EnumGameObjects TYPE;
 	float VELOCITY;
 	uint8_t LAYER;
-	bool STATE;
+	bool IS_FLY;
+	bool DRAW_STATUS;
 };
 class OBJStack
 {
@@ -201,8 +223,15 @@ private:
 	std::map<EnumGameObjects, std::vector<IGameObject*>> stack;
 };
 
+
 sf::Vector2f getCoordinate(sf::Vector2f, sf::RenderWindow);//функция пересчёта координат из 1920x1080 в текущий дисплей(относительно центра экрана)
 
 sf::Vector2f wayToCoordinate(float pos, uint8_t level = LEVEL);//функция пути
 
 sf::Vector2f normalize(sf::Vector2f vector);//возвращает единичный вектор
+
+float getDistance(sf::Vector2f vector1, sf::Vector2f vector2);
+
+bool isIntersected(sf::RectangleShape obj1, sf::RectangleShape obj2);
+
+bool isPointIntoShape(sf::Vector2f point, sf::RectangleShape obj);

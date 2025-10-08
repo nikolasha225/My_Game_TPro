@@ -8,6 +8,7 @@ json JSONSettings = json::parse(std::ifstream("./config/settings.json"));
 //=================================ÏÅÐÅÌÅÍÍÛÅ=======================================
 //îïðåäåëÿåì extern ïåðåìåííóþ level
 uint8_t LEVEL = 1;
+unsigned MONEY = 0;
 
 //==================================ENEMY==============================================
 Enemy::Enemy(EnumEnemyType type, float startPos, float hp, float velocity, std::string texture, sf::Vector2f textureScale)
@@ -108,12 +109,14 @@ void Enemy::setPos(sf::Vector2f pos, bool toMiddle)
 void Enemy::tick()
 {
 	POS += VELOCITY;
+	this->setPos(wayToCoordinate(POS));
 }
 
 void Enemy::setLayer(uint8_t newLayer)
 {
 	LAYER = newLayer;
 }
+
 
 uint8_t Enemy::getLayer()
 {
@@ -148,7 +151,6 @@ void Enemy::setDrowStatus(bool status)
 
 void Enemy::draw(sf::RenderWindow* window)
 {
-	this->setPos(wayToCoordinate(POS));
 	window->draw(OBJ);
 
 }
@@ -168,9 +170,157 @@ bool Enemy::getDrowStatus()
 	return DRAW_STATUS;
 }
 
+sf::RectangleShape* Enemy::getShape()
+{
+	return &OBJ;
+}
+
 bool Enemy::operator<(const Enemy& other) const
 {
 	return this->LAYER<other.LAYER;
+}
+
+bool Enemy::checkBullet(Bullet& bullet)
+{
+	bool result = 0;
+	if (isIntersected((*bullet.getShape()), OBJ)) {
+		result = 1;
+		bullet.complete();
+	}
+	return result;
+}
+
+
+//============================BULLET====================================
+
+Bullet::Bullet(Tower::EnumTowerType type, Enemy* target, sf::Vector2f startPos)
+{
+	if (!target)
+		throw "no_target";
+	std::string bulletType = "";
+	switch (type)
+	{
+	case Tower::tower1:
+		bulletType = "tower1";
+		break;
+	case Tower::tower2:
+		bulletType = "tower2";
+		break;
+	case Tower::tower3:
+		bulletType = "tower3";
+		break;
+	case Tower::tower4:
+		bulletType = "tower4";
+		break;
+	default:
+		bulletType = "tower1";
+		break;
+	}
+	POS = startPos;
+	DAMAGE = (float)JSONSettings["BULLET"][bulletType]["damage"] 
+		* (float)JSONSettings["BULLET"]["damageCoeficent"];
+	LAYER = JSONSettings["BULLET"]["layer"];
+	TARGET = target;
+	SIZE = sf::Vector2f(
+		(float)JSONSettings["BULLET"][bulletType]["size"][0],
+		(float)JSONSettings["BULLET"][bulletType]["size"][1]
+	);
+	OBJ = sf::RectangleShape(SIZE);
+	OBJ.setPosition(startPos);
+	TEXTURE.loadFromFile(JSONSettings["BULLET"][bulletType]["texture"]);
+	OBJ.setTexture(&TEXTURE);
+	TYPE = bullet;
+	IS_FLY = 1;
+	VELOCITY = (float)JSONSettings["BULLET"][bulletType]["velocity"]
+		* JSONSettings["BULLET"]["velocityCoeficent"];
+	DRAW_STATUS = 1;
+}
+
+uint8_t Bullet::getLayer()
+{
+	return LAYER;
+}
+
+void Bullet::setLayer(uint8_t layer){
+	LAYER = layer;
+}
+
+sf::Vector2f Bullet::getSize(){
+	return SIZE;
+}
+
+sf::Vector2f Bullet::getPos(bool isMiddle){
+	sf::Vector2f pos = POS;
+	if (isMiddle)
+	{
+		pos.x += SIZE.x / 2;
+		pos.y += SIZE.y / 2;
+	}
+	return pos;
+}
+
+void Bullet::setMove(sf::Vector2f vector){
+	OBJ.move(vector);
+}
+
+void Bullet::setPos(sf::Vector2f pos, bool toMiddle){
+	if (toMiddle)
+	{
+		pos.x -= SIZE.x / 2;
+		pos.y -= SIZE.y / 2;
+	}
+	OBJ.setPosition(pos);
+}
+
+void Bullet::setDrowStatus(bool status){
+	DRAW_STATUS = status;
+}
+
+bool Bullet::getDrowStatus(){
+	return DRAW_STATUS;
+}
+
+void Bullet::draw(sf::RenderWindow* window){
+	window->draw(OBJ);
+}
+
+EnumGameObjects Bullet::getTypeObjet(){
+	return TYPE;
+}
+
+IGameObject* Bullet::getPtr(){
+	return this;
+}
+
+void Bullet::tick(){
+	move();
+}
+
+sf::RectangleShape* Bullet::getShape(){
+	return &OBJ;
+}
+
+sf::Vector2f Bullet::getVectorToTarget(bool isNormalise){
+	if (isNormalise)
+		return normalize(TARGET->getPos() - POS);
+	return TARGET->getPos() - POS;
+}
+
+bool Bullet::operator<(const Bullet& other) const{
+	return LAYER < other.LAYER;
+}
+
+void Bullet::move(){
+	setPos(POS + getVectorToTarget() * VELOCITY);
+}
+
+void Bullet::complete(){
+	IS_FLY = 0;
+	//DRAW_STATUS = 0;
+}
+
+bool Bullet::isCompleted(){
+	return !IS_FLY;
 }
 
 
@@ -249,4 +399,31 @@ sf::Vector2f wayToCoordinate(float pos, uint8_t level)
 sf::Vector2f normalize(sf::Vector2f vec) {
 	float length = std::sqrt(vec.x * vec.x + vec.y * vec.y);
 	return (length > 0) ? vec / length : sf::Vector2f(0, 0);
+}
+
+float getDistance(sf::Vector2f vector1, sf::Vector2f vector2)
+{
+	return sqrt((vector1.x - vector2.x) * (vector1.x - vector2.x) + (vector1.y - vector2.y) * (vector1.y - vector2.y));
+}
+
+bool isIntersected(sf::RectangleShape obj1, sf::RectangleShape obj2)
+{
+	bool result = 0;
+	sf::Vector2f size = obj1.getSize();
+	sf::Vector2f point[4];
+	for (uint8_t i = 0; i < 4; i++) {
+		point[i] = obj1.getPosition();
+		point[i].x += size.x * (i % 3 != 0);
+		point[i].y += size.y * (i > 1);
+		result |= isPointIntoShape(point[i], obj2);
+	}
+	return result;
+}
+
+bool isPointIntoShape(sf::Vector2f point, sf::RectangleShape obj)
+{
+	sf::Vector2f pos = obj.getPosition();
+	sf::Vector2f size = obj.getSize();
+	return ((point.x > pos.x && point.x < pos.x + size.x)
+		&& (point.y > pos.y && point.y < pos.y + size.y));
 }

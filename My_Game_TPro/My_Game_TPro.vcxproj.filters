@@ -48,9 +48,6 @@
     <ClCompile Include="game.cpp">
       <Filter>SourseCode</Filter>
     </ClCompile>
-    <ClCompile Include="CONSTANTS.cpp">
-      <Filter>Libray</Filter>
-    </ClCompile>
     <ClCompile Include="functions.cpp">
       <Filter>SourseCode</Filter>
     </ClCompile>

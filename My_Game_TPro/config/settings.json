@@ -37,5 +37,34 @@
       "size": [ 100, 100 ],
       "texture": "./textures/img/virus-d.png"
     }
+  },
+  "BULLET": {
+    "damageCoeficent": 100,
+    "velocityCoeficent": 100,
+    "layer":  30,
+    "tower1": {
+      "damage": 1,
+      "velocity": 3,
+      "texture": "./textures/debug/base.png",
+      "size": [10,10]
+    },
+    "tower2": {
+      "damage": 3,
+      "velocity": 3,
+      "texture": "./textures/debug/base.png",
+      "size": [ 12, 12 ]
+    },
+    "tower3": {
+      "damage": 5,
+      "velocity": 2,
+      "texture": "./textures/debug/base.png",
+      "size": [ 20, 20 ]
+    },
+    "tower4": {
+      "damage": 10,
+      "velocity": 1,
+      "texture": "./textures/debug/base.png",
+      "size": [ 25, 25 ]
+    }
   }
 }
