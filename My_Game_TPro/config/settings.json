@@ -40,7 +40,7 @@
   },
   "BULLET": {
     "damageCoeficent": 100,
-    "velocityCoeficent": 100,
+    "velocityCoeficent": 3,
     "layer":  30,
     "tower1": {
       "damage": 1,

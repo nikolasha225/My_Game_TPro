@@ -261,6 +261,7 @@ sf::Vector2f Bullet::getPos(bool isMiddle){
 
 void Bullet::setMove(sf::Vector2f vector){
 	OBJ.move(vector);
+	POS = OBJ.getPosition();
 }
 
 void Bullet::setPos(sf::Vector2f pos, bool toMiddle){
@@ -270,6 +271,7 @@ void Bullet::setPos(sf::Vector2f pos, bool toMiddle){
 		pos.y -= SIZE.y / 2;
 	}
 	OBJ.setPosition(pos);
+	POS = OBJ.getPosition();
 }
 
 void Bullet::setDrowStatus(bool status){
@@ -311,7 +313,7 @@ bool Bullet::operator<(const Bullet& other) const{
 }
 
 void Bullet::move(){
-	setPos(POS + getVectorToTarget() * VELOCITY);
+	setMove(getVectorToTarget() * VELOCITY);
 }
 
 void Bullet::complete(){
