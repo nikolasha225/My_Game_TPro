@@ -230,12 +230,6 @@ sf::Vector2f wayToCoordinate(float pos, uint8_t level = LEVEL);//функция пути
 
 sf::Vector2f normalize(sf::Vector2f vector);//возвращает единичный вектор
 
-sf::Vector2f getPositionOnPathByDistance(float pos, const std::vector<sf::Vector2f>& pathPoints);//по значению pos и вектору точек находит точку на многоугольнике
-
-sf::Vector2f get1stPath(float pos);//набор точек в виде спирали и вызов getPositionOnPathByDistance
-sf::Vector2f get2ndPath(float pos);//набор точек в виде зигзага (М) и вызов getPositionOnPathByDistance
-sf::Vector2f get3rdPath(float pos);//набор точек в виде арки (П) и вызов getPositionOnPathByDistance
-
 float getDistance(sf::Vector2f vector1, sf::Vector2f vector2);
 
 bool isIntersected(sf::RectangleShape obj1, sf::RectangleShape obj2);
