@@ -64,8 +64,8 @@ public:
 	virtual sf::Vector2f getPos(bool isMiddle = 1) = 0;//положение на экране
 	virtual void setMove(sf::Vector2f vector) = 0;//вектор перемещения
 	virtual void setPos(sf::Vector2f vector, bool toMiddle = 1) = 0;//вектор перемещения
-	virtual void setDrowStatus(bool status) = 0;//задаёт статус отрисовки (если надо сделать невидимым)
-	virtual bool getDrowStatus() = 0;//задаёт статус отрисовки (если надо сделать невидимым)
+	virtual void setDrawStatus(bool status) = 0;//задаёт статус отрисовки (если надо сделать невидимым)
+	virtual bool getDrawStatus() = 0;//задаёт статус отрисовки (если надо сделать невидимым)
 	virtual void draw(sf::RenderWindow*) = 0;//функция отрисовки
 	virtual EnumGameObjects getTypeObjet() = 0;//возвращает тип объекта;
 	virtual IGameObject* getPtr() = 0;//ссылка на сам объект
@@ -125,11 +125,11 @@ public:
 	sf::Vector2f getSize();//размеры x y
 	sf::Vector2f getPos(bool isMiddle = 1);//положение на экране
 	void setMove(sf::Vector2f vector);//вектор перемещения
-	void setDrowStatus(bool status);//задаёт статус отрисовки (если надо сделать невидимым)
+	void setDrawStatus(bool status);//задаёт статус отрисовки (если надо сделать невидимым)
 	void draw(sf::RenderWindow* window);//функция отрисовки
 	EnumGameObjects getTypeObjet();//возвращает тип объекта;
 	Enemy* getPtr();//ссылка на сам объект
-	bool getDrowStatus();
+	bool getDrawStatus();
 	sf::RectangleShape* getShape();
 
 	bool operator<(const Enemy& other) const;
@@ -179,8 +179,8 @@ public:
 	sf::Vector2f getPos(bool isMiddle = 1);//положение на экране
 	void setMove(sf::Vector2f vector);//вектор перемещения
 	void setPos(sf::Vector2f vector, bool toMiddle = 1);//вектор перемещения
-	void setDrowStatus(bool status);//задаёт статус отрисовки (если надо сделать невидимым)
-	bool getDrowStatus();//задаёт статус отрисовки (если надо сделать невидимым)
+	void setDrawStatus(bool status);//задаёт статус отрисовки (если надо сделать невидимым)
+	bool getDrawStatus();//задаёт статус отрисовки (если надо сделать невидимым)
 	void draw(sf::RenderWindow*);//функция отрисовки
 	EnumGameObjects getTypeObjet();//возвращает тип объекта;
 	IGameObject* getPtr();//ссылка на сам объект

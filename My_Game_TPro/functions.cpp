@@ -144,7 +144,7 @@ void Enemy::setMove(sf::Vector2f vector)
 	OBJ.move(vector);
 }
 
-void Enemy::setDrowStatus(bool status)
+void Enemy::setDrawStatus(bool status)
 {
 	DRAW_STATUS = status;
 }
@@ -165,7 +165,7 @@ Enemy* Enemy::getPtr()
 	return this;
 }
 
-bool Enemy::getDrowStatus()
+bool Enemy::getDrawStatus()
 {
 	return DRAW_STATUS;
 }
@@ -274,11 +274,11 @@ void Bullet::setPos(sf::Vector2f pos, bool toMiddle){
 	POS = OBJ.getPosition();
 }
 
-void Bullet::setDrowStatus(bool status){
+void Bullet::setDrawStatus(bool status){
 	DRAW_STATUS = status;
 }
 
-bool Bullet::getDrowStatus(){
+bool Bullet::getDrawStatus(){
 	return DRAW_STATUS;
 }
 
