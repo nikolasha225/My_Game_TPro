@@ -389,97 +389,13 @@ void OBJStack::tick()
 
 //============================ќ“ƒ≈Ћ№Ќџ≈ ‘”Ќ ÷»»==========================
 
-sf::Vector2f getPositionOnPathByDistance(float pos, const std::vector<sf::Vector2f>& pathPoints)
-{
-
-	float totalLength = 0.0f;	        // обща€ длина пути
-	std::vector<float> segmentLengths;  // длины сегментов
-
-	for (size_t i = 0; i < pathPoints.size() - 1; ++i) {
-		float segmentLength = getDistance(pathPoints[i], pathPoints[i + 1]);
-		segmentLengths.push_back(segmentLength);
-		totalLength += segmentLength;
-	}
-
-	// целевое рассто€ние, которое должен пройти враг
-	float targetDistance = (pos / 100.0f) * totalLength;
-
-	// проходим по сегментам, пока не найдем нужный
-	float accumulatedDistance = 0.0f;
-	for (size_t i = 0; i < pathPoints.size() - 1; ++i) {
-		float segmentLength = segmentLengths[i];
-
-		if (targetDistance <= accumulatedDistance + segmentLength) {
-			float t = (targetDistance - accumulatedDistance) / segmentLength;
-			return sf::Vector2f(pathPoints[i].x + t * (pathPoints[i + 1].x - pathPoints[i].x), pathPoints[i].y + t * (pathPoints[i + 1].y - pathPoints[i].y));
-		}
-		accumulatedDistance += segmentLength;
-	}
-
-	// ≈сли дошли до конца, возвращаем последнюю точку
-	return pathPoints.back();
-}
-
-sf::Vector2f get1stPath(float pos)
-{
-	std::vector<sf::Vector2f> pathPoints = {
-		sf::Vector2f(200, 980),   // start
-		sf::Vector2f(200, 300),   // point1
-		sf::Vector2f(1720, 300),  // point2  
-		sf::Vector2f(1720, 780),  // point3
-		sf::Vector2f(400, 780),   // point4
-		sf::Vector2f(400, 500),   // point5
-		sf::Vector2f(1520, 500),  // point6
-		sf::Vector2f(1520, 600)   // end
-	};
-
-	return getPositionOnPathByDistance(pos, pathPoints);
-}
-
-sf::Vector2f get2ndPath(float pos)
-{
-	std::vector<sf::Vector2f> pathPoints = {
-		sf::Vector2f(200, 980),   // start
-		sf::Vector2f(580, 300),   // point1
-		sf::Vector2f(960, 980),   // point2  
-		sf::Vector2f(1340, 300),  // point3
-		sf::Vector2f(1720, 980)   // end
-	};
-
-	return getPositionOnPathByDistance(pos, pathPoints);
-}
-
-sf::Vector2f get3rdPath(float pos)
-{
-	std::vector<sf::Vector2f> pathPoints = {
-		sf::Vector2f(200, 980),   // start
-		sf::Vector2f(200, 300),   // point1
-		sf::Vector2f(1720, 300),  // point2
-		sf::Vector2f(1720, 600)   // end
-	};
-
-	return getPositionOnPathByDistance(pos, pathPoints);
-}
-
+//-----------------------------------------------------------------------
 sf::Vector2f wayToCoordinate(float pos, uint8_t level)
 {
-	if (pos < 0.0f) {
-		return sf::Vector2f(0, 0);
-	}
-	else if (pos > 100.0f) {
-		return sf::Vector2f(1920, 1080);
-	}
+	//в значении по умолчанию extern пременна€ левел, так что передавать функции можно только пос, остальное сама подсосЄт из экстернов
 
-	switch (level) {
-	case 1:
-		return get1stPath(pos);
-	case 2:
-		return get2ndPath(pos);
-	case 3:
-		return get3rdPath(pos);
-	default:
-		return sf::Vector2f(0, 0);
-	}
+	//тут временна€ заглушка чтобы всЄ компилировалось
+	return sf::Vector2f(100 + 10*pos, 500);
 }
 
 sf::Vector2f normalize(sf::Vector2f vec) {
