@@ -60,9 +60,9 @@ public:
 	virtual uint8_t getLayer() = 0;//слой отрисовки
 	virtual void setLayer(uint8_t layer) = 0;//слой отрисовки
 	virtual sf::Vector2f getSize() = 0;//размеры x y
-	virtual sf::Vector2f getPos() = 0;//положение на экране
+	virtual sf::Vector2f getPos(bool isMiddle = 1) = 0;//положение на экране
 	virtual void setMove(sf::Vector2f vector) = 0;//вектор перемещения
-	virtual void setPos(sf::Vector2f vector) = 0;//вектор перемещения
+	virtual void setPos(sf::Vector2f vector, bool toMiddle = 1) = 0;//вектор перемещения
 	virtual void setDrowStatus(bool status) = 0;//задаёт статус отрисовки (если надо сделать невидимым)
 	virtual bool getDrowStatus() = 0;//задаёт статус отрисовки (если надо сделать невидимым)
 	virtual void draw(sf::RenderWindow*) = 0;//функция отрисовки
@@ -113,14 +113,14 @@ public:
 	bool isDie();
 	EnumEnemyType getEnemyType();
 	float getPosPercent();
-	void setPos(sf::Vector2f pos);
 	void tick();//игровой тик
 
 	//общие
+	void setPos(sf::Vector2f pos, bool toMiddle = 1);
 	void setLayer(uint8_t newLayer);
 	uint8_t getLayer();//слой отрисовки
 	sf::Vector2f getSize();//размеры x y
-	sf::Vector2f getPos();//положение на экране
+	sf::Vector2f getPos(bool isMiddle = 1);//положение на экране
 	void setMove(sf::Vector2f vector);//вектор перемещения
 	void setDrowStatus(bool status);//задаёт статус отрисовки (если надо сделать невидимым)
 	void draw(sf::RenderWindow* window);//функция отрисовки
@@ -156,9 +156,9 @@ public:
 	uint8_t getLayer();//слой отрисовки
 	void setLayer(uint8_t layer);//слой отрисовки
 	sf::Vector2f getSize();//размеры x y
-	sf::Vector2f getPos();//положение на экране
+	sf::Vector2f getPos(bool isMiddle = 1);//положение на экране
 	void setMove(sf::Vector2f vector);//вектор перемещения
-	void setPos(sf::Vector2f vector);//вектор перемещения
+	void setPos(sf::Vector2f vector, bool toMiddle = 1);//вектор перемещения
 	void setDrowStatus(bool status);//задаёт статус отрисовки (если надо сделать невидимым)
 	bool getDrowStatus();//задаёт статус отрисовки (если надо сделать невидимым)
 	void draw(sf::RenderWindow*);//функция отрисовки

@@ -20,20 +20,20 @@ int main(bool volume = 1, uint8_t difficult = 2, unsigned id = 0)
     //отладка
     OBJStack drawStack;
 
-    Enemy enemy1;
+    Enemy enemy1(Enemy::miniBossVirus);
+    Enemy enemy4;
     Enemy enemy2(Enemy::fastVirus);
-    Enemy enemy3;
+    Enemy enemy3(Enemy::tankVirus);
 
-    enemy2.multVelocity(2);
-    enemy3.multVelocity(5);
-    enemy1.multVelocity(1);
 
     enemy1.setLayer(3);
     enemy2.setLayer(2);
     enemy3.setLayer(1);
+    enemy4.setLayer(4);
 
     drawStack.add(&enemy1);
     drawStack.add(&enemy2);
+    drawStack.add(&enemy4);
     drawStack.add(&enemy3);
     //===========================================
     while (window.isOpen())
@@ -59,6 +59,7 @@ int main(bool volume = 1, uint8_t difficult = 2, unsigned id = 0)
         enemy1.tick();
         enemy2.tick();
         enemy3.tick();
+        enemy4.tick();
 
         window.clear(sf::Color::Black);
         //тут вся отрисовка

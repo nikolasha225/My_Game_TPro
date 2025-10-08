@@ -94,8 +94,13 @@ float Enemy::getPosPercent()
 	return POS;
 }
 
-void Enemy::setPos(sf::Vector2f pos)
+void Enemy::setPos(sf::Vector2f pos, bool toMiddle)
 {
+	if (toMiddle)
+	{
+		pos.x -= SIZE.x/2;
+		pos.y -= SIZE.y/2;
+	}
 	OBJ.setPosition(pos);
 }
 
@@ -120,9 +125,15 @@ sf::Vector2f Enemy::getSize()
 	return SIZE;
 }
 
-sf::Vector2f Enemy::getPos()
+sf::Vector2f Enemy::getPos(bool isMiddle)
 {
-	return wayToCoordinate(POS, LEVEL);
+	sf::Vector2f POS_MIDDLE = wayToCoordinate(POS, LEVEL);
+	if (isMiddle)
+	{
+		POS_MIDDLE.x += SIZE.x / 2;
+		POS_MIDDLE.y += SIZE.y / 2;
+	}
+	return POS_MIDDLE;
 }
 
 void Enemy::setMove(sf::Vector2f vector)
