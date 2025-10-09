@@ -212,8 +212,9 @@ public:
 	sf::RectangleShape* getShape();
 
 	//свои
-	Bullet* shoot(Enemy* target);
+	Bullet* shoot(Enemy* target, unsigned msTime); //timer.getElapsedTime().asSeconds();
 	Enemy* getTarget(std::vector<Enemy*> vector);
+	void upgrade(uint8_t level = 1);
 
 
 private:
