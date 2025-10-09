@@ -14,6 +14,8 @@ int main(bool volume = 1, uint8_t difficult = 2, unsigned id = 0)
 
     static sf::Clock timer;
 
+    LEVEL = 3;
+
     //базовые определения
     bool pauseState = 0;
 
@@ -31,7 +33,7 @@ int main(bool volume = 1, uint8_t difficult = 2, unsigned id = 0)
     enemy3.setLayer(1);
     enemy4.setLayer(4);
 
-    enemy2.multVelocity(7);
+    enemy2.multVelocity(4);
 
     Bullet bullet(Tower::tower1, &enemy2, sf::Vector2f(1000,1000));
 
@@ -39,6 +41,7 @@ int main(bool volume = 1, uint8_t difficult = 2, unsigned id = 0)
     drawStack.add(&enemy2);
     drawStack.add(&enemy4);
     drawStack.add(&enemy3);
+    drawStack.add(&bullet);
     //===========================================
     while (window.isOpen())
     {
@@ -60,11 +63,7 @@ int main(bool volume = 1, uint8_t difficult = 2, unsigned id = 0)
         if (game(window&)) {
             //чтото
         }*/
-        enemy1.tick();
-        enemy2.tick();
-        enemy3.tick();
-        enemy4.tick();
-        bullet.tick();
+        drawStack.tick();
 
 
 
@@ -73,7 +72,6 @@ int main(bool volume = 1, uint8_t difficult = 2, unsigned id = 0)
 
         //отладка
         drawStack.draw(&window);
-        bullet.draw(&window);
 
         window.display();
     }

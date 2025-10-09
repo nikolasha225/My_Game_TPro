@@ -366,6 +366,7 @@ void OBJStack::remove(IGameObject* obj)
 		stack[obj->getTypeObjet()].erase(it);
 	}
 }
+
 void OBJStack::draw(sf::RenderWindow* window)
 {
 	this->sortByLayer();
@@ -380,6 +381,7 @@ void OBJStack::sortByLayer()
 		std::sort(stack[i].begin(), stack[i].end());
 	
 }
+
 void OBJStack::tick()
 {
 	for (auto i : renderLineReverce)

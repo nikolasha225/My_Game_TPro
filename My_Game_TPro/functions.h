@@ -159,7 +159,37 @@ public:
 		tower4
 	};
 
+	Tower();
+	~Tower() {};
+	uint8_t getLayer();//слой отрисовки
+	void setLayer(uint8_t layer);//слой отрисовки
+	sf::Vector2f getSize();//размеры x y
+	sf::Vector2f getPos(bool isMiddle = 1);//положение на экране
+	void setMove(sf::Vector2f vector);//вектор перемещения
+	void setPos(sf::Vector2f vector, bool toMiddle = 1);//вектор перемещения
+	void setDrawStatus(bool status);//задаёт статус отрисовки (если надо сделать невидимым)
+	bool getDrawStatus();//задаёт статус отрисовки (если надо сделать невидимым)
+	void draw(sf::RenderWindow* window);//функция отрисовки
+	EnumGameObjects getTypeObjet();//возвращает тип объекта;
+	IGameObject* getPtr();//ссылка на сам объект
+	void tick();
+	sf::RectangleShape* getShape();
+
+	//свои
+	Bullet* shoot(Enemy* target);
+	Enemy* getTarget(std::vector<Enemy*> vector);
+
+
 private:
+	sf::Vector2f POS;
+	sf::RectangleShape OBJ;
+	sf::Texture TEXTURE;
+	sf::Vector2f SIZE;
+	EnumGameObjects TYPE;
+	uint8_t TOWER_LEVEL;
+
+	uint8_t LAYER;
+	bool DRAW_STATUS;
 
 };
 
@@ -207,6 +237,7 @@ private:
 	bool IS_FLY;
 	bool DRAW_STATUS;
 };
+
 class OBJStack
 {
 public:

@@ -41,12 +41,12 @@
   "BULLET": {
     "damageCoeficent": 100,
     "velocityCoeficent": 3,
-    "layer":  30,
+    "layer": 30,
     "tower1": {
       "damage": 1,
       "velocity": 3,
       "texture": "./textures/debug/base.png",
-      "size": [10,10]
+      "size": [ 10, 10 ]
     },
     "tower2": {
       "damage": 3,
@@ -65,6 +65,30 @@
       "velocity": 1,
       "texture": "./textures/debug/base.png",
       "size": [ 25, 25 ]
+    }
+  },
+  "TOWER": {
+    "timePerShotCoeficent": 1,
+    "layer": 23,
+    "tower1": {
+      "timePerShot": 0.5,
+      "texture": "./textures/img/tower-d.png",
+      "size": [ 100, 200 ]
+    },
+    "tower2": {
+      "timePerShot": 0.5,
+      "texture": "./textures/img/tower-d.png",
+      "size": [ 100, 200 ]
+    },
+    "tower3": {
+      "timePerShot": 0.5,
+      "texture": "./textures/img/tower-d.png",
+      "size": [ 100, 200 ]
+    },
+    "tower4": {
+      "timePerShot": 0.5,
+      "texture": "./textures/img/tower-d.png",
+      "size": [ 100, 200 ]
     }
   }
 }
