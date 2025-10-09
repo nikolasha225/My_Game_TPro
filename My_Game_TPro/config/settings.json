@@ -91,5 +91,15 @@
       "texture": "./textures/img/tower-d.png",
       "size": [ 100, 200 ]
     }
+  },
+  "GUI": {
+    "money": {
+      "position": [ 0, 0 ],
+      "size": [ 100, 100 ]
+    },
+    "health": {
+      "position": [ 0, 0 ],
+      "size": [ 100, 100 ]
+    }
   }
 }
