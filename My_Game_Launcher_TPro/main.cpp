@@ -59,12 +59,16 @@ int main() {
     // === Функции пунктов меню ===
     auto startGame = []() { std::cout << "Запуск игры!\n"; };
     auto openSettings = []() { std::cout << "Открытие настроек...\n"; };
+    auto records = []() { std::cout << "Открытие настроек...\n"; };
+    auto owners = []() { std::cout << "Открытие настроек...\n"; };
     auto exitGame = [&window]() { std::cout << "Выход из игры\n"; window.close(); };
 
     std::vector<MenuItem> menu = {
         MenuItem(L"Старт", font, 36, { 100.f, 200.f }, startGame),
         MenuItem(L"Настройки", font, 36, { 100.f, 270.f }, openSettings),
-        MenuItem(L"Выход", font, 36, { 100.f, 340.f }, exitGame)
+        MenuItem(L"Таблица лидеров", font, 36, { 100.f, 340.f }, records),
+        MenuItem(L"О создателях", font, 36, { 100.f, 410.f }, owners),
+        MenuItem(L"Выход", font, 36, { 100.f, 480.f }, exitGame)
     };
 
     sf::Clock clock;
