@@ -278,7 +278,7 @@ private:
 };
 
 
-sf::Vector2f getCoordinate(sf::Vector2f pos);//функция пересчёта координат из 1920x1080 в текущий дисплей(относительно центра экрана)
+sf::Vector2f getNewCoordinate(sf::Vector2f pos);//функция пересчёта координат из 1920x1080 в текущий дисплей(относительно центра экрана)
 
 sf::Vector2f wayToCoordinate(float pos, uint8_t level = LEVEL);//функция пути
 

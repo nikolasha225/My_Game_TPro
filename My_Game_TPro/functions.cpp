@@ -133,10 +133,10 @@ sf::Vector2f Enemy::getSize()
 sf::Vector2f Enemy::getPos(bool isMiddle)
 {
 	sf::Vector2f POS_MIDDLE = wayToCoordinate(POS, LEVEL);
-	if (isMiddle)
+	if (!isMiddle)
 	{
-		POS_MIDDLE.x += SIZE.x / 2;
-		POS_MIDDLE.y += SIZE.y / 2;
+		POS_MIDDLE.x -= SIZE.x / 2;
+		POS_MIDDLE.y -= SIZE.y / 2;
 	}
 	return POS_MIDDLE;
 }
@@ -305,8 +305,8 @@ sf::RectangleShape* Bullet::getShape() {
 
 sf::Vector2f Bullet::getVectorToTarget(bool isNormalise) {
 	if (isNormalise)
-		return normalize(TARGET->getPos() - OBJ.getPosition());
-	return TARGET->getPos() - OBJ.getPosition();
+		return normalize(TARGET->getPos() - OBJ.getPosition() - SIZE / 2.f);
+	return TARGET->getPos() - OBJ.getPosition() - SIZE / 2.f;
 }
 
 bool Bullet::operator<(const Bullet& other) const {
@@ -374,7 +374,9 @@ void OBJStack::draw(sf::RenderWindow* window)
 	for (auto i : renderLine)
 		for (auto& obj : stack[i]) {
 			sf::Vector2f pos = obj->getPos();
+			obj->setPos(getNewCoordinate(pos));
 			obj->draw(window);
+			obj->setPos(pos);
 		}
 }
 
@@ -425,8 +427,7 @@ sf::Vector2f getPositionOnPathByDistance(float pos, const std::vector<sf::Vector
 	return pathPoints.back();
 }
 
-//------------------------------------------
-sf::Vector2f getCoordinate(sf::Vector2f pos)
+sf::Vector2f getNewCoordinate(sf::Vector2f pos)
 {
 	sf::Vector2f nowSize(
 	(float)JSONSettings["GENERAL"]["resolution"][0],
