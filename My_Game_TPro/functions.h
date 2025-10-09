@@ -166,9 +166,9 @@ private:
 	sf::RectangleShape OBJ;
 	sf::Vector2f SIZE;
 	sf::Texture TEXTURE;
-	EnumEnemyType TYPE;
 	float HP;
 	float VELOCITY;
+	EnumEnemyType TYPE;
 
 	uint8_t LAYER;
 	bool DRAW_STATUS;
@@ -208,11 +208,9 @@ public:
 
 
 private:
-	sf::Vector2f POS;
 	sf::RectangleShape OBJ;
 	sf::Texture TEXTURE;
 	sf::Vector2f SIZE;
-	EnumGameObjects TYPE;
 	uint8_t TOWER_LEVEL;
 
 	uint8_t LAYER;
@@ -252,13 +250,11 @@ public:
 	bool isCompleted(); //возвращает статус
 
 private:
-	sf::Vector2f POS;
 	Enemy* TARGET;
 	float DAMAGE;
 	sf::RectangleShape OBJ;
 	sf::Vector2f SIZE;
 	sf::Texture TEXTURE;
-	EnumGameObjects TYPE;
 	float VELOCITY;
 	uint8_t LAYER;
 	bool IS_FLY;
@@ -282,7 +278,7 @@ private:
 };
 
 
-sf::Vector2f getCoordinate(sf::Vector2f, sf::RenderWindow);//функция пересчёта координат из 1920x1080 в текущий дисплей(относительно центра экрана)
+sf::Vector2f getCoordinate(sf::Vector2f pos);//функция пересчёта координат из 1920x1080 в текущий дисплей(относительно центра экрана)
 
 sf::Vector2f wayToCoordinate(float pos, uint8_t level = LEVEL);//функция пути
 

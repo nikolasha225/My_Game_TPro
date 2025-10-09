@@ -218,7 +218,7 @@ Bullet::Bullet(Tower::EnumTowerType type, Enemy* target, sf::Vector2f startPos)
 		bulletType = "tower1";
 		break;
 	}
-	POS = startPos;
+	
 	DAMAGE = (float)JSONSettings["BULLET"][bulletType]["damage"]
 		* (float)JSONSettings["BULLET"]["damageCoeficent"];
 	LAYER = JSONSettings["BULLET"]["layer"];
@@ -231,7 +231,7 @@ Bullet::Bullet(Tower::EnumTowerType type, Enemy* target, sf::Vector2f startPos)
 	OBJ.setPosition(startPos);
 	TEXTURE.loadFromFile(JSONSettings["BULLET"][bulletType]["texture"]);
 	OBJ.setTexture(&TEXTURE);
-	TYPE = bullet;
+	OBJ.setPosition(startPos);
 	IS_FLY = 1;
 	VELOCITY = (float)JSONSettings["BULLET"][bulletType]["velocity"]
 		* JSONSettings["BULLET"]["velocityCoeficent"];
@@ -252,7 +252,7 @@ sf::Vector2f Bullet::getSize() {
 }
 
 sf::Vector2f Bullet::getPos(bool isMiddle) {
-	sf::Vector2f pos = POS;
+	sf::Vector2f pos = OBJ.getPosition();
 	if (isMiddle)
 	{
 		pos.x += SIZE.x / 2;
@@ -263,7 +263,6 @@ sf::Vector2f Bullet::getPos(bool isMiddle) {
 
 void Bullet::setMove(sf::Vector2f vector) {
 	OBJ.move(vector);
-	POS = OBJ.getPosition();
 }
 
 void Bullet::setPos(sf::Vector2f pos, bool toMiddle) {
@@ -273,7 +272,6 @@ void Bullet::setPos(sf::Vector2f pos, bool toMiddle) {
 		pos.y -= SIZE.y / 2;
 	}
 	OBJ.setPosition(pos);
-	POS = OBJ.getPosition();
 }
 
 void Bullet::setDrawStatus(bool status) {
@@ -289,7 +287,7 @@ void Bullet::draw(sf::RenderWindow* window) {
 }
 
 EnumGameObjects Bullet::getTypeObjet() {
-	return TYPE;
+	return bullet;
 }
 
 IGameObject* Bullet::getPtr() {
@@ -307,8 +305,8 @@ sf::RectangleShape* Bullet::getShape() {
 
 sf::Vector2f Bullet::getVectorToTarget(bool isNormalise) {
 	if (isNormalise)
-		return normalize(TARGET->getPos() - POS);
-	return TARGET->getPos() - POS;
+		return normalize(TARGET->getPos() - OBJ.getPosition());
+	return TARGET->getPos() - OBJ.getPosition();
 }
 
 bool Bullet::operator<(const Bullet& other) const {
@@ -374,8 +372,10 @@ void OBJStack::draw(sf::RenderWindow* window)
 {
 	this->sortByLayer();
 	for (auto i : renderLine)
-		for (auto& obj : stack[i])
+		for (auto& obj : stack[i]) {
+			sf::Vector2f pos = obj->getPos();
 			obj->draw(window);
+		}
 }
 
 void OBJStack::sortByLayer()
@@ -425,6 +425,19 @@ sf::Vector2f getPositionOnPathByDistance(float pos, const std::vector<sf::Vector
 	return pathPoints.back();
 }
 
+//------------------------------------------
+sf::Vector2f getCoordinate(sf::Vector2f pos)
+{
+	sf::Vector2f nowSize(
+	(float)JSONSettings["GENERAL"]["resolution"][0],
+	(float)JSONSettings["GENERAL"]["resolution"][1]
+	);
+	if (nowSize.x == 1920 && nowSize.y == 1080)
+		return pos;
+	pos.x *= nowSize.x / 1920;
+	pos.y *= nowSize.y / 1080;
+	return pos;
+}
 
 sf::Vector2f wayToCoordinate(float pos, uint8_t level)
 {

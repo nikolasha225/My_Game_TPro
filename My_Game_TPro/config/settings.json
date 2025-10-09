@@ -2,7 +2,8 @@
   "GENERAL": {
     "title": "Guards of ELBRUS",
     "vsync": true,
-    "framerate": 60
+    "framerate": 60,
+    "resolution": [ 1920, 1080 ]
   },
   "ENEMY": {
     "velocityCoeficent": 0.01,

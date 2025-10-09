@@ -14,7 +14,7 @@ int main(bool volume = 1, uint8_t difficult = 2, unsigned id = 0)
 
     static sf::Clock timer;
 
-    LEVEL = 3;
+    LEVEL = 1;
 
     //базовые определения
     bool pauseState = 0;
@@ -33,7 +33,7 @@ int main(bool volume = 1, uint8_t difficult = 2, unsigned id = 0)
     enemy3.setLayer(1);
     enemy4.setLayer(4);
 
-    enemy2.multVelocity(6);
+    enemy2.multVelocity(3);
 
     Bullet bullet(Tower::tower1, &enemy2, sf::Vector2f(1000,1000));
 
