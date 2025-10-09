@@ -33,7 +33,7 @@ int main(bool volume = 1, uint8_t difficult = 2, unsigned id = 0)
     enemy3.setLayer(1);
     enemy4.setLayer(4);
 
-    enemy2.multVelocity(4);
+    enemy2.multVelocity(6);
 
     Bullet bullet(Tower::tower1, &enemy2, sf::Vector2f(1000,1000));
 

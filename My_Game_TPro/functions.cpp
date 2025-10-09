@@ -59,7 +59,9 @@ Enemy::Enemy(EnumEnemyType type, float startPos, float hp, float velocity, std::
 		OBJ = sf::RectangleShape(SIZE);
 		TEXTURE.loadFromFile(JSONSettings["ENEMY"][typeOfGet]["texture"]);
 		OBJ.setTexture(&TEXTURE);
-		VELOCITY = (float)JSONSettings["ENEMY"]["velocityCoeficent"] * (float)JSONSettings["ENEMY"][typeOfGet]["velocity"];
+		VELOCITY = (float)JSONSettings["ENEMY"]["velocityCoeficent"] 
+			* (float)JSONSettings["ENEMY"][typeOfGet]["velocity"]
+			* getWayCoeficent();
 		OBJ.setPosition(100, 100);
 
 	}
@@ -99,8 +101,8 @@ void Enemy::setPos(sf::Vector2f pos, bool toMiddle)
 {
 	if (toMiddle)
 	{
-		pos.x -= SIZE.x/2;
-		pos.y -= SIZE.y/2;
+		pos.x -= SIZE.x / 2;
+		pos.y -= SIZE.y / 2;
 	}
 	OBJ.setPosition(pos);
 }
@@ -177,7 +179,7 @@ sf::RectangleShape* Enemy::getShape()
 
 bool Enemy::operator<(const Enemy& other) const
 {
-	return this->LAYER<other.LAYER;
+	return this->LAYER < other.LAYER;
 }
 
 bool Enemy::checkBullet(Bullet& bullet)
@@ -217,7 +219,7 @@ Bullet::Bullet(Tower::EnumTowerType type, Enemy* target, sf::Vector2f startPos)
 		break;
 	}
 	POS = startPos;
-	DAMAGE = (float)JSONSettings["BULLET"][bulletType]["damage"] 
+	DAMAGE = (float)JSONSettings["BULLET"][bulletType]["damage"]
 		* (float)JSONSettings["BULLET"]["damageCoeficent"];
 	LAYER = JSONSettings["BULLET"]["layer"];
 	TARGET = target;
@@ -241,15 +243,15 @@ uint8_t Bullet::getLayer()
 	return LAYER;
 }
 
-void Bullet::setLayer(uint8_t layer){
+void Bullet::setLayer(uint8_t layer) {
 	LAYER = layer;
 }
 
-sf::Vector2f Bullet::getSize(){
+sf::Vector2f Bullet::getSize() {
 	return SIZE;
 }
 
-sf::Vector2f Bullet::getPos(bool isMiddle){
+sf::Vector2f Bullet::getPos(bool isMiddle) {
 	sf::Vector2f pos = POS;
 	if (isMiddle)
 	{
@@ -259,12 +261,12 @@ sf::Vector2f Bullet::getPos(bool isMiddle){
 	return pos;
 }
 
-void Bullet::setMove(sf::Vector2f vector){
+void Bullet::setMove(sf::Vector2f vector) {
 	OBJ.move(vector);
 	POS = OBJ.getPosition();
 }
 
-void Bullet::setPos(sf::Vector2f pos, bool toMiddle){
+void Bullet::setPos(sf::Vector2f pos, bool toMiddle) {
 	if (toMiddle)
 	{
 		pos.x -= SIZE.x / 2;
@@ -274,54 +276,55 @@ void Bullet::setPos(sf::Vector2f pos, bool toMiddle){
 	POS = OBJ.getPosition();
 }
 
-void Bullet::setDrawStatus(bool status){
+void Bullet::setDrawStatus(bool status) {
 	DRAW_STATUS = status;
 }
 
-bool Bullet::getDrawStatus(){
+bool Bullet::getDrawStatus() {
 	return DRAW_STATUS;
 }
 
-void Bullet::draw(sf::RenderWindow* window){
+void Bullet::draw(sf::RenderWindow* window) {
 	window->draw(OBJ);
 }
 
-EnumGameObjects Bullet::getTypeObjet(){
+EnumGameObjects Bullet::getTypeObjet() {
 	return TYPE;
 }
 
-IGameObject* Bullet::getPtr(){
+IGameObject* Bullet::getPtr() {
 	return this;
 }
 
-void Bullet::tick(){
+//----------------------+++++++++++++++++++++
+void Bullet::tick() {
 	move();
 }
 
-sf::RectangleShape* Bullet::getShape(){
+sf::RectangleShape* Bullet::getShape() {
 	return &OBJ;
 }
 
-sf::Vector2f Bullet::getVectorToTarget(bool isNormalise){
+sf::Vector2f Bullet::getVectorToTarget(bool isNormalise) {
 	if (isNormalise)
 		return normalize(TARGET->getPos() - POS);
 	return TARGET->getPos() - POS;
 }
 
-bool Bullet::operator<(const Bullet& other) const{
+bool Bullet::operator<(const Bullet& other) const {
 	return LAYER < other.LAYER;
 }
 
-void Bullet::move(){
+void Bullet::move() {
 	setMove(getVectorToTarget() * VELOCITY);
 }
 
-void Bullet::complete(){
+void Bullet::complete() {
 	IS_FLY = 0;
 	//DRAW_STATUS = 0;
 }
 
-bool Bullet::isCompleted(){
+bool Bullet::isCompleted() {
 	return !IS_FLY;
 }
 
@@ -349,7 +352,7 @@ void OBJStack::add(IGameObject* obj)
 
 void OBJStack::add(std::vector<IGameObject*> vector)
 {
-	for(auto &i : vector)
+	for (auto& i : vector)
 		stack[i->getTypeObjet()].push_back(i);
 }
 
@@ -358,7 +361,7 @@ void OBJStack::remove(IGameObject* obj)
 	if (obj == nullptr) return;
 
 	auto it = std::find(
-		stack[obj->getTypeObjet()].begin(), 
+		stack[obj->getTypeObjet()].begin(),
 		stack[obj->getTypeObjet()].end(), obj
 	);
 
@@ -377,9 +380,9 @@ void OBJStack::draw(sf::RenderWindow* window)
 
 void OBJStack::sortByLayer()
 {
-	for (auto i : renderLine) 
+	for (auto i : renderLine)
 		std::sort(stack[i].begin(), stack[i].end());
-	
+
 }
 
 void OBJStack::tick()
@@ -391,7 +394,7 @@ void OBJStack::tick()
 
 //============================Œ“ƒ≈À‹Õ€≈ ‘”Õ ÷»»==========================
 
-sf::Vector2f getPositionOnPathByDistance(float pos, const std::vector<sf::Vector2f>& pathPoints)
+sf::Vector2f getPositionOnPathByDistance(float pos, const std::vector<sf::Vector2f> pathPoints)
 {
 
 	float totalLength = 0.0f;	        // Ó·˘‡ˇ ‰ÎËÌ‡ ÔÛÚË
@@ -422,66 +425,17 @@ sf::Vector2f getPositionOnPathByDistance(float pos, const std::vector<sf::Vector
 	return pathPoints.back();
 }
 
-sf::Vector2f get1stPath(float pos)
-{
-	std::vector<sf::Vector2f> pathPoints = {
-		sf::Vector2f(200, 980),   // start
-		sf::Vector2f(200, 300),   // point1
-		sf::Vector2f(1720, 300),  // point2  
-		sf::Vector2f(1720, 780),  // point3
-		sf::Vector2f(400, 780),   // point4
-		sf::Vector2f(400, 500),   // point5
-		sf::Vector2f(1520, 500),  // point6
-		sf::Vector2f(1520, 600)   // end
-	};
-
-	return getPositionOnPathByDistance(pos, pathPoints);
-}
-
-sf::Vector2f get2ndPath(float pos)
-{
-	std::vector<sf::Vector2f> pathPoints = {
-		sf::Vector2f(200, 980),   // start
-		sf::Vector2f(580, 300),   // point1
-		sf::Vector2f(960, 980),   // point2  
-		sf::Vector2f(1340, 300),  // point3
-		sf::Vector2f(1720, 980)   // end
-	};
-
-	return getPositionOnPathByDistance(pos, pathPoints);
-}
-
-sf::Vector2f get3rdPath(float pos)
-{
-	std::vector<sf::Vector2f> pathPoints = {
-		sf::Vector2f(200, 980),   // start
-		sf::Vector2f(200, 300),   // point1
-		sf::Vector2f(1720, 300),  // point2
-		sf::Vector2f(1720, 600)   // end
-	};
-
-	return getPositionOnPathByDistance(pos, pathPoints);
-}
 
 sf::Vector2f wayToCoordinate(float pos, uint8_t level)
 {
-	if (pos < 0.0f) {
+	if (pos < 0.0f || (level > 3 || level < 1)) {
 		return sf::Vector2f(0, 0);
 	}
 	else if (pos > 100.0f) {
 		return sf::Vector2f(1920, 1080);
 	}
 
-	switch (level) {
-	case 1:
-		return get1stPath(pos);
-	case 2:
-		return get2ndPath(pos);
-	case 3:
-		return get3rdPath(pos);
-	default:
-		return sf::Vector2f(0, 0);
-	}
+	return getPositionOnPathByDistance(pos, wayPoints[level-1]);
 }
 
 sf::Vector2f normalize(sf::Vector2f vec) {
@@ -514,4 +468,25 @@ bool isPointIntoShape(sf::Vector2f point, sf::RectangleShape obj)
 	sf::Vector2f size = obj.getSize();
 	return ((point.x > pos.x && point.x < pos.x + size.x)
 		&& (point.y > pos.y && point.y < pos.y + size.y));
+}
+
+float getWayCoeficent(uint8_t level)
+{
+	return getWayLength(wayPoints[2]) / getWayLength(wayPoints[level -1]);
+}
+
+float getWayLength(std::vector<sf::Vector2f> pathPoints)
+{
+	if (pathPoints.size() < 2) {
+		return 0.f;
+	}
+
+	float totalLength = 0.f;
+
+	for (size_t i = 1; i < pathPoints.size(); i++) {
+		sf::Vector2f delta = pathPoints[i] - pathPoints[i - 1];
+		totalLength += std::sqrt(delta.x * delta.x + delta.y * delta.y);
+	}
+
+	return totalLength;
 }

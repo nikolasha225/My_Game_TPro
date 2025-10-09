@@ -54,6 +54,33 @@ constexpr EnumGameObjects renderLineReverce[] = {
 	backgroundStatic
 };
 
+const std::vector<sf::Vector2f> wayPoints[3] = //наши пути
+{
+	{
+		sf::Vector2f(200, 980),   // start
+		sf::Vector2f(200, 300),   // point1
+		sf::Vector2f(1720, 300),  // point2  
+		sf::Vector2f(1720, 780),  // point3
+		sf::Vector2f(400, 780),   // point4
+		sf::Vector2f(400, 500),   // point5
+		sf::Vector2f(1520, 500),  // point6
+		sf::Vector2f(1520, 600)   // end
+	},
+	{
+		sf::Vector2f(200, 980),   // start
+		sf::Vector2f(580, 300),   // point1
+		sf::Vector2f(960, 980),   // point2  
+		sf::Vector2f(1340, 300),  // point3
+		sf::Vector2f(1720, 980)   // end
+	},
+	{
+		sf::Vector2f(200, 980),   // start
+		sf::Vector2f(200, 300),   // point1
+		sf::Vector2f(1720, 300),  // point2
+		sf::Vector2f(1720, 600)   // end
+	}
+};
+
 class IGameObject
 {
 public:
@@ -261,14 +288,14 @@ sf::Vector2f wayToCoordinate(float pos, uint8_t level = LEVEL);//функция пути
 
 sf::Vector2f normalize(sf::Vector2f vector);//возвращает единичный вектор
 
-sf::Vector2f getPositionOnPathByDistance(float pos, const std::vector<sf::Vector2f>& pathPoints);//по значению pos и вектору точек находит точку на многоугольнике
-
-sf::Vector2f get1stPath(float pos);//набор точек в виде спирали и вызов getPositionOnPathByDistance
-sf::Vector2f get2ndPath(float pos);//набор точек в виде зигзага (М) и вызов getPositionOnPathByDistance
-sf::Vector2f get3rdPath(float pos);//набор точек в виде арки (П) и вызов getPositionOnPathByDistance
+sf::Vector2f getPositionOnPathByDistance(float pos, const std::vector<sf::Vector2f> pathPoints);//по значению pos и вектору точек находит точку на многоугольнике
 
 float getDistance(sf::Vector2f vector1, sf::Vector2f vector2);
 
 bool isIntersected(sf::RectangleShape obj1, sf::RectangleShape obj2);
 
 bool isPointIntoShape(sf::Vector2f point, sf::RectangleShape obj);
+
+float getWayCoeficent(uint8_t level = LEVEL);
+
+float getWayLength(std::vector<sf::Vector2f> pathPoints);
