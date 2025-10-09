@@ -137,7 +137,7 @@ public:
 	);//через switch case из типа врага подсосать всё остальное
 
 	//чисто enemy
-	float getHP();
+	float getHP(bool startHP = 0);
 	void subHP(float hp);//нанести урон
 	void multVelocity(float coef);
 	bool isDie();
@@ -168,6 +168,7 @@ private:
 	sf::Vector2f SIZE;
 	sf::Texture TEXTURE;
 	float HP;
+	float START_HP;
 	float VELOCITY;
 	EnumEnemyType TYPE;
 

@@ -6,7 +6,7 @@ json JSONSettings = json::parse(std::ifstream("./config/settings.json"));
 //json JSONScore = json::parse(std::ifstream("./config/score.json"));
 
 //=================================ПЕРЕМЕННЫЕ=======================================
-//определяем extern переменную level
+//определяем extern переменные
 uint8_t LEVEL = 1;
 unsigned MONEY = 0;
 float HEALTH = 0;
@@ -42,6 +42,7 @@ Enemy::Enemy(EnumEnemyType type, float startPos, float hp, float velocity, std::
 	if (startPos >= 0) {
 		POS = startPos;
 		HP = hp;
+		START_HP = hp;
 		OBJ = sf::RectangleShape(textureScale);
 		TEXTURE.loadFromFile(texture);
 		OBJ.setTexture(&TEXTURE);
@@ -68,8 +69,10 @@ Enemy::Enemy(EnumEnemyType type, float startPos, float hp, float velocity, std::
 	}
 }
 
-float Enemy::getHP()
+float Enemy::getHP(bool startHP)
 {
+	if (startHP)
+		return START_HP;
 	return HP;
 }
 
@@ -425,6 +428,8 @@ void OBJStack::tick()
 				//иожно ещё проверять что пуля попала только по одномуЮ,но так интереснее (типо прострел)
 				nowEnemy->subHP(nowBullet->getDamage());
 				nowBullet->complete();
+				float colorCoef = nowEnemy->getHP() / nowEnemy->getHP(1);
+				nowEnemy->getShape()->setFillColor(sf::Color(255, 255*colorCoef, 255*colorCoef));
 			}
 		}
 	for (auto& ENEMY : stack[enemy])
