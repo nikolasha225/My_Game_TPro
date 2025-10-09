@@ -2,13 +2,14 @@
 
 //общие функции для игры и главного меню
 #include <SFML/Graphics.hpp>
-#include <utility>//на всякий случай если пригодится std::pair<*,*>
+//#include <utility>//на всякий случай если пригодится std::pair<*,*>
 #include <string>
 #include <vector>
 #include <nlohmann/json.hpp>
 #include <fstream>
 #include <algorithm>
 #include <map>
+#include <random>
 
 using json = nlohmann::json;
 extern json JSONSettings;
@@ -17,6 +18,11 @@ extern json JSONSettings;
 extern uint8_t LEVEL;
 extern unsigned MONEY;
 extern float HEALTH;
+
+//рандом функции
+static std::mt19937 generator(std::random_device{}());
+#define RAND_INT(min, max) std::uniform_int_distribution<int>(min, max)(generator)
+#define RAND_FLOAT(min, max) std::uniform_real_distribution<float>(min, max)(generator)
 
 //енам игроввых объектов
 enum EnumGameObjects
@@ -171,6 +177,7 @@ private:
 	float START_HP;
 	float VELOCITY;
 	EnumEnemyType TYPE;
+	float DAMAGE;
 
 	uint8_t LAYER;
 	bool DRAW_STATUS;

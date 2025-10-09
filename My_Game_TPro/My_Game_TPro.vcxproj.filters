@@ -105,5 +105,8 @@
     <Image Include="textures\img\tank.png">
       <Filter>Textures\img</Filter>
     </Image>
+    <Image Include="textures\img\miniBoss2.png">
+      <Filter>Textures\img</Filter>
+    </Image>
   </ItemGroup>
 </Project>

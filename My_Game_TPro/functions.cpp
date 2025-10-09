@@ -42,7 +42,6 @@ Enemy::Enemy(EnumEnemyType type, float startPos, float hp, float velocity, std::
 	if (startPos >= 0) {
 		POS = startPos;
 		HP = hp;
-		START_HP = hp;
 		OBJ = sf::RectangleShape(textureScale);
 		TEXTURE.loadFromFile(texture);
 		OBJ.setTexture(&TEXTURE);
@@ -65,8 +64,10 @@ Enemy::Enemy(EnumEnemyType type, float startPos, float hp, float velocity, std::
 			* (float)JSONSettings["ENEMY"][typeOfGet]["velocity"]
 			* getWayCoeficent();
 		OBJ.setPosition(100, 100);
+		DAMAGE = (float)JSONSettings["ENEMY"][typeOfGet]["damage"] * (float)JSONSettings["ENEMY"]["damageCoeficent"];
 
 	}
+	START_HP = HP;
 }
 
 float Enemy::getHP(bool startHP)
@@ -298,7 +299,6 @@ IGameObject* Bullet::getPtr() {
 	return this;
 }
 
-//----------------------+++++++++++++++++++++
 void Bullet::tick() {
 	move();
 }
@@ -425,11 +425,20 @@ void OBJStack::tick()
 			Bullet* nowBullet = (Bullet*)BULLET;
 			if (nowEnemy->checkBullet(nowBullet))
 			{
-				//иожно ещё проверять что пуля попала только по одномуЮ,но так интереснее (типо прострел)
+
+				//иожно ещё проверять что пуля попала только по одному,но так интереснее (типо прострел)
 				nowEnemy->subHP(nowBullet->getDamage());
 				nowBullet->complete();
 				float colorCoef = nowEnemy->getHP() / nowEnemy->getHP(1);
-				nowEnemy->getShape()->setFillColor(sf::Color(255, 255*colorCoef, 255*colorCoef));
+				nowEnemy->
+					getShape()->
+					setFillColor(
+						sf::Color(
+							255, 
+							255 * colorCoef,
+							255 * colorCoef
+						)
+					);
 			}
 		}
 	for (auto& ENEMY : stack[enemy])
