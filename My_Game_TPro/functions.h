@@ -16,6 +16,7 @@ extern json JSONSettings;
 
 extern uint8_t LEVEL;
 extern unsigned MONEY;
+extern float HEALTH;
 
 //енам игроввых объектов
 enum EnumGameObjects
@@ -143,7 +144,7 @@ public:
 	EnumEnemyType getEnemyType();
 	float getPosPercent();
 	void tick();//игровой тик
-	bool checkBullet(Bullet& bullet);
+	bool checkBullet(Bullet* bullet);
 
 	//общие
 	void setPos(sf::Vector2f pos, bool toMiddle = 1);
@@ -248,6 +249,7 @@ public:
 	void move();//через вектор до цели домноженный на скорость двигается сетмувом
 	void complete();//попадание зафиксировано
 	bool isCompleted(); //возвращает статус
+	float getDamage();
 
 private:
 	Enemy* TARGET;
@@ -272,7 +274,7 @@ public:
 	void draw(sf::RenderWindow*);
 	void tick();
 	void sortByLayer();
-
+	bool deleteObj(IGameObject* obj);
 private:
 	std::map<EnumGameObjects, std::vector<IGameObject*>> stack;
 };

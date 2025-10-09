@@ -9,6 +9,7 @@ json JSONSettings = json::parse(std::ifstream("./config/settings.json"));
 //определ€ем extern переменную level
 uint8_t LEVEL = 1;
 unsigned MONEY = 0;
+float HEALTH = 0;
 
 //==================================ENEMY==============================================
 Enemy::Enemy(EnumEnemyType type, float startPos, float hp, float velocity, std::string texture, sf::Vector2f textureScale)
@@ -59,7 +60,7 @@ Enemy::Enemy(EnumEnemyType type, float startPos, float hp, float velocity, std::
 		OBJ = sf::RectangleShape(SIZE);
 		TEXTURE.loadFromFile(JSONSettings["ENEMY"][typeOfGet]["texture"]);
 		OBJ.setTexture(&TEXTURE);
-		VELOCITY = (float)JSONSettings["ENEMY"]["velocityCoeficent"] 
+		VELOCITY = (float)JSONSettings["ENEMY"]["velocityCoeficent"]
 			* (float)JSONSettings["ENEMY"][typeOfGet]["velocity"]
 			* getWayCoeficent();
 		OBJ.setPosition(100, 100);
@@ -182,12 +183,12 @@ bool Enemy::operator<(const Enemy& other) const
 	return this->LAYER < other.LAYER;
 }
 
-bool Enemy::checkBullet(Bullet& bullet)
+bool Enemy::checkBullet(Bullet* bullet)
 {
 	bool result = 0;
-	if (isIntersected((*bullet.getShape()), OBJ)) {
+	if (isIntersected(*(bullet->getShape()), OBJ)) {
 		result = 1;
-		bullet.complete();
+		bullet->complete();
 	}
 	return result;
 }
@@ -218,7 +219,7 @@ Bullet::Bullet(Tower::EnumTowerType type, Enemy* target, sf::Vector2f startPos)
 		bulletType = "tower1";
 		break;
 	}
-	
+
 	DAMAGE = (float)JSONSettings["BULLET"][bulletType]["damage"]
 		* (float)JSONSettings["BULLET"]["damageCoeficent"];
 	LAYER = JSONSettings["BULLET"]["layer"];
@@ -326,6 +327,11 @@ bool Bullet::isCompleted() {
 	return !IS_FLY;
 }
 
+float Bullet::getDamage()
+{
+	return DAMAGE;
+}
+
 
 //============================OBJ STACK=================================
 
@@ -387,11 +393,46 @@ void OBJStack::sortByLayer()
 
 }
 
+bool OBJStack::deleteObj(IGameObject* obj)
+{
+	EnumGameObjects type = obj->getTypeObjet();
+	auto it = std::find(
+		stack[type].begin(), 
+		stack[type].end(), 
+		obj
+	);
+	if (it != stack[type].end()) {
+		stack[type].erase(it);
+		return 1;
+	}
+	return 0;
+}
+
+
+//--------------------------------+++++++++++++++++++++++
 void OBJStack::tick()
 {
-	for (auto i : renderLineReverce)
+	for (auto& i : renderLineReverce)
 		for (auto& obj : stack[i])
 			obj->tick();
+	for (auto& ENEMY : stack[enemy])
+		for (auto& BULLET : stack[bullet])
+		{
+			Enemy* nowEnemy = (Enemy*)ENEMY;
+			Bullet* nowBullet = (Bullet*)BULLET;
+			if (nowEnemy->checkBullet(nowBullet))
+			{
+				//иожно ещЄ провер€ть что пул€ попала только по одномуё,но так интереснее (типо прострел)
+				nowEnemy->subHP(nowBullet->getDamage());
+				nowBullet->complete();
+			}
+		}
+	for (auto& ENEMY : stack[enemy])
+		if (((Enemy*)ENEMY)->getHP() <= 0)
+			deleteObj(ENEMY);
+	for (auto& BULLET : stack[bullet])
+		if (((Bullet*)BULLET)->isCompleted())
+			deleteObj(BULLET);
 }
 
 //============================ќ“ƒ≈Ћ№Ќџ≈ ‘”Ќ ÷»»==========================
@@ -430,8 +471,8 @@ sf::Vector2f getPositionOnPathByDistance(float pos, const std::vector<sf::Vector
 sf::Vector2f getNewCoordinate(sf::Vector2f pos)
 {
 	sf::Vector2f nowSize(
-	(float)JSONSettings["GENERAL"]["resolution"][0],
-	(float)JSONSettings["GENERAL"]["resolution"][1]
+		(float)JSONSettings["GENERAL"]["resolution"][0],
+		(float)JSONSettings["GENERAL"]["resolution"][1]
 	);
 	if (nowSize.x == 1920 && nowSize.y == 1080)
 		return pos;
@@ -449,7 +490,7 @@ sf::Vector2f wayToCoordinate(float pos, uint8_t level)
 		return sf::Vector2f(1920, 1080);
 	}
 
-	return getPositionOnPathByDistance(pos, wayPoints[level-1]);
+	return getPositionOnPathByDistance(pos, wayPoints[level - 1]);
 }
 
 sf::Vector2f normalize(sf::Vector2f vec) {
@@ -486,7 +527,7 @@ bool isPointIntoShape(sf::Vector2f point, sf::RectangleShape obj)
 
 float getWayCoeficent(uint8_t level)
 {
-	return getWayLength(wayPoints[2]) / getWayLength(wayPoints[level -1]);
+	return getWayLength(wayPoints[2]) / getWayLength(wayPoints[level - 1]);
 }
 
 float getWayLength(std::vector<sf::Vector2f> pathPoints)
