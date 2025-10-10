@@ -146,13 +146,13 @@
   <ItemGroup>
     <Image Include="textures\debug\base.png" />
     <Image Include="textures\debug\test1.png" />
+    <Image Include="textures\gif\bullavast.gif" />
+    <Image Include="textures\gif\bulldefender.gif" />
+    <Image Include="textures\gif\bulldrweb.gif" />
+    <Image Include="textures\gif\bullkaspersky.gif" />
     <Image Include="textures\img\avast.png" />
     <Image Include="textures\img\basic.png" />
     <Image Include="textures\img\BOSS.png" />
-    <Image Include="textures\img\bullavast.gif" />
-    <Image Include="textures\img\bulldefender.gif" />
-    <Image Include="textures\img\bulldrweb.gif" />
-    <Image Include="textures\img\bullkaspersky.gif" />
     <Image Include="textures\img\defender.png" />
     <Image Include="textures\img\dr web.png" />
     <Image Include="textures\img\fast.png" />

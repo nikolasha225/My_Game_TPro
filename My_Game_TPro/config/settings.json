@@ -2,7 +2,7 @@
   "GENERAL": {
     "title": "Guards of ELBRUS",
     "vsync": true,
-    "framerate": 60,
+    "framerate": 10,
     "resolution": [ 1920, 1080 ]
   },
   "ENEMY": {
@@ -42,7 +42,7 @@
       "hp": 8000,
       "velocity": 1,
       "size": [ 100, 100 ],
-      "texture": "./textures/img/virus-d.png"
+      "texture": "./textures/img/BOSS.png"
     }
   },
   "BULLET": {
@@ -52,25 +52,25 @@
     "tower1": {
       "damage": 1,
       "velocity": 3,
-      "texture": "./textures/debug/base.png",
+      "texture": "./textures/gif/bulldefender.gif",
       "size": [ 10, 10 ]
     },
     "tower2": {
       "damage": 3,
       "velocity": 3,
-      "texture": "./textures/debug/base.png",
+      "texture": "./textures/gif/bullavast.gif",
       "size": [ 12, 12 ]
     },
     "tower3": {
       "damage": 5,
       "velocity": 2,
-      "texture": "./textures/debug/base.png",
+      "texture": "./textures/gif/bulldrweb.gif",
       "size": [ 20, 20 ]
     },
     "tower4": {
       "damage": 10,
       "velocity": 1,
-      "texture": "./textures/debug/base.png",
+      "texture": "./textures/gif/bullkaspersky.gif",
       "size": [ 25, 25 ]
     }
   },
@@ -79,22 +79,22 @@
     "layer": 23,
     "tower1": {
       "timePerShot": 0.5,
-      "texture": "./textures/img/tower-d.png",
+      "texture": "./textures/img/defender.png",
       "size": [ 100, 200 ]
     },
     "tower2": {
       "timePerShot": 0.5,
-      "texture": "./textures/img/tower-d.png",
+      "texture": "./textures/img/avast.png",
       "size": [ 100, 200 ]
     },
     "tower3": {
       "timePerShot": 0.5,
-      "texture": "./textures/img/tower-d.png",
+      "texture": "./textures/img/dr web.png",
       "size": [ 100, 200 ]
     },
     "tower4": {
       "timePerShot": 0.5,
-      "texture": "./textures/img/tower-d.png",
+      "texture": "./textures/img/kaspersky.png",
       "size": [ 100, 200 ]
     }
   },

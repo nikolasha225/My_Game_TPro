@@ -40,6 +40,15 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="Textures\img\tower">
+      <UniqueIdentifier>{a35c8f8c-2265-4b87-a42d-d0cfa3693531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Textures\img\virus">
+      <UniqueIdentifier>{827ba63b-3094-4eb1-969b-e3fd7414115b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Textures\img\bullet">
+      <UniqueIdentifier>{6f2cac96-2fff-41be-aad0-f1ae9901bac1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -87,53 +96,53 @@
     <Image Include="textures\debug\test1.png">
       <Filter>Textures\debug</Filter>
     </Image>
-    <Image Include="textures\img\tower-d.png">
-      <Filter>Textures\img</Filter>
-    </Image>
-    <Image Include="textures\img\virus-d.png">
-      <Filter>Textures\img</Filter>
+    <Image Include="textures\img\avast.png">
+      <Filter>Textures\img\tower</Filter>
     </Image>
     <Image Include="textures\img\basic.png">
-      <Filter>Textures\img</Filter>
-    </Image>
-    <Image Include="textures\img\fast.png">
-      <Filter>Textures\img</Filter>
-    </Image>
-    <Image Include="textures\img\miniBoss.png">
-      <Filter>Textures\img</Filter>
-    </Image>
-    <Image Include="textures\img\tank.png">
-      <Filter>Textures\img</Filter>
-    </Image>
-    <Image Include="textures\img\miniBoss2.png">
-      <Filter>Textures\img</Filter>
+      <Filter>Textures\img\virus</Filter>
     </Image>
     <Image Include="textures\img\BOSS.png">
-      <Filter>Textures\img</Filter>
-    </Image>
-    <Image Include="textures\img\avast.png">
-      <Filter>Textures\img</Filter>
+      <Filter>Textures\img\virus</Filter>
     </Image>
     <Image Include="textures\img\defender.png">
-      <Filter>Textures\img</Filter>
+      <Filter>Textures\img\tower</Filter>
     </Image>
     <Image Include="textures\img\dr web.png">
-      <Filter>Textures\img</Filter>
+      <Filter>Textures\img\tower</Filter>
+    </Image>
+    <Image Include="textures\img\fast.png">
+      <Filter>Textures\img\virus</Filter>
     </Image>
     <Image Include="textures\img\kaspersky.png">
-      <Filter>Textures\img</Filter>
+      <Filter>Textures\img\tower</Filter>
     </Image>
-    <Image Include="textures\img\bullavast.gif">
-      <Filter>Textures\img</Filter>
+    <Image Include="textures\img\miniBoss.png">
+      <Filter>Textures\img\virus</Filter>
     </Image>
-    <Image Include="textures\img\bulldefender.gif">
-      <Filter>Textures\img</Filter>
+    <Image Include="textures\img\miniBoss2.png">
+      <Filter>Textures\img\virus</Filter>
     </Image>
-    <Image Include="textures\img\bulldrweb.gif">
-      <Filter>Textures\img</Filter>
+    <Image Include="textures\img\tank.png">
+      <Filter>Textures\img\virus</Filter>
     </Image>
-    <Image Include="textures\img\bullkaspersky.gif">
-      <Filter>Textures\img</Filter>
+    <Image Include="textures\img\tower-d.png">
+      <Filter>Textures\img\tower</Filter>
+    </Image>
+    <Image Include="textures\img\virus-d.png">
+      <Filter>Textures\img\virus</Filter>
+    </Image>
+    <Image Include="textures\gif\bullavast.gif">
+      <Filter>Textures\img\bullet</Filter>
+    </Image>
+    <Image Include="textures\gif\bulldefender.gif">
+      <Filter>Textures\img\bullet</Filter>
+    </Image>
+    <Image Include="textures\gif\bulldrweb.gif">
+      <Filter>Textures\img\bullet</Filter>
+    </Image>
+    <Image Include="textures\gif\bullkaspersky.gif">
+      <Filter>Textures\img\bullet</Filter>
     </Image>
   </ItemGroup>
 </Project>
