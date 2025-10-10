@@ -149,6 +149,10 @@
     <Image Include="textures\img\avast.png" />
     <Image Include="textures\img\basic.png" />
     <Image Include="textures\img\BOSS.png" />
+    <Image Include="textures\img\bullavast.gif" />
+    <Image Include="textures\img\bulldefender.gif" />
+    <Image Include="textures\img\bulldrweb.gif" />
+    <Image Include="textures\img\bullkaspersky.gif" />
     <Image Include="textures\img\defender.png" />
     <Image Include="textures\img\dr web.png" />
     <Image Include="textures\img\fast.png" />

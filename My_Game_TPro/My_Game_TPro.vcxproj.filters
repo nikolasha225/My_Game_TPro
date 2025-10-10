@@ -123,5 +123,17 @@
     <Image Include="textures\img\kaspersky.png">
       <Filter>Textures\img</Filter>
     </Image>
+    <Image Include="textures\img\bullavast.gif">
+      <Filter>Textures\img</Filter>
+    </Image>
+    <Image Include="textures\img\bulldefender.gif">
+      <Filter>Textures\img</Filter>
+    </Image>
+    <Image Include="textures\img\bulldrweb.gif">
+      <Filter>Textures\img</Filter>
+    </Image>
+    <Image Include="textures\img\bullkaspersky.gif">
+      <Filter>Textures\img</Filter>
+    </Image>
   </ItemGroup>
 </Project>
