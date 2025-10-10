@@ -108,5 +108,20 @@
     <Image Include="textures\img\miniBoss2.png">
       <Filter>Textures\img</Filter>
     </Image>
+    <Image Include="textures\img\BOSS.png">
+      <Filter>Textures\img</Filter>
+    </Image>
+    <Image Include="textures\img\avast.png">
+      <Filter>Textures\img</Filter>
+    </Image>
+    <Image Include="textures\img\defender.png">
+      <Filter>Textures\img</Filter>
+    </Image>
+    <Image Include="textures\img\dr web.png">
+      <Filter>Textures\img</Filter>
+    </Image>
+    <Image Include="textures\img\kaspersky.png">
+      <Filter>Textures\img</Filter>
+    </Image>
   </ItemGroup>
 </Project>
