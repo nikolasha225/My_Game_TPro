@@ -2,47 +2,53 @@
   "GENERAL": {
     "title": "Guards of ELBRUS",
     "vsync": true,
-    "framerate": 10,
+    "framerate": 30,
     "resolution": [ 1920, 1080 ]
   },
   "ENEMY": {
     "velocityCoeficent": 0.01,
     "damageCoeficent": 1,
     "layer": 20,
+    "moneyCoeficent": 10,
     "basic": {
       "damage": 5,
       "hp": 100,
       "velocity": 7,
       "size": [ 50, 50 ],
-      "texture": "./textures/img/basic.png"
+      "texture": "./textures/img/basic.png",
+      "money": 1
     },
     "fast": {
       "damage": 2,
       "hp": 50,
       "velocity": 10,
       "size": [ 35, 35 ],
-      "texture": "./textures/img/fast.png"
+      "texture": "./textures/img/fast.png",
+      "money": 1
     },
     "tank": {
       "damage": 11,
       "hp": 1000,
       "velocity": 5,
       "size": [ 65, 65 ],
-      "texture": "./textures/img/tank.png"
+      "texture": "./textures/img/tank.png",
+      "money": 7
     },
     "miniBoss": {
       "damage": 22,
       "hp": 3000,
       "velocity": 3,
       "size": [ 80, 80 ],
-      "texture": "./textures/img/miniBoss2.png"
+      "texture": "./textures/img/miniBoss2.png",
+      "money": 15
     },
     "boss": {
       "damage": 33,
       "hp": 8000,
       "velocity": 1,
-      "size": [ 100, 100 ],
-      "texture": "./textures/img/BOSS.png"
+      "size": [ 90, 120 ],
+      "texture": "./textures/img/BOSS_lowPixel.png",
+      "money": 30
     }
   },
   "BULLET": {
@@ -75,25 +81,25 @@
     }
   },
   "TOWER": {
-    "timePerShotCoeficent": 1,
+    "timePerShotCoeficent": 100,
     "layer": 23,
     "tower1": {
-      "timePerShot": 0.5,
+      "timePerShot": 1,
       "texture": "./textures/img/defender.png",
       "size": [ 100, 200 ]
     },
     "tower2": {
-      "timePerShot": 0.5,
+      "timePerShot": 1,
       "texture": "./textures/img/avast.png",
       "size": [ 100, 200 ]
     },
     "tower3": {
-      "timePerShot": 0.5,
+      "timePerShot": 1,
       "texture": "./textures/img/dr web.png",
       "size": [ 100, 200 ]
     },
     "tower4": {
-      "timePerShot": 0.5,
+      "timePerShot": 1,
       "texture": "./textures/img/kaspersky.png",
       "size": [ 100, 200 ]
     }

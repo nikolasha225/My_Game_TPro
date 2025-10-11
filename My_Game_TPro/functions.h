@@ -151,6 +151,7 @@ public:
 	float getPosPercent();
 	void tick();//игровой тик
 	bool checkBullet(Bullet* bullet);
+	unsigned getMoney();
 
 	//общие
 	void setPos(sf::Vector2f pos, bool toMiddle = 1);
@@ -178,6 +179,7 @@ private:
 	float VELOCITY;
 	EnumEnemyType TYPE;
 	float DAMAGE;
+	unsigned PRICE;
 
 	uint8_t LAYER;
 	bool DRAW_STATUS;

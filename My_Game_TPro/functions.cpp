@@ -33,7 +33,7 @@ Enemy::Enemy(EnumEnemyType type, float startPos, float hp, float velocity, std::
 		typeOfGet = "miniBoss";
 		break;
 	case Enemy::bossVirus:
-		typeOfGet = "Boss";
+		typeOfGet = "boss";
 		break;
 	default:
 		typeOfGet = "basic";
@@ -64,8 +64,10 @@ Enemy::Enemy(EnumEnemyType type, float startPos, float hp, float velocity, std::
 			* (float)JSONSettings["ENEMY"][typeOfGet]["velocity"]
 			* getWayCoeficent();
 		OBJ.setPosition(100, 100);
-		DAMAGE = (float)JSONSettings["ENEMY"][typeOfGet]["damage"] * (float)JSONSettings["ENEMY"]["damageCoeficent"];
-
+		DAMAGE = (float)JSONSettings["ENEMY"][typeOfGet]["damage"] 
+			* (float)JSONSettings["ENEMY"]["damageCoeficent"];
+		PRICE = (unsigned)JSONSettings["ENEMY"][typeOfGet]["money"]
+			* (unsigned)JSONSettings["ENEMY"]["moneyCoeficent"];
 	}
 	START_HP = HP;
 }
@@ -195,6 +197,11 @@ bool Enemy::checkBullet(Bullet* bullet)
 		bullet->complete();
 	}
 	return result;
+}
+
+unsigned Enemy::getMoney()
+{
+	return PRICE;
 }
 
 
@@ -442,8 +449,10 @@ void OBJStack::tick()
 			}
 		}
 	for (auto& ENEMY : stack[enemy])
-		if (((Enemy*)ENEMY)->getHP() <= 0)
+		if (((Enemy*)ENEMY)->getHP() <= 0) {
+			MONEY += ((Enemy*)ENEMY)->getMoney();
 			deleteObj(ENEMY);
+		}
 	for (auto& BULLET : stack[bullet])
 		if (((Bullet*)BULLET)->isCompleted())
 			deleteObj(BULLET);

@@ -25,7 +25,7 @@ int main(bool volume = 1, uint8_t difficult = 2, unsigned id = 0)
     Enemy enemy1(Enemy::miniBossVirus);
     Enemy enemy4;
     Enemy enemy2(Enemy::fastVirus);
-    Enemy enemy3(Enemy::tankVirus);
+    Enemy enemy3(Enemy::bossVirus);
 
 
     enemy1.setLayer(3);
