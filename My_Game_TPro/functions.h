@@ -39,6 +39,8 @@ enum EnumGameObjects
 class Bullet;
 class Enemy;
 class Tower;
+class IGameObject;
+class OBJStack;
 
 //очередь отрисовки
 constexpr EnumGameObjects renderLine[] = {
@@ -120,7 +122,7 @@ private:
 			перегруженный оператор bool operator<(const NameClass& other) const {слой} дл€ функции std::sort(vectorObj.begin(), vectorObj.end());
 	*/
 };
-//======================================ENEMY======================================
+//======================================ENEMY=======================================
 class Enemy :public IGameObject
 {
 public:
@@ -172,7 +174,6 @@ public:
 private:
 	float POS;	//путь каждого врага делитс€ на 100% и двигаетс€ враг в %
 	sf::RectangleShape OBJ;
-	sf::Vector2f SIZE;
 	sf::Texture TEXTURE;
 	float HP;
 	float START_HP;
@@ -186,15 +187,15 @@ private:
 
 };
 
-//======================================TOWER======================================
+//======================================TOWER=======================================
 
 class Tower : public IGameObject {
 public:
 	enum EnumTowerType {
-		tower1,
-		tower2,
-		tower3,
-		tower4
+		defender,
+		avast,
+		drWeb,
+		kaspersky
 	};
 
 	Tower();
@@ -214,7 +215,7 @@ public:
 	sf::RectangleShape* getShape();
 
 	//свои
-	Bullet* shoot(Enemy* target, unsigned msTime); //timer.getElapsedTime().asSeconds();
+	Bullet* shoot(Enemy* target); //timer.getElapsedTime().asSeconds();
 	Enemy* getTarget(std::vector<Enemy*> vector);
 	void upgrade(uint8_t level = 1);
 
@@ -222,11 +223,12 @@ public:
 private:
 	sf::RectangleShape OBJ;
 	sf::Texture TEXTURE;
-	sf::Vector2f SIZE;
 	uint8_t TOWER_LEVEL;
 
 	uint8_t LAYER;
 	bool DRAW_STATUS;
+	uint8_t STATE_SHOOT;
+	//Enemy* LAST_TARGET; // мне слишком в падлу писать оптимизированный код где будет провер€тьс€ не умерла ли последн€€ цель и тп
 
 };
 
@@ -236,7 +238,7 @@ class Bullet : public IGameObject
 {
 public:
 
-	Bullet(Tower::EnumTowerType type = Tower::tower1, Enemy* target = nullptr, sf::Vector2f startPos = sf::Vector2f(100, 100));
+	Bullet(Tower::EnumTowerType type = Tower::defender, Enemy* target = nullptr, sf::Vector2f startPos = sf::Vector2f(100, 100));
 	~Bullet() {};
 
 	//baza
@@ -261,6 +263,7 @@ public:
 	void complete();//попадание зафиксировано
 	bool isCompleted(); //возвращает статус
 	float getDamage();
+	bool targetIsDie();
 
 private:
 	Enemy* TARGET;
@@ -273,6 +276,8 @@ private:
 	bool IS_FLY;
 	bool DRAW_STATUS;
 };
+
+//====================================OBJ STACK=====================================
 
 class OBJStack
 {
@@ -290,6 +295,8 @@ private:
 	std::map<EnumGameObjects, std::vector<IGameObject*>> stack;
 };
 
+
+//==================================ќ“ƒ≈Ћ№Ќџ≈ ‘”Ќ ÷»»===============================
 
 sf::Vector2f getNewCoordinate(sf::Vector2f pos);//функци€ пересчЄта координат из 1920x1080 в текущий дисплей(относительно центра экрана)
 

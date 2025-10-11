@@ -55,25 +55,25 @@
     "damageCoeficent": 500,
     "velocityCoeficent": 3,
     "layer": 30,
-    "tower1": {
+    "defender": {
       "damage": 1,
       "velocity": 3,
       "texture": "./textures/gif/bulldefender.gif",
       "size": [ 10, 10 ]
     },
-    "tower2": {
+    "avast": {
       "damage": 3,
       "velocity": 3,
       "texture": "./textures/gif/bullavast.gif",
       "size": [ 12, 12 ]
     },
-    "tower3": {
+    "drWeb": {
       "damage": 5,
       "velocity": 2,
       "texture": "./textures/gif/bulldrweb.gif",
       "size": [ 20, 20 ]
     },
-    "tower4": {
+    "kaspersky": {
       "damage": 10,
       "velocity": 1,
       "texture": "./textures/gif/bullkaspersky.gif",
@@ -82,26 +82,32 @@
   },
   "TOWER": {
     "timePerShotCoeficent": 100,
+    "priceCoeficent": 1,
     "layer": 23,
-    "tower1": {
+    "upgrade": [ 1, 1.2, 1.5, 1.8, 2.5, 3 ],
+    "defender": {
       "timePerShot": 1,
       "texture": "./textures/img/defender.png",
-      "size": [ 100, 200 ]
+      "size": [ 100, 200 ],
+      "price": 100
     },
-    "tower2": {
+    "avast": {
       "timePerShot": 1,
       "texture": "./textures/img/avast.png",
-      "size": [ 100, 200 ]
+      "size": [ 100, 200 ],
+      "price": 150
     },
-    "tower3": {
+    "drWeb": {
       "timePerShot": 1,
       "texture": "./textures/img/dr web.png",
-      "size": [ 100, 200 ]
+      "size": [ 100, 200 ],
+      "price": 200
     },
-    "tower4": {
+    "kaspersky": {
       "timePerShot": 1,
       "texture": "./textures/img/kaspersky.png",
-      "size": [ 100, 200 ]
+      "size": [ 100, 200 ],
+      "price": 300
     }
   },
   "GUI": {

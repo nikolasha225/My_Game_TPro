@@ -46,18 +46,18 @@ Enemy::Enemy(EnumEnemyType type, float startPos, float hp, float velocity, std::
 		TEXTURE.loadFromFile(texture);
 		OBJ.setTexture(&TEXTURE);
 		OBJ.setPosition(100, 100);
-		SIZE = textureScale;
 		VELOCITY = velocity;
 	}
 	else
 	{
 		POS = 0;
 		HP = JSONSettings["ENEMY"][typeOfGet]["hp"];
-		SIZE = sf::Vector2f(
-			JSONSettings["ENEMY"][typeOfGet]["size"][0],
-			JSONSettings["ENEMY"][typeOfGet]["size"][1]
+		OBJ = sf::RectangleShape(
+			sf::Vector2f(
+				JSONSettings["ENEMY"][typeOfGet]["size"][0],
+				JSONSettings["ENEMY"][typeOfGet]["size"][1]
+			)
 		);
-		OBJ = sf::RectangleShape(SIZE);
 		TEXTURE.loadFromFile(JSONSettings["ENEMY"][typeOfGet]["texture"]);
 		OBJ.setTexture(&TEXTURE);
 		VELOCITY = (float)JSONSettings["ENEMY"]["velocityCoeficent"]
@@ -108,8 +108,8 @@ void Enemy::setPos(sf::Vector2f pos, bool toMiddle)
 {
 	if (toMiddle)
 	{
-		pos.x -= SIZE.x / 2;
-		pos.y -= SIZE.y / 2;
+		pos.x -= OBJ.getSize().x / 2;
+		pos.y -= OBJ.getSize().y / 2;
 	}
 	OBJ.setPosition(pos);
 }
@@ -134,7 +134,7 @@ uint8_t Enemy::getLayer()
 
 sf::Vector2f Enemy::getSize()
 {
-	return SIZE;
+	return OBJ.getSize();
 }
 
 sf::Vector2f Enemy::getPos(bool isMiddle)
@@ -142,8 +142,8 @@ sf::Vector2f Enemy::getPos(bool isMiddle)
 	sf::Vector2f POS_MIDDLE = wayToCoordinate(POS, LEVEL);
 	if (!isMiddle)
 	{
-		POS_MIDDLE.x -= SIZE.x / 2;
-		POS_MIDDLE.y -= SIZE.y / 2;
+		POS_MIDDLE.x -= OBJ.getSize().x / 2;
+		POS_MIDDLE.y -= OBJ.getSize().y / 2;
 	}
 	return POS_MIDDLE;
 }
@@ -214,20 +214,20 @@ Bullet::Bullet(Tower::EnumTowerType type, Enemy* target, sf::Vector2f startPos)
 	std::string bulletType = "";
 	switch (type)
 	{
-	case Tower::tower1:
-		bulletType = "tower1";
+	case Tower::defender:
+		bulletType = "defender";
 		break;
-	case Tower::tower2:
-		bulletType = "tower2";
+	case Tower::avast:
+		bulletType = "avast";
 		break;
-	case Tower::tower3:
-		bulletType = "tower3";
+	case Tower::drWeb:
+		bulletType = "drWeb";
 		break;
-	case Tower::tower4:
-		bulletType = "tower4";
+	case Tower::kaspersky:
+		bulletType = "kaspersky";
 		break;
 	default:
-		bulletType = "tower1";
+		bulletType = "defender";
 		break;
 	}
 
@@ -342,6 +342,122 @@ float Bullet::getDamage()
 	return DAMAGE;
 }
 
+bool Bullet::targetIsDie()
+{
+	return TARGET->getHP() <= 0;
+}
+
+//============================TOWER=====================================
+
+//---------------------------------------------------
+Tower::Tower() 
+{
+
+}
+
+uint8_t Tower::getLayer() 
+{
+	return LAYER;
+}
+
+void Tower::setLayer(uint8_t layer) 
+{
+	LAYER = layer;
+}
+
+sf::Vector2f Tower::getSize() 
+{
+	return OBJ.getSize();
+}
+
+sf::Vector2f Tower::getPos(bool isMiddle) 
+{
+	sf::Vector2f POS_MIDDLE = OBJ.getPosition();
+	if (!isMiddle)
+	{
+		POS_MIDDLE.x -= OBJ.getSize().x / 2;
+		POS_MIDDLE.y -= OBJ.getSize().y / 2;
+	}
+	return POS_MIDDLE;
+}
+
+void Tower::setMove(sf::Vector2f vector)
+{
+	OBJ.move(vector);
+}
+
+void Tower::setPos(sf::Vector2f pos, bool toMiddle)
+{
+	if (toMiddle)
+	{
+		pos.x -= OBJ.getSize().x / 2;
+		pos.y -= OBJ.getSize().y / 2;
+	}
+	OBJ.setPosition(pos);
+}
+
+void Tower::setDrawStatus(bool status)
+{
+	DRAW_STATUS = status;
+}
+
+bool Tower::getDrawStatus()
+{
+	return DRAW_STATUS;
+}
+
+void Tower::draw(sf::RenderWindow* window)
+{
+	window->draw(OBJ);
+}
+
+EnumGameObjects Tower::getTypeObjet()
+{
+	return tower;
+}
+
+IGameObject* Tower::getPtr()
+{
+	return this;
+}
+
+//---------------------------------------------------
+void Tower::tick()
+{
+
+}
+
+sf::RectangleShape* Tower::getShape()
+{
+	return &OBJ;
+}
+
+//---------------------------------------------------
+Bullet* Tower::shoot(Enemy* target)
+{
+
+}
+
+Enemy* Tower::getTarget(std::vector<Enemy*> vector)
+{
+	float lastDistance = vector[0]->getPosPercent();
+	Enemy* lastEnemy = vector[0];
+	for (auto& ENEMY : vector) {
+		float distance = ENEMY->getPosPercent();
+		if (lastDistance > distance) {
+			lastDistance = distance;
+			lastEnemy = ENEMY;
+		}
+	}
+	return lastEnemy;
+}
+
+//---------------------------------------------------
+void Tower::upgrade(uint8_t level)
+{
+
+}
+
 
 //============================OBJ STACK=================================
 
@@ -448,14 +564,18 @@ void OBJStack::tick()
 					);
 			}
 		}
+
+	//проверяем какие пули достигли цели и у каких цель умерла
+	for (auto& BULLET : stack[bullet])
+		if (((Bullet*)BULLET)->isCompleted() || ((Bullet*)BULLET)->targetIsDie())
+			deleteObj(BULLET);
+
+	//проверяем кто умер
 	for (auto& ENEMY : stack[enemy])
 		if (((Enemy*)ENEMY)->getHP() <= 0) {
 			MONEY += ((Enemy*)ENEMY)->getMoney();
 			deleteObj(ENEMY);
 		}
-	for (auto& BULLET : stack[bullet])
-		if (((Bullet*)BULLET)->isCompleted())
-			deleteObj(BULLET);
 }
 
 //============================ОТДЕЛЬНЫЕ ФУНКЦИИ==========================
