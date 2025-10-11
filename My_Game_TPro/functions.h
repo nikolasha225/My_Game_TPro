@@ -192,7 +192,11 @@ public:
 		kaspersky
 	};
 
-	Tower(EnumTowerType type, std::vector<Bullet*>* bullets, sf::Vector2f pos);
+	Tower(
+		EnumTowerType type, 
+		OBJStack* stack,
+		sf::Vector2f pos
+	);
 	~Tower() {};
 	uint8_t getLayer();//слой отрисовки
 	void setLayer(uint8_t layer);//слой отрисовки
@@ -210,22 +214,27 @@ public:
 
 	//свои
 	Bullet* shoot(Enemy* target); //специально оставил, мб там сделаю другие функции выбора целей (не последнюю а ближайшую и тп)
-	Enemy* getTarget(std::vector<Enemy*> vector);
+	Enemy* getTarget();
 	void upgrade(uint8_t level = 1);
+	EnumTowerType getTowerType();
+	unsigned getPrice();
 
 
 private:
 	sf::RectangleShape OBJ;
 	sf::Texture TEXTURE;
+	sf::Vector2f SCALE;
 	uint8_t TOWER_LEVEL;
 	float BULLET_DAMAGE;
 	float BULLET_VELOCITY_COEF;
 	unsigned TOWER_VELOCITY;
 	EnumTowerType TYPE;
-	std::vector<Bullet*>* BULLET_BUFF;
+	OBJStack* STACK;
 	uint8_t LAYER;
+	unsigned PRICE;
 	bool DRAW_STATUS;
-	uint8_t STATE_SHOOT;// < TOWER_VELOCITY
+	float SHOOT_SCALE;
+	unsigned STATE_SHOOT;// < TOWER_VELOCITY
 	//Enemy* LAST_TARGET; // мне слишком в падлу писать оптимизированный код где будет провер€тьс€ не умерла ли последн€€ цель и тп
 
 };
@@ -236,7 +245,10 @@ class Bullet : public IGameObject
 {
 public:
 
-	Bullet(Tower::EnumTowerType type = Tower::defender, Enemy* target = nullptr, sf::Vector2f startPos = sf::Vector2f(100, 100));
+	Bullet(
+		Tower::EnumTowerType type = Tower::defender, 
+		Enemy* target = nullptr, 
+		sf::Vector2f startPos = sf::Vector2f(100, 100));
 	~Bullet() {};
 
 	//baza
@@ -270,7 +282,6 @@ private:
 	Enemy* TARGET;
 	float DAMAGE;
 	sf::RectangleShape OBJ;
-	sf::Vector2f SIZE;
 	sf::Texture TEXTURE;
 	float VELOCITY;
 	uint8_t LAYER;
@@ -292,6 +303,9 @@ public:
 	void tick();
 	void sortByLayer();
 	bool deleteObj(IGameObject* obj);
+	OBJStack* getPtr();
+	size_t getCountOf(EnumGameObjects type);
+	std::map<EnumGameObjects, std::vector<IGameObject*>>* getStack();
 private:
 	std::map<EnumGameObjects, std::vector<IGameObject*>> stack;
 };

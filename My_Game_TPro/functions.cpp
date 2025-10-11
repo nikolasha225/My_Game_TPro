@@ -54,7 +54,7 @@ Enemy::Enemy(EnumEnemyType type)
 	VELOCITY = (float)JSONSettings["ENEMY"]["velocityCoeficent"]
 		* (float)JSONSettings["ENEMY"][typeOfGet]["velocity"]
 		* getWayCoeficent()
-		* (float)JSONSettings["ENEMY"]["levelCoeficent"][DIFFICULT - 1];
+		* (float)JSONSettings["ENEMY"]["difficultCoeficent"][DIFFICULT - 1];
 	OBJ.setPosition(100, 100);
 	DAMAGE = (float)JSONSettings["ENEMY"][typeOfGet]["damage"]
 		* (float)JSONSettings["ENEMY"]["damageCoeficent"];
@@ -227,12 +227,12 @@ Bullet::Bullet(Tower::EnumTowerType type, Enemy* target, sf::Vector2f startPos)
 		* (float)JSONSettings["BULLET"]["damageCoeficent"];
 	LAYER = JSONSettings["BULLET"]["layer"];
 	TARGET = target;
-	SIZE = sf::Vector2f(
-		(float)JSONSettings["BULLET"][bulletType]["size"][0],
-		(float)JSONSettings["BULLET"][bulletType]["size"][1]
+	OBJ = sf::RectangleShape(
+		sf::Vector2f(
+			(float)JSONSettings["BULLET"][bulletType]["size"][0],
+			(float)JSONSettings["BULLET"][bulletType]["size"][1]
+		)
 	);
-	OBJ = sf::RectangleShape(SIZE);
-	OBJ.setPosition(startPos);
 	TEXTURE.loadFromFile(JSONSettings["BULLET"][bulletType]["texture"]);
 	OBJ.setTexture(&TEXTURE);
 	OBJ.setPosition(startPos);
@@ -252,15 +252,15 @@ void Bullet::setLayer(uint8_t layer) {
 }
 
 sf::Vector2f Bullet::getSize() {
-	return SIZE;
+	return OBJ.getSize();
 }
 
 sf::Vector2f Bullet::getPos(bool isMiddle) {
 	sf::Vector2f pos = OBJ.getPosition();
 	if (isMiddle)
 	{
-		pos.x += SIZE.x / 2;
-		pos.y += SIZE.y / 2;
+		pos.x += getSize().x / 2;
+		pos.y += getSize().y / 2;
 	}
 	return pos;
 }
@@ -272,8 +272,8 @@ void Bullet::setMove(sf::Vector2f vector) {
 void Bullet::setPos(sf::Vector2f pos, bool toMiddle) {
 	if (toMiddle)
 	{
-		pos.x -= SIZE.x / 2;
-		pos.y -= SIZE.y / 2;
+		pos.x -= getSize().x / 2;
+		pos.y -= getSize().y / 2;
 	}
 	OBJ.setPosition(pos);
 }
@@ -308,8 +308,8 @@ sf::RectangleShape* Bullet::getShape() {
 
 sf::Vector2f Bullet::getVectorToTarget(bool isNormalise) {
 	if (isNormalise)
-		return normalize(TARGET->getPos() - OBJ.getPosition() - SIZE / 2.f);
-	return TARGET->getPos() - OBJ.getPosition() - SIZE / 2.f;
+		return normalize(TARGET->getPos() - OBJ.getPosition() - getSize() / 2.f);
+	return TARGET->getPos() - OBJ.getPosition() - getSize() / 2.f;
 }
 
 bool Bullet::operator<(const Bullet& other) const {
@@ -357,9 +357,49 @@ void Bullet::setDamage(float damage)
 //============================TOWER=====================================
 
 //---------------------------------------------------
-Tower::Tower(EnumTowerType type, std::vector<Bullet*>* bullets, sf::Vector2f pos)
+Tower::Tower(EnumTowerType type, OBJStack* stack, sf::Vector2f pos)
 {
-
+	std::string stringType = "defender";
+	switch (type)
+	{
+	case Tower::defender:
+		break;
+	case Tower::avast:
+		stringType = "avast";
+		break;
+	case Tower::drWeb:
+		stringType = "drWeb";
+		break;
+	case Tower::kaspersky:
+		stringType = "kaspersky";
+		break;
+	default:
+		break;
+	}
+	LAYER = JSONSettings["TOWER"]["layer"];
+	OBJ = sf::RectangleShape(
+		sf::Vector2f(
+			JSONSettings["TOWER"][stringType]["size"][0],
+			JSONSettings["TOWER"][stringType]["size"][1]
+		)
+	);
+	TEXTURE.loadFromFile(JSONSettings["TOWER"][stringType]["texture"]);
+	PRICE = (unsigned)JSONSettings["TOWER"][stringType]["price"]
+		* (unsigned)JSONSettings["TOWER"]["priceCoeficent"];
+	TOWER_VELOCITY = (unsigned)JSONSettings["TOWER"][stringType]["framePerShoot"]
+		* (unsigned)JSONSettings["TOWER"]["framePerShootCoeficent"];
+	TOWER_LEVEL = 1;
+	BULLET_DAMAGE = (float)JSONSettings["BULLET"][stringType]["damage"]
+		* (float)JSONSettings["BULLET"]["damageCoeficent"];
+	BULLET_VELOCITY_COEF = 1;
+	TYPE = type;
+	setPos(pos);
+	OBJ.setTexture(&TEXTURE);
+	OBJ.setOrigin(OBJ.getSize().x / 2, OBJ.getSize().y / 2);
+	DRAW_STATUS = 1;
+	STATE_SHOOT = 0;
+	SHOOT_SCALE = JSONSettings["TOWER"]["shootScale"];
+	STACK = stack;
 }
 
 uint8_t Tower::getLayer()
@@ -395,10 +435,10 @@ void Tower::setMove(sf::Vector2f vector)
 
 void Tower::setPos(sf::Vector2f pos, bool toMiddle)
 {
-	if (toMiddle)
+	if (!toMiddle)
 	{
-		pos.x -= OBJ.getSize().x / 2;
-		pos.y -= OBJ.getSize().y / 2;
+		pos.x += OBJ.getSize().x / 2;
+		pos.y += OBJ.getSize().y / 2;
 	}
 	OBJ.setPosition(pos);
 }
@@ -428,10 +468,17 @@ IGameObject* Tower::getPtr()
 	return this;
 }
 
-//---------------------------------------------------
+//+++++++++++++++++++++---------------------------
 void Tower::tick()
 {
-
+	STATE_SHOOT = (STATE_SHOOT >= TOWER_VELOCITY)
+		? (TOWER_VELOCITY)
+		: (STATE_SHOOT + 1);
+	float coefSize = (1.f - SHOOT_SCALE)
+		+ (SHOOT_SCALE * ((float)(STATE_SHOOT) / (float)(TOWER_VELOCITY)));
+	if (STATE_SHOOT >= TOWER_VELOCITY)
+		shoot(getTarget());
+	OBJ.setScale(sf::Vector2f(coefSize,coefSize));
 }
 
 sf::RectangleShape* Tower::getShape()
@@ -439,22 +486,30 @@ sf::RectangleShape* Tower::getShape()
 	return &OBJ;
 }
 
-//---------------------------------------------------
 Bullet* Tower::shoot(Enemy* target)
 {
-	Bullet newBullet(TYPE, target, getPos());
-	newBullet.setDamage(BULLET_DAMAGE);
-	newBullet.multVelocity(BULLET_VELOCITY_COEF);
-	BULLET_BUFF->push_back(&newBullet);
+	if (!target)
+		return nullptr;
+	Bullet* newBullet = new Bullet(TYPE, target, getPos()); 
+	newBullet->setDamage(BULLET_DAMAGE);
+	newBullet->multVelocity(BULLET_VELOCITY_COEF);
+	STACK->add(newBullet);
+	STATE_SHOOT = 0;
+	return newBullet;
 }
 
-Enemy* Tower::getTarget(std::vector<Enemy*> vector)
+Enemy* Tower::getTarget()
 {
-	float lastDistance = vector[0]->getPosPercent();
-	Enemy* lastEnemy = vector[0];
-	for (auto& ENEMY : vector) {
+	if (STACK->getCountOf(enemy) == 0)
+		return nullptr;
+	std::vector<Enemy*> enemys;
+	for (auto& i : (*(STACK->getStack()))[enemy])
+		enemys.push_back((Enemy*)i);
+	float lastDistance = enemys[0]->getPosPercent();
+	Enemy* lastEnemy = enemys[0];
+	for (auto& ENEMY : enemys) {
 		float distance = ENEMY->getPosPercent();
-		if (lastDistance > distance) {
+		if (lastDistance < distance) {
 			lastDistance = distance;
 			lastEnemy = ENEMY;
 		}
@@ -468,10 +523,20 @@ void Tower::upgrade(uint8_t level)
 		return;
 	TOWER_LEVEL += level;
 	float coef = JSONSettings["TOWER"]["upgrade"][TOWER_LEVEL];
-	float lastCoef = JSONSettings["TOWER"]["upgrade"][(TOWER_LEVEL>0)?(TOWER_LEVEL-1):(0)];
+	float lastCoef = JSONSettings["TOWER"]["upgrade"][(TOWER_LEVEL > 0) ? (TOWER_LEVEL - 1) : (0)];
 	BULLET_DAMAGE *= coef / lastCoef;
 	BULLET_VELOCITY_COEF *= coef / lastCoef;
 	TOWER_VELOCITY /= coef / lastCoef;
+}
+
+Tower::EnumTowerType Tower::getTowerType()
+{
+	return TYPE;
+}
+
+unsigned Tower::getPrice()
+{
+	return PRICE;
 }
 
 
@@ -550,6 +615,19 @@ bool OBJStack::deleteObj(IGameObject* obj)
 	return 0;
 }
 
+OBJStack* OBJStack::getPtr() {
+	return this;
+}
+
+size_t OBJStack::getCountOf(EnumGameObjects type)
+{
+	return stack[type].size();
+}
+
+std::map<EnumGameObjects, std::vector<IGameObject*>>* OBJStack::getStack()
+{
+	return &stack;
+}
 
 //--------------------------------+++++++++++++++++++++++
 void OBJStack::tick()

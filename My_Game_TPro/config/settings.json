@@ -2,11 +2,11 @@
   "GENERAL": {
     "title": "Guards of ELBRUS",
     "vsync": true,
-    "framerate": 30,
+    "framerate": 60,
     "resolution": [ 1920, 1080 ]
   },
   "ENEMY": {
-    "levelCoeficent": [ 1, 1.2, 1.5],
+    "difficultCoeficent": [ 1, 1.2, 1.5],
     "velocityCoeficent": 0.01,
     "damageCoeficent": 1,
     "layer": 20,
@@ -59,55 +59,56 @@
     "defender": {
       "damage": 1,
       "velocity": 3,
-      "texture": "./textures/gif/bulldefender.gif",
+      "texture": "./textures/img/bulldefender.png",
       "size": [ 10, 10 ]
     },
     "avast": {
       "damage": 3,
       "velocity": 3,
-      "texture": "./textures/gif/bullavast.gif",
+      "texture": "./textures/img/bullavast.png",
       "size": [ 12, 12 ]
     },
     "drWeb": {
       "damage": 5,
       "velocity": 2,
-      "texture": "./textures/gif/bulldrweb.gif",
+      "texture": "./textures/img/bulldrweb.png",
       "size": [ 20, 20 ]
     },
     "kaspersky": {
       "damage": 10,
       "velocity": 1,
-      "texture": "./textures/gif/bullkaspersky.gif",
+      "texture": "./textures/img/bullkaspersky.png",
       "size": [ 25, 25 ]
     }
   },
   "TOWER": {
-    "timePerShotCoeficent": 100,
+    "framePerShootCoeficent": 100,
     "priceCoeficent": 1,
     "layer": 23,
+    "shootScale": 0.2,
     "upgrade": [ 1, 1.2, 1.5, 1.8, 2.0, 2.5 ],
     "defender": {
-      "timePerShot": 1,
+      "framePerShoot": 1,
       "texture": "./textures/img/defender.png",
-      "size": [ 100, 200 ],
+      "size": [ 100, 100 ],
       "price": 100
     },
     "avast": {
-      "timePerShot": 1,
+      "framePerShoot": 1,
       "texture": "./textures/img/avast.png",
-      "size": [ 100, 200 ],
+      "size": [ 150, 150 ],
       "price": 150
     },
     "drWeb": {
-      "timePerShot": 1,
+      "framePerShoot": 1,
       "texture": "./textures/img/dr web.png",
-      "size": [ 100, 200 ],
+      "size": [ 150, 150 ],
       "price": 200
     },
     "kaspersky": {
-      "timePerShot": 1,
+      "framePerShoot": 1,
       "texture": "./textures/img/kaspersky.png",
-      "size": [ 100, 200 ],
+      "size": [ 150, 150 ],
       "price": 300
     }
   },

@@ -2,6 +2,13 @@
 
 int main(bool __volume = 1, uint8_t __difficult = 1, unsigned __id = 0)
 {
+
+    //базовые параметры (отладка)
+    __difficult = 1;
+    __id = 0;
+    __volume = 1;
+
+
     // SF базовые преременные
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
     sf::RenderWindow window(
@@ -16,7 +23,6 @@ int main(bool __volume = 1, uint8_t __difficult = 1, unsigned __id = 0)
 
     LEVEL = 1;
     DIFFICULT = __difficult;
-
     //базовые определения
     bool pauseState = 0;
 
@@ -36,13 +42,15 @@ int main(bool __volume = 1, uint8_t __difficult = 1, unsigned __id = 0)
 
     enemy3.multVelocity(5);
 
-    Bullet bullet(Tower::defender, &enemy3, sf::Vector2f(1000,1000));
+    //Bullet bullet(Tower::defender, &enemy3, sf::Vector2f(1000,1000));
+    Tower tower1(Tower::defender, &drawStack, sf::Vector2f(700, 500));
 
     drawStack.add(&enemy1);
     drawStack.add(&enemy2);
     drawStack.add(&enemy4);
     drawStack.add(&enemy3);
-    drawStack.add(&bullet);
+    drawStack.add(&tower1);
+    //drawStack.add(&bullet);
     //===========================================
     while (window.isOpen())
     {
