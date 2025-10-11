@@ -23,6 +23,9 @@ int main(bool __volume = 1, uint8_t __difficult = 1, unsigned __id = 0)
 
     LEVEL = 1;
     DIFFICULT = __difficult;
+    HEALTH = JSONSettings["GAME"]["HP"][DIFFICULT - 1];
+    MONEY = JSONSettings["GAME"]["startMoney"][DIFFICULT - 1];
+
     //базовые определения
     bool pauseState = 0;
 

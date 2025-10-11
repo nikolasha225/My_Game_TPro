@@ -5,6 +5,10 @@
     "framerate": 60,
     "resolution": [ 1920, 1080 ]
   },
+  "GAME": {
+    "HP": [ 100, 60, 30 ],
+    "startMoney": [ 500, 300, 200 ]
+  },
   "ENEMY": {
     "difficultCoeficent": [ 1, 1.2, 1.5],
     "velocityCoeficent": 0.01,
@@ -53,7 +57,7 @@
     }
   },
   "BULLET": {
-    "damageCoeficent": 500,
+    "damageCoeficent": 50,
     "velocityCoeficent": 3,
     "layer": 30,
     "defender": {
@@ -82,7 +86,7 @@
     }
   },
   "TOWER": {
-    "framePerShootCoeficent": 100,
+    "framePerShootCoeficent": 30,
     "priceCoeficent": 1,
     "layer": 23,
     "shootScale": 0.2,
@@ -96,19 +100,19 @@
     "avast": {
       "framePerShoot": 1,
       "texture": "./textures/img/avast.png",
-      "size": [ 150, 150 ],
+      "size": [ 100, 100 ],
       "price": 150
     },
     "drWeb": {
       "framePerShoot": 1,
       "texture": "./textures/img/dr web.png",
-      "size": [ 150, 150 ],
+      "size": [ 100, 100 ],
       "price": 200
     },
     "kaspersky": {
       "framePerShoot": 1,
       "texture": "./textures/img/kaspersky.png",
-      "size": [ 150, 150 ],
+      "size": [ 100, 100 ],
       "price": 300
     }
   },
