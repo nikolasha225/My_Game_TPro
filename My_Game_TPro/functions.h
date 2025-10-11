@@ -18,6 +18,7 @@ extern json JSONSettings;
 extern uint8_t LEVEL;
 extern unsigned MONEY;
 extern float HEALTH;
+extern uint8_t DIFFICULT;
 
 //рандом функции
 static std::mt19937 generator(std::random_device{}());
@@ -105,7 +106,7 @@ public:
 	virtual void draw(sf::RenderWindow*) = 0;//функци€ отрисовки
 	virtual EnumGameObjects getTypeObjet() = 0;//возвращает тип объекта;
 	virtual IGameObject* getPtr() = 0;//ссылка на сам объект
-	virtual void tick() =0;
+	virtual void tick() = 0;
 	virtual sf::RectangleShape* getShape() = 0;
 private:
 	/*
@@ -135,14 +136,7 @@ public:
 		bossVirus
 	};
 	~Enemy() {};
-	Enemy(
-		EnumEnemyType type = basicVirus,
-		float startPos = -1.f,
-		float hp = 100.f,
-		float velocity = 0.05f,
-		std::string texture = "./textures/debug/base.png",
-		sf::Vector2f textureScale = sf::Vector2f(0, 0)
-	);//через switch case из типа врага подсосать всЄ остальное
+	Enemy(EnumEnemyType type = basicVirus);//через switch case из типа врага подсосать всЄ остальное
 
 	//чисто enemy
 	float getHP(bool startHP = 0);
@@ -170,7 +164,7 @@ public:
 	sf::RectangleShape* getShape();
 
 	bool operator<(const Enemy& other) const;
-	
+
 private:
 	float POS;	//путь каждого врага делитс€ на 100% и двигаетс€ враг в %
 	sf::RectangleShape OBJ;
@@ -198,7 +192,7 @@ public:
 		kaspersky
 	};
 
-	Tower();
+	Tower(EnumTowerType type, std::vector<Bullet*>* bullets, sf::Vector2f pos);
 	~Tower() {};
 	uint8_t getLayer();//слой отрисовки
 	void setLayer(uint8_t layer);//слой отрисовки
@@ -215,7 +209,7 @@ public:
 	sf::RectangleShape* getShape();
 
 	//свои
-	Bullet* shoot(Enemy* target); //timer.getElapsedTime().asSeconds();
+	Bullet* shoot(Enemy* target); //специально оставил, мб там сделаю другие функции выбора целей (не последнюю а ближайшую и тп)
 	Enemy* getTarget(std::vector<Enemy*> vector);
 	void upgrade(uint8_t level = 1);
 
@@ -224,10 +218,14 @@ private:
 	sf::RectangleShape OBJ;
 	sf::Texture TEXTURE;
 	uint8_t TOWER_LEVEL;
-
+	float BULLET_DAMAGE;
+	float BULLET_VELOCITY_COEF;
+	unsigned TOWER_VELOCITY;
+	EnumTowerType TYPE;
+	std::vector<Bullet*>* BULLET_BUFF;
 	uint8_t LAYER;
 	bool DRAW_STATUS;
-	uint8_t STATE_SHOOT;
+	uint8_t STATE_SHOOT;// < TOWER_VELOCITY
 	//Enemy* LAST_TARGET; // мне слишком в падлу писать оптимизированный код где будет провер€тьс€ не умерла ли последн€€ цель и тп
 
 };
@@ -264,6 +262,9 @@ public:
 	bool isCompleted(); //возвращает статус
 	float getDamage();
 	bool targetIsDie();
+	void multDamage(float coef);
+	void multVelocity(float coef);
+	void setDamage(float damage);
 
 private:
 	Enemy* TARGET;

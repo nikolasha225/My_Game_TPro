@@ -10,9 +10,10 @@ json JSONSettings = json::parse(std::ifstream("./config/settings.json"));
 uint8_t LEVEL = 1;
 unsigned MONEY = 0;
 float HEALTH = 0;
+uint8_t DIFFICULT = 1;
 
 //==================================ENEMY==============================================
-Enemy::Enemy(EnumEnemyType type, float startPos, float hp, float velocity, std::string texture, sf::Vector2f textureScale)
+Enemy::Enemy(EnumEnemyType type)
 {
 	TYPE = type;
 	DRAW_STATUS = 1;
@@ -39,36 +40,27 @@ Enemy::Enemy(EnumEnemyType type, float startPos, float hp, float velocity, std::
 		typeOfGet = "basic";
 		break;
 	}
-	if (startPos >= 0) {
-		POS = startPos;
-		HP = hp;
-		OBJ = sf::RectangleShape(textureScale);
-		TEXTURE.loadFromFile(texture);
-		OBJ.setTexture(&TEXTURE);
-		OBJ.setPosition(100, 100);
-		VELOCITY = velocity;
-	}
-	else
-	{
-		POS = 0;
-		HP = JSONSettings["ENEMY"][typeOfGet]["hp"];
-		OBJ = sf::RectangleShape(
-			sf::Vector2f(
-				JSONSettings["ENEMY"][typeOfGet]["size"][0],
-				JSONSettings["ENEMY"][typeOfGet]["size"][1]
-			)
-		);
-		TEXTURE.loadFromFile(JSONSettings["ENEMY"][typeOfGet]["texture"]);
-		OBJ.setTexture(&TEXTURE);
-		VELOCITY = (float)JSONSettings["ENEMY"]["velocityCoeficent"]
-			* (float)JSONSettings["ENEMY"][typeOfGet]["velocity"]
-			* getWayCoeficent();
-		OBJ.setPosition(100, 100);
-		DAMAGE = (float)JSONSettings["ENEMY"][typeOfGet]["damage"] 
-			* (float)JSONSettings["ENEMY"]["damageCoeficent"];
-		PRICE = (unsigned)JSONSettings["ENEMY"][typeOfGet]["money"]
-			* (unsigned)JSONSettings["ENEMY"]["moneyCoeficent"];
-	}
+
+	POS = 0;
+	HP = JSONSettings["ENEMY"][typeOfGet]["hp"];
+	OBJ = sf::RectangleShape(
+		sf::Vector2f(
+			JSONSettings["ENEMY"][typeOfGet]["size"][0],
+			JSONSettings["ENEMY"][typeOfGet]["size"][1]
+		)
+	);
+	TEXTURE.loadFromFile(JSONSettings["ENEMY"][typeOfGet]["texture"]);
+	OBJ.setTexture(&TEXTURE);
+	VELOCITY = (float)JSONSettings["ENEMY"]["velocityCoeficent"]
+		* (float)JSONSettings["ENEMY"][typeOfGet]["velocity"]
+		* getWayCoeficent()
+		* (float)JSONSettings["ENEMY"]["levelCoeficent"][DIFFICULT - 1];
+	OBJ.setPosition(100, 100);
+	DAMAGE = (float)JSONSettings["ENEMY"][typeOfGet]["damage"]
+		* (float)JSONSettings["ENEMY"]["damageCoeficent"];
+	PRICE = (unsigned)JSONSettings["ENEMY"][typeOfGet]["money"]
+		* (unsigned)JSONSettings["ENEMY"]["moneyCoeficent"];
+
 	START_HP = HP;
 }
 
@@ -344,33 +336,48 @@ float Bullet::getDamage()
 
 bool Bullet::targetIsDie()
 {
-	return TARGET->getHP() <= 0;
+	return TARGET->isDie();
+}
+
+void Bullet::multDamage(float coef)
+{
+	DAMAGE *= coef;
+}
+
+void Bullet::multVelocity(float coef)
+{
+	VELOCITY *= coef;
+}
+
+void Bullet::setDamage(float damage)
+{
+	DAMAGE = damage;
 }
 
 //============================TOWER=====================================
 
 //---------------------------------------------------
-Tower::Tower() 
+Tower::Tower(EnumTowerType type, std::vector<Bullet*>* bullets, sf::Vector2f pos)
 {
 
 }
 
-uint8_t Tower::getLayer() 
+uint8_t Tower::getLayer()
 {
 	return LAYER;
 }
 
-void Tower::setLayer(uint8_t layer) 
+void Tower::setLayer(uint8_t layer)
 {
 	LAYER = layer;
 }
 
-sf::Vector2f Tower::getSize() 
+sf::Vector2f Tower::getSize()
 {
 	return OBJ.getSize();
 }
 
-sf::Vector2f Tower::getPos(bool isMiddle) 
+sf::Vector2f Tower::getPos(bool isMiddle)
 {
 	sf::Vector2f POS_MIDDLE = OBJ.getPosition();
 	if (!isMiddle)
@@ -435,7 +442,10 @@ sf::RectangleShape* Tower::getShape()
 //---------------------------------------------------
 Bullet* Tower::shoot(Enemy* target)
 {
-
+	Bullet newBullet(TYPE, target, getPos());
+	newBullet.setDamage(BULLET_DAMAGE);
+	newBullet.multVelocity(BULLET_VELOCITY_COEF);
+	BULLET_BUFF->push_back(&newBullet);
 }
 
 Enemy* Tower::getTarget(std::vector<Enemy*> vector)
@@ -452,10 +462,16 @@ Enemy* Tower::getTarget(std::vector<Enemy*> vector)
 	return lastEnemy;
 }
 
-//---------------------------------------------------
 void Tower::upgrade(uint8_t level)
 {
-
+	if (TOWER_LEVEL + level > 5)
+		return;
+	TOWER_LEVEL += level;
+	float coef = JSONSettings["TOWER"]["upgrade"][TOWER_LEVEL];
+	float lastCoef = JSONSettings["TOWER"]["upgrade"][(TOWER_LEVEL>0)?(TOWER_LEVEL-1):(0)];
+	BULLET_DAMAGE *= coef / lastCoef;
+	BULLET_VELOCITY_COEF *= coef / lastCoef;
+	TOWER_VELOCITY /= coef / lastCoef;
 }
 
 
@@ -523,8 +539,8 @@ bool OBJStack::deleteObj(IGameObject* obj)
 {
 	EnumGameObjects type = obj->getTypeObjet();
 	auto it = std::find(
-		stack[type].begin(), 
-		stack[type].end(), 
+		stack[type].begin(),
+		stack[type].end(),
 		obj
 	);
 	if (it != stack[type].end()) {
@@ -557,7 +573,7 @@ void OBJStack::tick()
 					getShape()->
 					setFillColor(
 						sf::Color(
-							255, 
+							255,
 							255 * colorCoef,
 							255 * colorCoef
 						)
@@ -572,7 +588,7 @@ void OBJStack::tick()
 
 	//проверяем кто умер
 	for (auto& ENEMY : stack[enemy])
-		if (((Enemy*)ENEMY)->getHP() <= 0) {
+		if (((Enemy*)ENEMY)->isDie()) {
 			MONEY += ((Enemy*)ENEMY)->getMoney();
 			deleteObj(ENEMY);
 		}

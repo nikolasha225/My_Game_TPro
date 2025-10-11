@@ -6,6 +6,7 @@
     "resolution": [ 1920, 1080 ]
   },
   "ENEMY": {
+    "levelCoeficent": [ 1, 1.2, 1.5],
     "velocityCoeficent": 0.01,
     "damageCoeficent": 1,
     "layer": 20,
@@ -84,7 +85,7 @@
     "timePerShotCoeficent": 100,
     "priceCoeficent": 1,
     "layer": 23,
-    "upgrade": [ 1, 1.2, 1.5, 1.8, 2.5, 3 ],
+    "upgrade": [ 1, 1.2, 1.5, 1.8, 2.0, 2.5 ],
     "defender": {
       "timePerShot": 1,
       "texture": "./textures/img/defender.png",

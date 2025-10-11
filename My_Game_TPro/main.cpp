@@ -1,6 +1,6 @@
 #include "functions.h"
 
-int main(bool volume = 1, uint8_t difficult = 2, unsigned id = 0)
+int main(bool __volume = 1, uint8_t __difficult = 1, unsigned __id = 0)
 {
     // SF базовые преременные
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
@@ -12,9 +12,10 @@ int main(bool volume = 1, uint8_t difficult = 2, unsigned id = 0)
     window.setVerticalSyncEnabled(JSONSettings["GENERAL"]["vsync"]);
     window.setFramerateLimit(JSONSettings["GENERAL"]["framerate"]);
 
-    static sf::Clock timer;
+    //static sf::Clock timer;
 
     LEVEL = 1;
+    DIFFICULT = __difficult;
 
     //базовые определения
     bool pauseState = 0;
