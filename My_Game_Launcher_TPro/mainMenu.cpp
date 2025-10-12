@@ -1,8 +1,8 @@
 #include "mainMenu.h"
 
 
-    MenuItem::MenuItem(const sf::String& label, sf::Font& font, unsigned int size, const sf::Vector2f& pos, std::function<void()> callback)
-        : onClick(callback)
+    MenuItem::MenuItem(const sf::String& label, sf::Font& font, unsigned int size, const sf::Vector2f& pos, std::function<void()> callback, bool title)
+        : onClick(callback), title(title)
     {
         text.setFont(font);
         text.setString(label);
@@ -18,7 +18,7 @@
     }
 
     void MenuItem::update(float time) {
-        if (hovered) {
+        if (hovered && !title) {
             // Переливающийся зелёный (плавно пульсирует)
             float pulse = (std::sin(time * 3.0f) + 1.f) / 2.f; // 0..1
             sf::Uint8 green = static_cast<sf::Uint8>(180 + 75 * pulse); // 180..255
