@@ -51,6 +51,18 @@ int main() {
 		screen = "main";
 		};
 
+	bool isSoundOn = true;
+	MenuItem* soundToggle = nullptr;
+
+	auto audio = [&isSoundOn, &soundToggle, &sound] {
+		isSoundOn = !isSoundOn;
+		if (soundToggle) {
+			soundToggle->text.setString(isSoundOn ? L"Вкл" : L"Выкл");
+		}
+		sound.setVolume(isSoundOn ? 100.f : 0.f);
+
+		};
+
 	std::vector<MenuItem> mainmenu = {
 		MenuItem(L"Название игры", font, 50, {200.f, 50.f}, []() {}, true),
 		MenuItem(L"Старт", font, 36, { 100.f, 200.f }, startGame, false),
@@ -63,9 +75,10 @@ int main() {
 	std::vector<MenuItem> settingsmenu = {
 		MenuItem(L"Настройки", font, 50, {300.f, 50.f}, []() {}, true),
 		MenuItem(L"Звук", font, 30, {200.f, 200.f}, []() {}, true),
-		MenuItem(L"Вкл", font, 24, {750.f, 200.f}, []() {}, false), //функция звука
+		MenuItem(L"Вкл", font, 24, {750.f, 200.f}, audio, false), //функция звука
 		MenuItem(L"Сохранить", font, 36, {350.f, 440.f}, back, false)
 	};
+	soundToggle = &settingsmenu[2];
 
 	std::vector<MenuItem> recordsmenu = {
 		MenuItem(L"Таблица рекордов", font, 50, {140.f, 50.f}, []() {}, true),
