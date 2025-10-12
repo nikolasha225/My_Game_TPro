@@ -1,4 +1,4 @@
-#include "mainMenu.h"
+﻿#include "mainMenu.h"
 
 int main() {
 
@@ -7,19 +7,33 @@ int main() {
 	if (icon.loadFromFile("assets/img/icon.png")) {
 		window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 	}
+
 	window.setFramerateLimit(60);
 	window.setVerticalSyncEnabled(1);
+
+
+	AdvancedMatrixBackground matrixBackground;
+
 	sf::Font font;
 	if (!font.loadFromFile("assets/fonts/PressStart2P-Regular.ttf")) {
-		std::cerr << "�� ������� ��������� �����!\n";
+		std::cerr << "Не удалось загрузить шрифт!\n";
 		return 1;
 	}
+
+	sf::SoundBuffer buffer;
+	if (!buffer.loadFromFile("assets/sound/sound.wav")) {
+		std::cerr << "Не удалось загрузить аудиофайл!" << std::endl;
+		return -1;
+	}
+	sf::Sound sound;
+	sound.setBuffer(buffer);
+
 	std::string screen = "main";
 	bool needsRedraw = true;
 
-	// ============= ������� ������� ���� =============
+	// ============= Функции пунктов меню =============
 	auto startGame = []() {
-		     
+		
 		};
 	auto openSettings = [&screen]() {
 		screen = "settings";
@@ -30,7 +44,7 @@ int main() {
 	auto owners = [&screen]() {
 		screen = "owners";
 		};
-	auto exitGame = [&window]() { 
+	auto exitGame = [&window]() {
 		window.close(); 
 		};
 	auto back = [&screen]() {
@@ -38,28 +52,37 @@ int main() {
 		};
 
 	std::vector<MenuItem> mainmenu = {
-		MenuItem(L"�����", font, 36, { 100.f, 200.f }, startGame, false),
-		MenuItem(L"���������", font, 36, { 100.f, 270.f }, openSettings, false),
-		MenuItem(L"������� �������", font, 36, { 100.f, 340.f }, records, false),
-		MenuItem(L"� ����������", font, 36, { 100.f, 410.f }, owners, false),
-		MenuItem(L"�����", font, 36, { 100.f, 480.f }, exitGame, false)
+		MenuItem(L"Название игры", font, 50, {200.f, 50.f}, []() {}, true),
+		MenuItem(L"Старт", font, 36, { 100.f, 200.f }, startGame, false),
+		MenuItem(L"Настройки", font, 36, { 100.f, 270.f }, openSettings, false),
+		MenuItem(L"Таблица лидеров", font, 36, { 100.f, 340.f }, records, false),
+		MenuItem(L"О создателях", font, 36, { 100.f, 410.f }, owners, false),
+		MenuItem(L"Выход", font, 36, { 100.f, 480.f }, exitGame, false)
 	};
 
 	std::vector<MenuItem> settingsmenu = {
-		MenuItem(L"���������", font, 50, {250.f, 50.f}, []() {}, true),
-
+		MenuItem(L"Настройки", font, 50, {300.f, 50.f}, []() {}, true),
+		MenuItem(L"Звук", font, 30, {200.f, 200.f}, []() {}, true),
+		MenuItem(L"Вкл", font, 24, {750.f, 200.f}, []() {}, false), //функция звука
+		MenuItem(L"Сохранить", font, 36, {350.f, 440.f}, back, false)
 	};
+
 	std::vector<MenuItem> recordsmenu = {
-		
-	};
-	std::vector<MenuItem> ownersmenu = {
+		MenuItem(L"Таблица рекордов", font, 50, {140.f, 50.f}, []() {}, true),
+		MenuItem(L"Назад", font, 36, {100.f, 550.f}, back, false)
 
+	};
+
+	std::vector<MenuItem> ownersmenu = {
+		MenuItem(L"О создателях", font, 50, {200.f, 50.f}, []() {}, true),
+		MenuItem(L"Назад", font, 36, {100.f, 550.f}, back, false)
 	};
 
 	sf::Clock clock;
 
 	while (window.isOpen()) {
 		float time = clock.getElapsedTime().asSeconds();
+		float deltaTime = clock.restart().asSeconds();
 
 		sf::Event event;
 		while (window.pollEvent(event)) {
@@ -72,6 +95,7 @@ int main() {
 						if (item.isMouseOver(window)) {
 							item.onClick();
 							needsRedraw = true;
+							sound.play();
 						}
 					}
 				}
@@ -80,6 +104,7 @@ int main() {
 						if (item.isMouseOver(window)) {
 							item.onClick();
 							needsRedraw = true;
+							sound.play();
 						}
 					}
 				}
@@ -88,6 +113,7 @@ int main() {
 						if (item.isMouseOver(window)) {
 							item.onClick();
 							needsRedraw = true;
+							sound.play();
 						}
 					}
 				}
@@ -96,13 +122,15 @@ int main() {
 						if (item.isMouseOver(window)) {
 							item.onClick();
 							needsRedraw = true;
+							sound.play();
 						}
 					}
 				}
 			}
 		}
 
-		// ��������� ���������
+		matrixBackground.updating(deltaTime);
+		// Проверяем наведение
 
 		if (screen == "main") {
 			for (auto& item : mainmenu) {
@@ -133,8 +161,12 @@ int main() {
 			}
 		}
 
-		// ============= ������ =============
-		window.clear(sf::Color(30, 30, 30)); //���
+		// ============= Рендер =============
+		window.clear(sf::Color(30, 30, 30)); //фон
+		matrixBackground.draw(window);
+		sf::RectangleShape overlay(sf::Vector2f(1020, 640));
+		overlay.setFillColor(sf::Color(0, 0, 0, 128)); // Полупрозрачный черный
+		window.draw(overlay);
 
 		if (screen == "main") {
 			for (auto& item : mainmenu)
@@ -157,4 +189,5 @@ int main() {
 	}
 
 	return 0;
+
 }
