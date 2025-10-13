@@ -132,28 +132,16 @@
     <Image Include="textures\img\virus-d.png">
       <Filter>Textures\img\virus</Filter>
     </Image>
-    <Image Include="textures\img\bullavast.png">
-      <Filter>Textures\img\bullet</Filter>
-    </Image>
-    <Image Include="textures\img\bulldefender.png">
-      <Filter>Textures\img\bullet</Filter>
-    </Image>
-    <Image Include="textures\img\bulldrweb.png">
-      <Filter>Textures\img\bullet</Filter>
-    </Image>
-    <Image Include="textures\img\bullkaspersky.png">
-      <Filter>Textures\img\bullet</Filter>
-    </Image>
-    <Image Include="textures\gif\bullkaspersky.gif">
+    <Image Include="textures\img\bullkaspersky.gif">
       <Filter>Textures\gif</Filter>
     </Image>
-    <Image Include="textures\gif\bulldrweb.gif">
+    <Image Include="textures\img\bullavast.gif">
       <Filter>Textures\gif</Filter>
     </Image>
-    <Image Include="textures\gif\bulldefender.gif">
+    <Image Include="textures\img\bulldefender.gif">
       <Filter>Textures\gif</Filter>
     </Image>
-    <Image Include="textures\gif\bullavast.gif">
+    <Image Include="textures\img\bulldrweb.gif">
       <Filter>Textures\gif</Filter>
     </Image>
   </ItemGroup>

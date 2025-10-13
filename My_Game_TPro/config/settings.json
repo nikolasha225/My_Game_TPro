@@ -3,7 +3,8 @@
     "title": "Guards of ELBRUS",
     "vsync": true,
     "framerate": 60,
-    "resolution": [ 1920, 1080 ]
+    "resolution": [ 1920, 1080 ],
+    "iconPath": "./textures/img/icon.png"
   },
   "GAME": {
     "HP": [ 100, 60, 30 ],
