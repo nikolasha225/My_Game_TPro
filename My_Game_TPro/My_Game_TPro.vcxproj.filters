@@ -156,5 +156,8 @@
     <Image Include="textures\img\bullkaspersky.png">
       <Filter>Textures\img\bullet</Filter>
     </Image>
+    <Image Include="textures\img\icongame.png">
+      <Filter>Textures\img</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -160,6 +160,7 @@
     <Image Include="textures\img\defender.png" />
     <Image Include="textures\img\dr web.png" />
     <Image Include="textures\img\fast.png" />
+    <Image Include="textures\img\icongame.png" />
     <Image Include="textures\img\kaspersky.png" />
     <Image Include="textures\img\miniBoss.png" />
     <Image Include="textures\img\miniBoss2.png" />
