@@ -35,7 +35,7 @@ int main(bool __volume = 1, uint8_t __difficult = 1, unsigned __id = 0)
     Enemy enemy1(Enemy::miniBossVirus);
     Enemy enemy4;
     Enemy enemy2(Enemy::fastVirus);
-    Enemy enemy3(Enemy::bossVirus);
+    Enemy enemy3(Enemy::tankVirus);
 
 
     enemy1.setLayer(3);
@@ -43,10 +43,10 @@ int main(bool __volume = 1, uint8_t __difficult = 1, unsigned __id = 0)
     enemy3.setLayer(1);
     enemy4.setLayer(4);
 
-    enemy3.multVelocity(5);
+    //enemy3.multVelocity(5);
 
     //Bullet bullet(Tower::defender, &enemy3, sf::Vector2f(1000,1000));
-    Tower tower1(Tower::defender, &drawStack, sf::Vector2f(700, 500));
+    Tower tower1(Tower::defender, &drawStack, sf::Vector2f(800, 500));
 
     drawStack.add(&enemy1);
     drawStack.add(&enemy2);

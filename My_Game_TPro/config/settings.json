@@ -88,6 +88,7 @@
   "TOWER": {
     "framePerShootCoeficent": 30,
     "priceCoeficent": 1,
+    "rangeCoeficent": 300,
     "layer": 23,
     "shootScale": 0.2,
     "upgrade": [ 1, 1.2, 1.5, 1.8, 2.0, 2.5 ],
@@ -95,25 +96,29 @@
       "framePerShoot": 1,
       "texture": "./textures/img/defender.png",
       "size": [ 100, 100 ],
-      "price": 100
+      "price": 100,
+      "range": 1
     },
     "avast": {
       "framePerShoot": 1,
       "texture": "./textures/img/avast.png",
       "size": [ 100, 100 ],
-      "price": 150
+      "price": 150,
+      "range": 1.1
     },
     "drWeb": {
       "framePerShoot": 1,
       "texture": "./textures/img/dr web.png",
       "size": [ 100, 100 ],
-      "price": 200
+      "price": 200,
+      "range": 1.3
     },
     "kaspersky": {
       "framePerShoot": 1,
       "texture": "./textures/img/kaspersky.png",
       "size": [ 100, 100 ],
-      "price": 300
+      "price": 300,
+      "range": 1.5
     }
   },
   "GUI": {

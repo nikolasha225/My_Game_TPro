@@ -60,7 +60,6 @@ Enemy::Enemy(EnumEnemyType type)
 		* (float)JSONSettings["ENEMY"]["damageCoeficent"];
 	PRICE = (unsigned)JSONSettings["ENEMY"][typeOfGet]["money"]
 		* (unsigned)JSONSettings["ENEMY"]["moneyCoeficent"];
-
 	START_HP = HP;
 }
 
@@ -356,7 +355,7 @@ void Bullet::setDamage(float damage)
 
 //============================TOWER=====================================
 
-//---------------------------------------------------
+
 Tower::Tower(EnumTowerType type, OBJStack* stack, sf::Vector2f pos)
 {
 	std::string stringType = "defender";
@@ -400,6 +399,8 @@ Tower::Tower(EnumTowerType type, OBJStack* stack, sf::Vector2f pos)
 	STATE_SHOOT = 0;
 	SHOOT_SCALE = JSONSettings["TOWER"]["shootScale"];
 	STACK = stack;
+	RANGE = (float)JSONSettings["TOWER"][stringType]["range"]
+		* (float)JSONSettings["TOWER"]["rangeCoeficent"];
 }
 
 uint8_t Tower::getLayer()
@@ -514,7 +515,10 @@ Enemy* Tower::getTarget()
 			lastEnemy = ENEMY;
 		}
 	}
-	return lastEnemy;
+	
+	return (getDistance(lastEnemy->getPos(), this->getPos()) <= RANGE)
+		? (lastEnemy)
+		: nullptr;
 }
 
 void Tower::upgrade(uint8_t level)

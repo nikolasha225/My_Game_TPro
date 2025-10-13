@@ -235,6 +235,7 @@ private:
 	bool DRAW_STATUS;
 	float SHOOT_SCALE;
 	unsigned STATE_SHOOT;// < TOWER_VELOCITY
+	float RANGE;
 	//Enemy* LAST_TARGET; // мне слишком в падлу писать оптимизированный код где будет провер€тьс€ не умерла ли последн€€ цель и тп
 
 };
