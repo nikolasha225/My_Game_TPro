@@ -479,7 +479,7 @@ void Tower::tick()
 		+ (SHOOT_SCALE * ((float)(STATE_SHOOT) / (float)(TOWER_VELOCITY)));
 	if (STATE_SHOOT >= TOWER_VELOCITY)
 		shoot(getTarget());
-	OBJ.setScale(sf::Vector2f(coefSize,coefSize));
+	OBJ.setScale(sf::Vector2f(coefSize, coefSize));
 }
 
 sf::RectangleShape* Tower::getShape()
@@ -491,7 +491,7 @@ Bullet* Tower::shoot(Enemy* target)
 {
 	if (!target)
 		return nullptr;
-	Bullet* newBullet = new Bullet(TYPE, target, getPos()); 
+	Bullet* newBullet = new Bullet(TYPE, target, getPos());
 	newBullet->setDamage(BULLET_DAMAGE);
 	newBullet->multVelocity(BULLET_VELOCITY_COEF);
 	STACK->add(newBullet);
@@ -515,7 +515,7 @@ Enemy* Tower::getTarget()
 			lastEnemy = ENEMY;
 		}
 	}
-	
+
 	return (getDistance(lastEnemy->getPos(), this->getPos()) <= RANGE)
 		? (lastEnemy)
 		: nullptr;
