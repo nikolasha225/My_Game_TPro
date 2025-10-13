@@ -19,6 +19,7 @@ int main(bool __volume = 1, uint8_t __difficult = 1, unsigned __id = 0)
     );
     window.setVerticalSyncEnabled(JSONSettings["GENERAL"]["vsync"]);
     window.setFramerateLimit(JSONSettings["GENERAL"]["framerate"]);
+    
     sf::Image icon;
     if (icon.loadFromFile(JSONSettings["GENERAL"]["iconPath"])) {
         window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
