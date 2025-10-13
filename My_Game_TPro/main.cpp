@@ -2,6 +2,11 @@
 
 int main(bool __volume = 1, uint8_t __difficult = 1, unsigned __id = 0)
 {
+    sf::Image icon;
+    if (icon.loadFromFile("assets/img/icon.png")) {
+        window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+    }
+
 
     //базовые параметры (отладка)
     __difficult = 1;
