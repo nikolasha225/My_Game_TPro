@@ -19,6 +19,9 @@
     <Filter Include="assets\img">
       <UniqueIdentifier>{065caa44-3a2a-4bca-ab36-c178d628d180}</UniqueIdentifier>
     </Filter>
+    <Filter Include="assets\sound">
+      <UniqueIdentifier>{a195c0dc-699b-414e-9d2f-0c2edf932120}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -37,5 +40,16 @@
     <Image Include="assets\img\icon.png">
       <Filter>assets\img</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="assets\sound\click.wav">
+      <Filter>assets\sound</Filter>
+    </Media>
+    <Media Include="assets\sound\hello.wav">
+      <Filter>assets\sound</Filter>
+    </Media>
+    <Media Include="assets\sound\startgame.wav">
+      <Filter>assets\sound</Filter>
+    </Media>
   </ItemGroup>
 </Project>

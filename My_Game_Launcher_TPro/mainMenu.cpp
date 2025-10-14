@@ -35,6 +35,10 @@
         }
     }
 
+	bool MenuItem::gettitle() const {
+		return this->title;
+	}
+
 		AdvancedMatrixBackground::AdvancedMatrixBackground() : spawnTimer(0.f), spawnInterval(0.1f), columns(30) {
 			if (!font.loadFromFile("assets/fonts/PressStart2P-Regular.ttf")) {
 				std::cerr << "Не удалось загрузить шрифт для матрицы!\n";

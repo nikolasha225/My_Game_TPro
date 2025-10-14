@@ -136,6 +136,11 @@
   <ItemGroup>
     <Image Include="assets\img\icon.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="assets\sound\click.wav" />
+    <Media Include="assets\sound\hello.wav" />
+    <Media Include="assets\sound\startgame.wav" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

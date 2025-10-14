@@ -18,6 +18,7 @@ public:
     MenuItem(const sf::String& label, sf::Font& font, unsigned int size, const sf::Vector2f& pos, std::function<void()> callback, bool title);
     bool isMouseOver(const sf::RenderWindow& window) const;
     void update(float time);
+	bool gettitle() const;
 };
 
 struct SymbolChain {
