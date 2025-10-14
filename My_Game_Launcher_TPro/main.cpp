@@ -64,7 +64,7 @@ int main() {
 		};
 
 	std::vector<MenuItem> mainmenu = {
-		MenuItem(L"Название игры", font, 50, {200.f, 50.f}, []() {}, true),
+		MenuItem(L"Guards of ELBRUS", font, 50, {100.f, 50.f}, []() {}, true),
 		MenuItem(L"Старт", font, 36, { 100.f, 200.f }, startGame, false),
 		MenuItem(L"Настройки", font, 36, { 100.f, 270.f }, openSettings, false),
 		MenuItem(L"Таблица лидеров", font, 36, { 100.f, 340.f }, records, false),
@@ -74,8 +74,13 @@ int main() {
 
 	std::vector<MenuItem> settingsmenu = {
 		MenuItem(L"Настройки", font, 50, {300.f, 50.f}, []() {}, true),
+
 		MenuItem(L"Звук", font, 30, {200.f, 200.f}, []() {}, true),
-		MenuItem(L"Вкл", font, 24, {750.f, 200.f}, audio, false), //функция звука
+		MenuItem(L"Вкл", font, 24, {750.f, 200.f}, audio, false),
+
+	// разрешение
+
+
 		MenuItem(L"Сохранить", font, 36, {350.f, 440.f}, back, false)
 	};
 	soundToggle = &settingsmenu[2];
@@ -175,7 +180,7 @@ int main() {
 		}
 
 		// ============= Рендер =============
-		window.clear(sf::Color(30, 30, 30)); //фон
+		window.clear(sf::Color(30, 30, 30)); //изначальный фон
 		matrixBackground.draw(window);
 		sf::RectangleShape overlay(sf::Vector2f(1020, 640));
 		overlay.setFillColor(sf::Color(0, 0, 0, 128)); // Полупрозрачный черный
