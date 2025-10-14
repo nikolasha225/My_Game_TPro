@@ -4,18 +4,21 @@
     "vsync": true,
     "framerate": 60,
     "resolution": [ 1920, 1080 ],
-    "iconPath": "./textures/img/icongame.png"
+    "iconPath": "./textures/img/icongame.png",
+    "volume": 50
   },
   "GAME": {
-    "HP": [ 100, 60, 30 ],
+    "startHP": [ 100, 60, 30 ],
     "startMoney": [ 500, 300, 200 ]
   },
   "ENEMY": {
-    "difficultCoeficent": [ 1, 1.2, 1.5],
+    "difficultCoeficent": [ 1, 1.2, 1.5 ],
     "velocityCoeficent": 0.01,
     "damageCoeficent": 1,
     "layer": 20,
     "moneyCoeficent": 10,
+    "dieSound": "./sound/die.ogg",
+    "damageSound": "./sound/procDamage.ogg",
     "basic": {
       "damage": 5,
       "hp": 100,
@@ -61,6 +64,7 @@
     "damageCoeficent": 50,
     "velocityCoeficent": 4,
     "layer": 30,
+    "shootSound": "./sound/shoot01.ogg",
     "defender": {
       "damage": 1,
       "velocity": 5,

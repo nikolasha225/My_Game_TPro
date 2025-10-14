@@ -1,13 +1,12 @@
 #include "functions.h"
 
-int main(bool __volume = 1, uint8_t __difficult = 1, unsigned __id = 0)
+int main(uint8_t __difficult = 1, unsigned __id = 0)
 {
 
 
     //базовые параметры (отладка)
     __difficult = 1;
     __id = 0;
-    __volume = 1;
 
 
     // SF базовые преременные

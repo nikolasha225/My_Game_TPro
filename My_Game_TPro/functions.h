@@ -2,11 +2,14 @@
 
 //общие функции дл€ игры и главного меню
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+
 //#include <utility>//на вс€кий случай если пригодитс€ std::pair<*,*>
+#include <fstream>
+#include <nlohmann/json.hpp>
+
 #include <string>
 #include <vector>
-#include <nlohmann/json.hpp>
-#include <fstream>
 #include <algorithm>
 #include <map>
 #include <random>
@@ -91,6 +94,10 @@ const std::vector<sf::Vector2f> wayPoints[3] = //наши пути
 	}
 };
 
+///\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\точки башен на каждом пути\\\\\\\\\\\\\\\\\\\\\\\
+
+//=====================================IGameObject============================
+
 class IGameObject
 {
 public:
@@ -123,6 +130,7 @@ private:
 			перегруженный оператор bool operator<(const NameClass& other) const {слой} дл€ функции std::sort(vectorObj.begin(), vectorObj.end());
 	*/
 };
+
 //======================================ENEMY=======================================
 class Enemy :public IGameObject
 {
@@ -164,6 +172,8 @@ public:
 	sf::RectangleShape* getShape();
 
 	bool operator<(const Enemy& other) const;
+
+	static void sound(bool itsDie = 1);// 1 - die 0 - damage
 
 private:
 	float POS;	//путь каждого врага делитс€ на 100% и двигаетс€ враг в %

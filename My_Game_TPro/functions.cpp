@@ -111,6 +111,14 @@ void Enemy::tick()
 {
 	POS += VELOCITY;
 	this->setPos(wayToCoordinate(POS));
+	if (POS >= 100) {
+		sound(0);
+		HEALTH -= DAMAGE;
+		HP = -1;
+		return;
+	}
+	if (HP <= 0)
+		sound();
 }
 
 void Enemy::setLayer(uint8_t newLayer)
@@ -179,6 +187,18 @@ sf::RectangleShape* Enemy::getShape()
 bool Enemy::operator<(const Enemy& other) const
 {
 	return this->LAYER < other.LAYER;
+}
+
+void Enemy::sound(bool itsDie)
+{
+	sf::SoundBuffer buffer;
+	sf::Sound sound;
+	if (itsDie)
+		buffer.loadFromFile(JSONSettings["ENEMY"]["dieSound"]);
+	else
+		buffer.loadFromFile(JSONSettings["ENEMY"]["damageSound"]);
+	sound.setBuffer(buffer);
+	sound.play();
 }
 
 bool Enemy::checkBullet(Bullet* bullet)
