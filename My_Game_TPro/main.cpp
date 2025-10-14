@@ -48,7 +48,7 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     enemy3.setLayer(1);
     enemy4.setLayer(4);
 
-    enemy2.multVelocity(32);
+    enemy1.multVelocity(12);
 
     //Bullet bullet(Tower::defender, &enemy3, sf::Vector2f(1000,1000));
     Tower tower1(Tower::defender, &drawStack, sf::Vector2f(100, 500));

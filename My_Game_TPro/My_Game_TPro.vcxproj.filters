@@ -49,6 +49,9 @@
     <Filter Include="Textures\img\bullet">
       <UniqueIdentifier>{6f2cac96-2fff-41be-aad0-f1ae9901bac1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sound">
+      <UniqueIdentifier>{83e0058e-684f-4ebd-868a-da5fa83c2ff3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -79,6 +82,15 @@
     </None>
     <None Include="config\score.json">
       <Filter>Configs</Filter>
+    </None>
+    <None Include="sound\die.ogg">
+      <Filter>sound</Filter>
+    </None>
+    <None Include="sound\procDamage.ogg">
+      <Filter>sound</Filter>
+    </None>
+    <None Include="sound\shoot01.ogg">
+      <Filter>sound</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -159,5 +171,25 @@
     <Image Include="textures\img\icongame.png">
       <Filter>Textures\img</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="sound\__doubleShoot.mp3">
+      <Filter>sound</Filter>
+    </Media>
+    <Media Include="sound\__manyShoot.mp3">
+      <Filter>sound</Filter>
+    </Media>
+    <Media Include="sound\forMaxPrivetstvie.mp3">
+      <Filter>sound</Filter>
+    </Media>
+    <Media Include="sound\forMaxStartGame.mp3">
+      <Filter>sound</Filter>
+    </Media>
+    <Media Include="sound\shoot01.mp3">
+      <Filter>sound</Filter>
+    </Media>
+    <Media Include="sound\shoot02.mp3">
+      <Filter>sound</Filter>
+    </Media>
   </ItemGroup>
 </Project>

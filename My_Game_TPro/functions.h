@@ -32,7 +32,8 @@ static std::mt19937 generator(std::random_device{}());
 enum EnumGameObjects
 {
 	enemy,//15-23
-	tower,//23-30
+	tower,//23-29
+	core,//30
 	backgroundStatic,//1-3
 	backgroundDynamic,//3-9
 	menuWindowObject,//40-49 + уведы 50+
@@ -45,6 +46,7 @@ class Enemy;
 class Tower;
 class IGameObject;
 class OBJStack;
+class Core;
 
 //очередь отрисовки
 constexpr EnumGameObjects renderLine[] = {
@@ -53,6 +55,7 @@ constexpr EnumGameObjects renderLine[] = {
 	effect,
 	enemy,
 	tower,
+	core,
 	bullet,
 	menuWindowObject
 };
@@ -60,6 +63,7 @@ constexpr EnumGameObjects renderLine[] = {
 constexpr EnumGameObjects renderLineReverce[] = {
 	menuWindowObject,
 	bullet,
+	core,
 	tower,
 	enemy,
 	effect,
@@ -105,6 +109,7 @@ public:
 	virtual uint8_t getLayer() = 0;//слой отрисовки
 	virtual void setLayer(uint8_t layer) = 0;//слой отрисовки
 	virtual sf::Vector2f getSize() = 0;//размеры x y
+	virtual void setSize(sf::Vector2f size) = 0;//размеры x y
 	virtual sf::Vector2f getPos(bool isMiddle = 1) = 0;//положение на экране
 	virtual void setMove(sf::Vector2f vector) = 0;//вектор перемещени€
 	virtual void setPos(sf::Vector2f vector, bool toMiddle = 1) = 0;//вектор перемещени€
@@ -157,8 +162,8 @@ public:
 	bool checkBullet(Bullet* bullet);
 	unsigned getMoney();
 	float getDamage();
-
 	//общие
+	void setSize(sf::Vector2f size);
 	void setPos(sf::Vector2f pos, bool toMiddle = 1);
 	void setLayer(uint8_t newLayer);
 	uint8_t getLayer();//слой отрисовки
@@ -225,6 +230,7 @@ public:
 	IGameObject* getPtr();//ссылка на сам объект
 	void tick();
 	sf::RectangleShape* getShape();
+	void setSize(sf::Vector2f size);
 
 	//свои
 	Bullet* shoot(Enemy* target); //специально оставил, мб там сделаю другие функции выбора целей (не последнюю а ближайшую и тп)
@@ -281,6 +287,7 @@ public:
 	IGameObject* getPtr();//ссылка на сам объект
 	void tick();
 	sf::RectangleShape* getShape();
+	void setSize(sf::Vector2f size);
 
 	//свои
 	sf::Vector2f getVectorToTarget(bool isNormalise = 1);
@@ -327,6 +334,41 @@ private:
 	std::vector<IGameObject*> deleted;
 };
 
+//==========================================CORE=================================
+
+class Core :public IGameObject
+{
+public:
+	Core();
+	~Core() = default;
+
+	uint8_t getLayer();//слой отрисовки
+	void setLayer(uint8_t layer);//слой отрисовки
+	sf::Vector2f getSize();//размеры x y
+	void setSize(sf::Vector2f size);//размеры x y
+	sf::Vector2f getPos(bool isMiddle = 1);//положение на экране
+	void setMove(sf::Vector2f vector);//вектор перемещени€
+	void setPos(sf::Vector2f vector, bool toMiddle = 1);//вектор перемещени€
+	void setDrawStatus(bool status);//задаЄт статус отрисовки (если надо сделать невидимым)
+	bool getDrawStatus();//задаЄт статус отрисовки (если надо сделать невидимым)
+	void draw(sf::RenderWindow*);//функци€ отрисовки
+	EnumGameObjects getTypeObjet();//возвращает тип объекта;
+	IGameObject* getPtr();//ссылка на сам объект
+	void tick();
+	sf::RectangleShape* getShape();
+
+	bool isDamaged();
+
+private:
+	sf::RectangleShape CORE;
+	sf::Texture TEXTURE;
+	float LAST_HEALTH;
+	unsigned TICK_COUNTER;
+	unsigned TICK_DAMAGE;
+	uint8_t LAYER;
+	bool DRAW_STATUS;
+	float MOVE;
+};
 
 //==================================ќ“ƒ≈Ћ№Ќџ≈ ‘”Ќ ÷»»===============================
 

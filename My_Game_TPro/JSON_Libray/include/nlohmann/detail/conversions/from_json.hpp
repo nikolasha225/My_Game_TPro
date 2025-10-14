@@ -431,7 +431,7 @@ inline void from_json(const BasicJsonType& j, ArithmeticType& val)
             break;
         }
 
-        case value_t::null:
+        case value_t::null://////////////////////////////////////////////////////////////////////////
             break;
         case value_t::object:
         case value_t::array:

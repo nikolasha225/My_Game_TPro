@@ -138,6 +138,9 @@
     <None Include="info\instrumentDoc\json.md" />
     <None Include="info\instrumentDoc\markDown.md" />
     <None Include="info\instrumentDoc\sfml.md" />
+    <None Include="sound\die.ogg" />
+    <None Include="sound\procDamage.ogg" />
+    <None Include="sound\shoot01.ogg" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="functions.h" />
@@ -167,6 +170,14 @@
     <Image Include="textures\img\tank.png" />
     <Image Include="textures\img\tower-d.png" />
     <Image Include="textures\img\virus-d.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="sound\forMaxPrivetstvie.mp3" />
+    <Media Include="sound\forMaxStartGame.mp3" />
+    <Media Include="sound\shoot01.mp3" />
+    <Media Include="sound\shoot02.mp3" />
+    <Media Include="sound\__doubleShoot.mp3" />
+    <Media Include="sound\__manyShoot.mp3" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

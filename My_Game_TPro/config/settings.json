@@ -95,12 +95,12 @@
     "priceCoeficent": 1,
     "rangeCoeficent": 3000,
     "layer": 23,
-    "shootScale": 0.2,
+    "shootScale": 0.1,
     "upgrade": [ 1, 1.2, 1.5, 1.8, 2.0, 2.5 ],
     "defender": {
       "framePerShoot": 1,
       "texture": "./textures/img/defender.png",
-      "size": [ 100, 100 ],
+      "size": [ 90, 90 ],
       "price": 100,
       "range": 1
     },
@@ -125,6 +125,12 @@
       "price": 300,
       "range": 1.5
     }
+  },
+  "CORE": {
+    "coreTexture": "./textures/img/elbrus.png",
+    "coreSize": [ 150, 150 ],
+    "tickOfDamage": 30,
+    "coreMove": 30
   },
   "GUI": {
     "money": {

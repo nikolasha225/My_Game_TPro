@@ -214,6 +214,10 @@ unsigned Enemy::getMoney()
 	return PRICE;
 }
 
+void Enemy::setSize(sf::Vector2f size)
+{
+	OBJ.setSize(size);
+}
 
 //============================BULLET====================================
 
@@ -289,7 +293,7 @@ void Bullet::setMove(sf::Vector2f vector) {
 }
 
 void Bullet::setPos(sf::Vector2f pos, bool toMiddle) {
-	if (toMiddle)
+	if (!toMiddle)
 	{
 		pos.x -= getSize().x / 2;
 		pos.y -= getSize().y / 2;
@@ -323,6 +327,11 @@ void Bullet::tick() {
 
 sf::RectangleShape* Bullet::getShape() {
 	return &OBJ;
+}
+
+void Bullet::setSize(sf::Vector2f size)
+{
+	OBJ.setSize(size);
 }
 
 sf::Vector2f Bullet::getVectorToTarget(bool isNormalise) {
@@ -559,7 +568,7 @@ void Tower::upgrade(uint8_t level)
 	float lastCoef = JSONSettings["TOWER"]["upgrade"][(TOWER_LEVEL > 0) ? (TOWER_LEVEL - 1) : (0)];
 	BULLET_DAMAGE *= coef / lastCoef;
 	BULLET_VELOCITY_COEF *= coef / lastCoef;
-	TOWER_VELOCITY /= coef / lastCoef;
+	TOWER_VELOCITY = (float) TOWER_VELOCITY * ( coef / lastCoef);
 }
 
 Tower::EnumTowerType Tower::getTowerType()
@@ -572,6 +581,10 @@ unsigned Tower::getPrice()
 	return PRICE;
 }
 
+void Tower::setSize(sf::Vector2f size)
+{
+	OBJ.setSize(size);
+}
 
 //============================OBJ STACK=================================
 
@@ -580,6 +593,7 @@ OBJStack::OBJStack()
 	stack = {
 	{enemy, {}},
 	{tower, {}},
+	{core, {new Core}},
 	{backgroundStatic, {}},
 	{backgroundDynamic, {}},
 	{menuWindowObject, {}},
@@ -587,6 +601,7 @@ OBJStack::OBJStack()
 	{bullet, {}}
 	};
 	deleted = {};
+
 }
 
 void OBJStack::add(IGameObject* obj)
@@ -621,9 +636,12 @@ void OBJStack::draw(sf::RenderWindow* window)
 	for (auto i : renderLine)
 		for (auto& obj : stack[i]) {
 			sf::Vector2f pos = obj->getPos();
+			sf::Vector2f size = obj->getSize();
 			obj->setPos(getNewCoordinate(pos));
+			obj->setSize(getNewCoordinate(size));
 			obj->draw(window);
 			obj->setPos(pos);
+			obj->setSize(size);
 		}
 }
 
@@ -707,6 +725,138 @@ void OBJStack::tick()
 			deleteObj(ENEMY);
 		}
 
+}
+
+//================================CORE===================================
+
+Core::Core()
+{
+	CORE = sf::RectangleShape(
+		sf::Vector2f(
+			JSONSettings["CORE"]["coreSize"][0],
+			JSONSettings["CORE"]["coreSize"][1]
+		)
+	);
+	TEXTURE.loadFromFile(JSONSettings["CORE"]["coreTexture"]);
+	CORE.setTexture(&TEXTURE);
+	LAYER = 30;
+	TICK_DAMAGE = JSONSettings["CORE"]["tickOfDamage"];
+	TICK_COUNTER = TICK_DAMAGE;
+	LAST_HEALTH = HEALTH;
+	CORE.setOrigin(CORE.getSize().x / 2, CORE.getSize().y / 2);
+	CORE.setPosition(
+		wayToCoordinate(100.f) 
+		+ sf::Vector2f(0, CORE.getSize().y/2)
+	);
+	DRAW_STATUS = 1;
+	MOVE = JSONSettings["CORE"]["coreMove"];
+}
+
+//-----------------------------
+void Core::tick() 
+{
+	TICK_COUNTER += (TICK_COUNTER < TICK_DAMAGE);
+	TICK_COUNTER *= !isDamaged();
+	if (TICK_COUNTER < TICK_DAMAGE) {
+		float coef = (float)TICK_COUNTER / (float)TICK_DAMAGE;
+		CORE.setFillColor(
+			sf::Color(
+				255,
+				255 * coef,
+				255 * coef
+			)
+		);
+		CORE.setPosition(
+			wayToCoordinate(100.f)
+			+ sf::Vector2f(0, CORE.getSize().y / 2)
+		);
+		CORE.move(
+			sf::Vector2f(
+				RAND_FLOAT(-1.f, 1.f) * MOVE * coef,
+				RAND_FLOAT(-1.f, 1.f) * MOVE * coef
+			)
+		);
+	}
+
+	if(TICK_DAMAGE == TICK_COUNTER + 1)
+		CORE.setPosition(
+			wayToCoordinate(100.f)
+			+ sf::Vector2f(0, CORE.getSize().y / 2)
+		);
+}
+
+EnumGameObjects Core::getTypeObjet() 
+{
+	return core;
+}
+
+void Core::draw(sf::RenderWindow* window)
+{
+	window->draw(CORE);
+}
+
+uint8_t Core::getLayer()
+{
+	return LAYER;
+}
+
+void Core::setLayer(uint8_t layer)
+{
+	LAYER = layer;
+}
+
+sf::Vector2f Core::getSize()
+{
+	return CORE.getSize();
+}
+
+void Core::setSize(sf::Vector2f size)
+{
+	CORE.setSize(size);
+}
+
+sf::Vector2f Core::getPos(bool)
+{
+	return CORE.getPosition();
+}
+
+void Core::setMove(sf::Vector2f vector)
+{
+	CORE.move(vector);
+}
+
+void Core::setPos(sf::Vector2f vector, bool)
+{
+	CORE.setPosition(vector);
+}
+
+void Core::setDrawStatus(bool status)
+{
+	DRAW_STATUS = status;
+}
+
+bool Core::getDrawStatus()
+{
+	return DRAW_STATUS;
+}
+
+IGameObject* Core::getPtr() 
+{
+	return this;
+}
+
+sf::RectangleShape* Core::getShape()
+{
+	return &CORE;
+}
+
+bool Core::isDamaged()
+{
+	if (HEALTH != LAST_HEALTH) {
+		LAST_HEALTH = HEALTH;
+		return 1;
+	}
+	return 0;
 }
 
 //============================Œ“ƒ≈À‹Õ€≈ ‘”Õ ÷»»==========================
