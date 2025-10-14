@@ -88,7 +88,7 @@ const std::vector<sf::Vector2f> wayPoints[3] = //наши пути
 		sf::Vector2f(580, 300),   // point1
 		sf::Vector2f(960, 980),   // point2  
 		sf::Vector2f(1340, 300),  // point3
-		sf::Vector2f(1720, 980)   // end
+		sf::Vector2f(1720, 880)   // end
 	},
 	{
 		sf::Vector2f(200, 980),   // start
