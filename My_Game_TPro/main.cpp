@@ -14,7 +14,7 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     sf::RenderWindow window(
         desktopMode,
         (std::string)JSONSettings["GENERAL"]["title"],
-        sf::Style::Default //Fullscreen/Titlebar/Default
+        sf::Style::Fullscreen //Fullscreen/Titlebar/Default
     );
     window.setVerticalSyncEnabled(JSONSettings["GENERAL"]["vsync"]);
     window.setFramerateLimit(JSONSettings["GENERAL"]["framerate"]);
@@ -48,10 +48,10 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     enemy3.setLayer(1);
     enemy4.setLayer(4);
 
-    //enemy3.multVelocity(5);
+    enemy2.multVelocity(32);
 
     //Bullet bullet(Tower::defender, &enemy3, sf::Vector2f(1000,1000));
-    Tower tower1(Tower::kaspersky, &drawStack, sf::Vector2f(100, 500));
+    Tower tower1(Tower::defender, &drawStack, sf::Vector2f(100, 500));
 
     drawStack.add(&enemy1);
     drawStack.add(&enemy2);
@@ -59,6 +59,7 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     drawStack.add(&enemy3);
     drawStack.add(&tower1);
     //drawStack.add(&bullet);
+
     //===========================================
     while (window.isOpen())
     {
@@ -83,7 +84,6 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
         else {
         */
         drawStack.tick();
-
 
 
         window.clear(sf::Color::Black);

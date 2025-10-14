@@ -61,7 +61,7 @@
     }
   },
   "BULLET": {
-    "damageCoeficent": 50,
+    "damageCoeficent": 10,
     "velocityCoeficent": 4,
     "layer": 30,
     "shootSound": "./sound/shoot01.ogg",

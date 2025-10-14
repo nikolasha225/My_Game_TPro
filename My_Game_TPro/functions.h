@@ -101,7 +101,7 @@ const std::vector<sf::Vector2f> wayPoints[3] = //наши пути
 class IGameObject
 {
 public:
-	virtual ~IGameObject() {};
+	virtual ~IGameObject() = default;
 	virtual uint8_t getLayer() = 0;//слой отрисовки
 	virtual void setLayer(uint8_t layer) = 0;//слой отрисовки
 	virtual sf::Vector2f getSize() = 0;//размеры x y
@@ -143,7 +143,7 @@ public:
 		miniBossVirus,
 		bossVirus
 	};
-	~Enemy() {};
+	~Enemy() = default;
 	Enemy(EnumEnemyType type = basicVirus);//через switch case из типа врага подсосать всё остальное
 
 	//чисто enemy
@@ -156,6 +156,7 @@ public:
 	void tick();//игровой тик
 	bool checkBullet(Bullet* bullet);
 	unsigned getMoney();
+	float getDamage();
 
 	//общие
 	void setPos(sf::Vector2f pos, bool toMiddle = 1);
@@ -173,7 +174,7 @@ public:
 
 	bool operator<(const Enemy& other) const;
 
-	static void sound(bool itsDie = 1);// 1 - die 0 - damage
+	void sound();
 
 private:
 	float POS;	//путь каждого врага делится на 100% и двигается враг в %
@@ -188,6 +189,9 @@ private:
 
 	uint8_t LAYER;
 	bool DRAW_STATUS;
+
+	sf::SoundBuffer SOUND_BUFF;
+	sf::Sound SOUND;
 
 };
 
@@ -207,7 +211,7 @@ public:
 		OBJStack* stack,
 		sf::Vector2f pos
 	);
-	~Tower() {};
+	~Tower() = default;
 	uint8_t getLayer();//слой отрисовки
 	void setLayer(uint8_t layer);//слой отрисовки
 	sf::Vector2f getSize();//размеры x y
@@ -228,7 +232,7 @@ public:
 	void upgrade(uint8_t level = 1);
 	EnumTowerType getTowerType();
 	unsigned getPrice();
-
+	void sound();
 
 private:
 	sf::RectangleShape OBJ;
@@ -247,7 +251,8 @@ private:
 	unsigned STATE_SHOOT;// < TOWER_VELOCITY
 	float RANGE;
 	//Enemy* LAST_TARGET; // мне слишком в падлу писать оптимизированный код где будет проверяться не умерла ли последняя цель и тп
-
+	sf::SoundBuffer SOUND_BUFF;
+	sf::Sound SOUND;
 };
 
 //======================================BULLET======================================
@@ -260,7 +265,7 @@ public:
 		Tower::EnumTowerType type = Tower::defender, 
 		Enemy* target = nullptr, 
 		sf::Vector2f startPos = sf::Vector2f(100, 100));
-	~Bullet() {};
+	~Bullet() = default;
 
 	//baza
 	uint8_t getLayer();//слой отрисовки
@@ -306,7 +311,7 @@ class OBJStack
 {
 public:
 	OBJStack();
-	~OBJStack() {};
+	~OBJStack() = default;
 	void add(IGameObject*); //добавить объект и сразу его сортируем
 	void add(std::vector<IGameObject*>); //добавить объект и сразу его сортируем
 	void remove(IGameObject*); //удалить
@@ -319,6 +324,7 @@ public:
 	std::map<EnumGameObjects, std::vector<IGameObject*>>* getStack();
 private:
 	std::map<EnumGameObjects, std::vector<IGameObject*>> stack;
+	std::vector<IGameObject*> deleted;
 };
 
 

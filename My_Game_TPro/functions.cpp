@@ -62,6 +62,7 @@ Enemy::Enemy(EnumEnemyType type)
 		* (unsigned)JSONSettings["ENEMY"]["moneyCoeficent"];
 	START_HP = HP;
 	OBJ.setOrigin(OBJ.getSize().x / 2, OBJ.getSize().y / 2);
+	SOUND_BUFF.loadFromFile(JSONSettings["ENEMY"]["dieSound"]);
 }
 
 float Enemy::getHP(bool startHP)
@@ -112,13 +113,10 @@ void Enemy::tick()
 	POS += VELOCITY;
 	this->setPos(wayToCoordinate(POS));
 	if (POS >= 100) {
-		sound(0);
-		HEALTH -= DAMAGE;
+		SOUND_BUFF.loadFromFile(JSONSettings["ENEMY"]["damageSound"]);
+		HEALTH -= getDamage();
 		HP = -1;
-		return;
 	}
-	if (HP <= 0)
-		sound();
 }
 
 void Enemy::setLayer(uint8_t newLayer)
@@ -164,6 +162,11 @@ void Enemy::draw(sf::RenderWindow* window)
 
 }
 
+float Enemy::getDamage()
+{
+	return DAMAGE;
+}
+
 EnumGameObjects Enemy::getTypeObjet()
 {
 	return enemy;
@@ -189,16 +192,11 @@ bool Enemy::operator<(const Enemy& other) const
 	return this->LAYER < other.LAYER;
 }
 
-void Enemy::sound(bool itsDie)
+void Enemy::sound()
 {
-	sf::SoundBuffer buffer;
-	sf::Sound sound;
-	if (itsDie)
-		buffer.loadFromFile(JSONSettings["ENEMY"]["dieSound"]);
-	else
-		buffer.loadFromFile(JSONSettings["ENEMY"]["damageSound"]);
-	sound.setBuffer(buffer);
-	sound.play();
+	SOUND.setBuffer(SOUND_BUFF);
+	//sound.setVolume(99);
+	SOUND.play();
 }
 
 bool Enemy::checkBullet(Bullet* bullet)
@@ -423,6 +421,8 @@ Tower::Tower(EnumTowerType type, OBJStack* stack, sf::Vector2f pos)
 	STACK = stack;
 	RANGE = (float)JSONSettings["TOWER"][stringType]["range"]
 		* (float)JSONSettings["TOWER"]["rangeCoeficent"];
+	SOUND_BUFF.loadFromFile(JSONSettings["BULLET"]["shootSound"]);
+	SOUND.setVolume(10);
 }
 
 uint8_t Tower::getLayer()
@@ -491,6 +491,12 @@ IGameObject* Tower::getPtr()
 	return this;
 }
 
+void Tower::sound()
+{
+	SOUND.setBuffer(SOUND_BUFF);
+	SOUND.play();
+}
+
 //+++++++++++++++++++++---------------------------
 void Tower::tick()
 {
@@ -518,6 +524,7 @@ Bullet* Tower::shoot(Enemy* target)
 	newBullet->multVelocity(BULLET_VELOCITY_COEF);
 	STACK->add(newBullet);
 	STATE_SHOOT = 0;
+	sound();
 	return newBullet;
 }
 
@@ -579,6 +586,7 @@ OBJStack::OBJStack()
 	{effect, {}},
 	{bullet, {}}
 	};
+	deleted = {};
 }
 
 void OBJStack::add(IGameObject* obj)
@@ -635,6 +643,7 @@ bool OBJStack::deleteObj(IGameObject* obj)
 		obj
 	);
 	if (it != stack[type].end()) {
+		deleted.push_back(*it);
 		stack[type].erase(it);
 		return 1;
 	}
@@ -693,9 +702,11 @@ void OBJStack::tick()
 	//ÔÓ‚ÂˇÂÏ ÍÚÓ ÛÏÂ
 	for (auto& ENEMY : stack[enemy])
 		if (((Enemy*)ENEMY)->isDie()) {
+			((Enemy*)ENEMY)->sound();
 			MONEY += ((Enemy*)ENEMY)->getMoney();
 			deleteObj(ENEMY);
 		}
+
 }
 
 //============================Œ“ƒ≈À‹Õ€≈ ‘”Õ ÷»»==========================
