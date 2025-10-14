@@ -15,7 +15,7 @@ int main(bool __volume = 1, uint8_t __difficult = 1, unsigned __id = 0)
     sf::RenderWindow window(
         desktopMode,
         (std::string)JSONSettings["GENERAL"]["title"],
-        sf::Style::Fullscreen //Fullscreen/Titlebar/Default
+        sf::Style::Default //Fullscreen/Titlebar/Default
     );
     window.setVerticalSyncEnabled(JSONSettings["GENERAL"]["vsync"]);
     window.setFramerateLimit(JSONSettings["GENERAL"]["framerate"]);
@@ -52,7 +52,7 @@ int main(bool __volume = 1, uint8_t __difficult = 1, unsigned __id = 0)
     //enemy3.multVelocity(5);
 
     //Bullet bullet(Tower::defender, &enemy3, sf::Vector2f(1000,1000));
-    Tower tower1(Tower::defender, &drawStack, sf::Vector2f(800, 500));
+    Tower tower1(Tower::kaspersky, &drawStack, sf::Vector2f(100, 500));
 
     drawStack.add(&enemy1);
     drawStack.add(&enemy2);

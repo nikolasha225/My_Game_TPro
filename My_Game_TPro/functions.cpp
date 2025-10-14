@@ -61,6 +61,7 @@ Enemy::Enemy(EnumEnemyType type)
 	PRICE = (unsigned)JSONSettings["ENEMY"][typeOfGet]["money"]
 		* (unsigned)JSONSettings["ENEMY"]["moneyCoeficent"];
 	START_HP = HP;
+	OBJ.setOrigin(OBJ.getSize().x / 2, OBJ.getSize().y / 2);
 }
 
 float Enemy::getHP(bool startHP)
@@ -97,10 +98,10 @@ float Enemy::getPosPercent()
 
 void Enemy::setPos(sf::Vector2f pos, bool toMiddle)
 {
-	if (toMiddle)
+	if (!toMiddle)
 	{
-		pos.x -= OBJ.getSize().x / 2;
-		pos.y -= OBJ.getSize().y / 2;
+		pos.x += OBJ.getSize().x / 2;
+		pos.y += OBJ.getSize().y / 2;
 	}
 	OBJ.setPosition(pos);
 }
@@ -239,6 +240,7 @@ Bullet::Bullet(Tower::EnumTowerType type, Enemy* target, sf::Vector2f startPos)
 	VELOCITY = (float)JSONSettings["BULLET"][bulletType]["velocity"]
 		* JSONSettings["BULLET"]["velocityCoeficent"];
 	DRAW_STATUS = 1;
+	OBJ.setOrigin(OBJ.getSize().x / 2, OBJ.getSize().y / 2);
 }
 
 uint8_t Bullet::getLayer()
@@ -751,19 +753,39 @@ bool isIntersected(sf::RectangleShape obj1, sf::RectangleShape obj2)
 	sf::Vector2f point[4];
 	for (uint8_t i = 0; i < 4; i++) {
 		point[i] = obj1.getPosition();
-		point[i].x += size.x * (i % 3 != 0);
-		point[i].y += size.y * (i > 1);
+		switch (i)
+		{
+		case 0:
+			point[i] += sf::Vector2f(size.x / -2, size.y / -2);
+			break;
+		case 1:
+			point[i] += sf::Vector2f(size.x / 2, size.y / -2);
+			break;
+		case 2:
+			point[i] += sf::Vector2f(size.x / 2, size.y / 2);
+			break;
+		case 3:
+			point[i] += sf::Vector2f(size.x / -2, size.y / 2);
+			break;
+		default:
+			break;
+		}
 		result |= isPointIntoShape(point[i], obj2);
 	}
 	return result;
+
+	//ускоренные вычисления (менее точно)
+	//sf::Vector2f size1 = obj1.getSize(), size2 = obj2.getSize();
+	//return getDistance(obj1.getPosition(), obj2.getPosition())
+	//	< ((size1.x / 4) + (size1.y / 4) + (size2.x / 4) + (size2.y / 4));// / 1.6;//sqrt 2 + ещё чутьчуть
 }
 
 bool isPointIntoShape(sf::Vector2f point, sf::RectangleShape obj)
 {
 	sf::Vector2f pos = obj.getPosition();
 	sf::Vector2f size = obj.getSize();
-	return ((point.x > pos.x && point.x < pos.x + size.x)
-		&& (point.y > pos.y && point.y < pos.y + size.y));
+	return ((point.x > pos.x - size.x/2 && point.x < pos.x + size.x/2)
+		&& (point.y > pos.y - size.y/2 && point.y < pos.y + size.y/2));
 }
 
 float getWayCoeficent(uint8_t level)

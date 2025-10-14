@@ -59,17 +59,17 @@
   },
   "BULLET": {
     "damageCoeficent": 50,
-    "velocityCoeficent": 3,
+    "velocityCoeficent": 4,
     "layer": 30,
     "defender": {
       "damage": 1,
-      "velocity": 3,
+      "velocity": 5,
       "texture": "./textures/img/bulldefender.png",
       "size": [ 10, 10 ]
     },
     "avast": {
       "damage": 3,
-      "velocity": 3,
+      "velocity": 5,
       "texture": "./textures/img/bullavast.png",
       "size": [ 12, 12 ]
     },
@@ -81,7 +81,7 @@
     },
     "kaspersky": {
       "damage": 10,
-      "velocity": 1,
+      "velocity": 3,
       "texture": "./textures/img/bullkaspersky.png",
       "size": [ 25, 25 ]
     }
@@ -89,7 +89,7 @@
   "TOWER": {
     "framePerShootCoeficent": 30,
     "priceCoeficent": 1,
-    "rangeCoeficent": 300,
+    "rangeCoeficent": 3000,
     "layer": 23,
     "shootScale": 0.2,
     "upgrade": [ 1, 1.2, 1.5, 1.8, 2.0, 2.5 ],
