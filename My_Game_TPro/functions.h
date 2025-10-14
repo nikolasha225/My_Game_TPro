@@ -38,7 +38,7 @@ enum EnumGameObjects
 	backgroundDynamic,//3-9
 	menuWindowObject,//40-49 + уведы 50+
 	effect,//10-15
-	bullet//30-39
+	bullet//31-39
 };
 
 class Bullet;
@@ -77,9 +77,9 @@ const std::vector<sf::Vector2f> wayPoints[3] = //наши пути
 		sf::Vector2f(200, 980),   // start
 		sf::Vector2f(200, 300),   // point1
 		sf::Vector2f(1720, 300),  // point2  
-		sf::Vector2f(1720, 780),  // point3
-		sf::Vector2f(400, 780),   // point4
-		sf::Vector2f(400, 500),   // point5
+		sf::Vector2f(1720, 880),  // point3
+		sf::Vector2f(500, 880),   // point4
+		sf::Vector2f(500, 500),   // point5
 		sf::Vector2f(1520, 500),  // point6
 		sf::Vector2f(1520, 600)   // end
 	},
