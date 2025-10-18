@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <map>
 #include <random>
+#include <chrono>
 
 using json = nlohmann::json;
 extern json JSONSettings;
@@ -24,7 +25,15 @@ extern float HEALTH;
 extern uint8_t DIFFICULT;
 
 //рандом функции
-static std::mt19937 generator(std::random_device{}());
+static std::mt19937 generator([]() {
+	return std::mt19937(
+		static_cast<unsigned int>(
+			std::chrono::high_resolution_clock::now()
+			.time_since_epoch()
+			.count()
+			)
+	);
+	}());
 #define RAND_INT(min, max) std::uniform_int_distribution<int>(min, max)(generator)
 #define RAND_FLOAT(min, max) std::uniform_real_distribution<float>(min, max)(generator)
 
@@ -79,8 +88,8 @@ const std::vector<sf::Vector2f> wayPoints[3] = //наши пути
 		sf::Vector2f(1720, 300),  // point2  
 		sf::Vector2f(1720, 880),  // point3
 		sf::Vector2f(500, 880),   // point4
-		sf::Vector2f(500, 500),   // point5
-		sf::Vector2f(1520, 500),  // point6
+		sf::Vector2f(500, 520),   // point5
+		sf::Vector2f(1520, 520),  // point6
 		sf::Vector2f(1520, 600)   // end
 	},
 	{
@@ -95,6 +104,45 @@ const std::vector<sf::Vector2f> wayPoints[3] = //наши пути
 		sf::Vector2f(200, 300),   // point1
 		sf::Vector2f(1720, 300),  // point2
 		sf::Vector2f(1720, 600)   // end
+	}
+};
+
+const std::vector <sf::Vector2f> towerPoint[3] =
+{
+	{
+		sf::Vector2f(350, 900),
+		sf::Vector2f(350, 650),
+		sf::Vector2f(350, 400),
+		sf::Vector2f(770, 400),
+		sf::Vector2f(1200, 400),
+		sf::Vector2f(1620, 400),
+		sf::Vector2f(770, 690),
+		sf::Vector2f(1200, 690),
+	},
+	{
+		sf::Vector2f(320, 480),
+		sf::Vector2f(580, 850),
+		sf::Vector2f(580, 600),
+		sf::Vector2f(960, 600),
+		sf::Vector2f(960, 350),
+		sf::Vector2f(1340, 600),
+		sf::Vector2f(1340, 850),
+		sf::Vector2f(1600, 480),
+	},
+	{
+		 sf::Vector2f(400, 520),
+		sf::Vector2f(400, 710),
+		sf::Vector2f(400, 900),
+		sf::Vector2f(720, 520),
+		sf::Vector2f(720, 710),
+		sf::Vector2f(720, 900),
+		sf::Vector2f(1050, 520),
+		sf::Vector2f(1050, 710),
+		sf::Vector2f(1050, 900),
+		sf::Vector2f(1400, 520),
+		sf::Vector2f(1400, 710),
+		sf::Vector2f(1400, 900),
+
 	}
 };
 
@@ -212,7 +260,7 @@ public:
 	};
 
 	Tower(
-		EnumTowerType type, 
+		EnumTowerType type,
 		OBJStack* stack,
 		sf::Vector2f pos
 	);
@@ -239,6 +287,7 @@ public:
 	EnumTowerType getTowerType();
 	unsigned getPrice();
 	void sound();
+
 
 private:
 	sf::RectangleShape OBJ;
@@ -268,8 +317,8 @@ class Bullet : public IGameObject
 public:
 
 	Bullet(
-		Tower::EnumTowerType type = Tower::defender, 
-		Enemy* target = nullptr, 
+		Tower::EnumTowerType type = Tower::defender,
+		Enemy* target = nullptr,
 		sf::Vector2f startPos = sf::Vector2f(100, 100));
 	~Bullet() = default;
 
@@ -370,6 +419,7 @@ private:
 	float MOVE;
 };
 
+
 //==================================ОТДЕЛЬНЫЕ ФУНКЦИИ===============================
 
 sf::Vector2f getNewCoordinate(sf::Vector2f pos);//функция пересчёта координат из 1920x1080 в текущий дисплей(относительно центра экрана)
@@ -389,3 +439,7 @@ bool isPointIntoShape(sf::Vector2f point, sf::RectangleShape obj);
 float getWayCoeficent(uint8_t level = LEVEL);
 
 float getWayLength(std::vector<sf::Vector2f> pathPoints);
+
+//=================================DEBUG ONLY====================================
+
+std::vector<sf::RectangleShape> createSimplePath(const std::vector<sf::Vector2f>& points, float width);

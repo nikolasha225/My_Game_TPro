@@ -107,21 +107,21 @@
     "avast": {
       "framePerShoot": 1,
       "texture": "./textures/img/avast.png",
-      "size": [ 100, 100 ],
+      "size": [ 90, 90 ],
       "price": 150,
       "range": 1.1
     },
     "drWeb": {
       "framePerShoot": 1,
       "texture": "./textures/img/dr web.png",
-      "size": [ 100, 100 ],
+      "size": [ 90, 90 ],
       "price": 200,
       "range": 1.3
     },
     "kaspersky": {
       "framePerShoot": 1,
       "texture": "./textures/img/kaspersky.png",
-      "size": [ 100, 100 ],
+      "size": [ 90, 90 ],
       "price": 300,
       "range": 1.5
     }

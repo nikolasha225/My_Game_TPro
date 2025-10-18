@@ -43,22 +43,21 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     Enemy enemy3(Enemy::tankVirus);
 
 
-    enemy1.setLayer(3);
-    enemy2.setLayer(2);
-    enemy3.setLayer(1);
-    enemy4.setLayer(4);
-
     enemy1.multVelocity(12);
 
     //Bullet bullet(Tower::defender, &enemy3, sf::Vector2f(1000,1000));
-    Tower tower1(Tower::defender, &drawStack, sf::Vector2f(100, 500));
+    for (auto i : towerPoint[LEVEL - 1]) {
+        drawStack.add(new Tower(Tower::defender, &drawStack, i));
+    }
+    //Tower tower1(Tower::defender, &drawStack, sf::Vector2f(100, 500));
 
     drawStack.add(&enemy1);
     drawStack.add(&enemy2);
     drawStack.add(&enemy4);
     drawStack.add(&enemy3);
-    drawStack.add(&tower1);
+    //drawStack.add(&tower1);
     //drawStack.add(&bullet);
+    std::vector<sf::RectangleShape> path = createSimplePath(wayPoints[LEVEL -1], 20);
 
     //===========================================
     while (window.isOpen())
@@ -91,6 +90,8 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
 
         //отладка
         drawStack.draw(&window);
+        for(auto i : path)
+            window.draw(i);
 
         window.display();
     }

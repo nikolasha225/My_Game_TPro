@@ -989,3 +989,41 @@ float getWayLength(std::vector<sf::Vector2f> pathPoints)
 
 	return totalLength;
 }
+
+
+//==============================DEBUG ONLY========================================
+
+std::vector<sf::RectangleShape> createSimplePath(const std::vector<sf::Vector2f>& points, float width) {
+	std::vector<sf::RectangleShape> pathSegments;
+
+	if (points.size() < 2) {
+		return pathSegments;
+	}
+
+	// Серо-синий цвет
+	sf::Color pathColor(100, 120, 180);
+
+	for (size_t i = 0; i < points.size() - 1; ++i) {
+		const sf::Vector2f& start = points[i];
+		const sf::Vector2f& end = points[i + 1];
+
+		// Вычисляем длину и угол сегмента
+		sf::Vector2f direction = end - start;
+		float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+		float angle = std::atan2(direction.y, direction.x) * 180 / 3.14159f;
+
+		// Создаем прямоугольник для сегмента пути
+		sf::RectangleShape segment(sf::Vector2f(length, width));
+		segment.setFillColor(pathColor);
+		segment.setPosition(start);
+		segment.setRotation(angle);
+
+		// Смещаем так чтобы путь был центрирован относительно линии
+		segment.move(-width / 2 * std::sin(angle * 3.14159f / 180),
+			width / 2 * std::cos(angle * 3.14159f / 180));
+
+		pathSegments.push_back(segment);
+	}
+
+	return pathSegments;
+}
