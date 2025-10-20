@@ -990,7 +990,6 @@ float getWayLength(std::vector<sf::Vector2f> pathPoints)
 	return totalLength;
 }
 
-
 //==============================DEBUG ONLY========================================
 
 std::vector<sf::RectangleShape> createSimplePath(const std::vector<sf::Vector2f>& points, float width) {

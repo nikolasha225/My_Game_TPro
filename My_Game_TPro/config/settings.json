@@ -9,7 +9,8 @@
   },
   "GAME": {
     "startHP": [ 100, 60, 30 ],
-    "startMoney": [ 500, 300, 200 ]
+    "startMoney": [ 500, 300, 200 ],
+    "roundTimeSec": [ 240, 320, 480 ]
   },
   "ENEMY": {
     "difficultCoeficent": [ 1, 1.2, 1.5 ],
@@ -25,7 +26,8 @@
       "velocity": 7,
       "size": [ 50, 50 ],
       "texture": "./textures/img/basic.png",
-      "money": 1
+      "money": 1,
+      "mobCount": 1000
     },
     "fast": {
       "damage": 2,
@@ -33,7 +35,8 @@
       "velocity": 10,
       "size": [ 35, 35 ],
       "texture": "./textures/img/fast.png",
-      "money": 1
+      "money": 1,
+      "mobCount": 200
     },
     "tank": {
       "damage": 11,
@@ -41,7 +44,8 @@
       "velocity": 5,
       "size": [ 65, 65 ],
       "texture": "./textures/img/tank.png",
-      "money": 7
+      "money": 7,
+      "mobCount": 50
     },
     "miniBoss": {
       "damage": 22,
@@ -49,7 +53,8 @@
       "velocity": 3,
       "size": [ 80, 80 ],
       "texture": "./textures/img/miniBoss2.png",
-      "money": 15
+      "money": 15,
+      "mobCount": 10
     },
     "boss": {
       "damage": 33,
@@ -57,7 +62,8 @@
       "velocity": 1,
       "size": [ 90, 120 ],
       "texture": "./textures/img/BOSS_lowPixel.png",
-      "money": 30
+      "money": 30,
+      "spawnTick": 2
     }
   },
   "BULLET": {
