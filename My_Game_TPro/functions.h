@@ -1,5 +1,8 @@
 #pragma once
 
+//debug
+#include <iostream>
+
 //общие функции для игры и главного меню
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -23,6 +26,7 @@ extern uint8_t LEVEL;
 extern unsigned MONEY;
 extern float HEALTH;
 extern uint8_t DIFFICULT;
+extern sf::Vector2f RESOLUTION;
 
 //рандом функции
 static std::mt19937 generator([]() {

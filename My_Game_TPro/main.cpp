@@ -14,7 +14,7 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     sf::RenderWindow window(
         desktopMode,
         (std::string)JSONSettings["GENERAL"]["title"],
-        sf::Style::Fullscreen //Fullscreen/Titlebar/Default
+        sf::Style::Default //Fullscreen/Titlebar/Default
     );
     window.setVerticalSyncEnabled(JSONSettings["GENERAL"]["vsync"]);
     window.setFramerateLimit(JSONSettings["GENERAL"]["framerate"]);
@@ -26,7 +26,7 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
 
     //static sf::Clock timer;
 
-    LEVEL = 1;
+    LEVEL = 2;
     DIFFICULT = __difficult;
     HEALTH = JSONSettings["GAME"]["HP"][DIFFICULT - 1];
     MONEY = JSONSettings["GAME"]["startMoney"][DIFFICULT - 1];
@@ -46,11 +46,11 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     enemy1.multVelocity(12);
 
     //Bullet bullet(Tower::defender, &enemy3, sf::Vector2f(1000,1000));
-    for (auto i : towerPoint[LEVEL - 1]) {
-        drawStack.add(new Tower(Tower::defender, &drawStack, i));
-    }
+    //for (auto i : towerPoint[LEVEL - 1]) {
+    //    drawStack.add(new Tower(Tower::kaspersky, &drawStack, i));
+    //}
     //Tower tower1(Tower::defender, &drawStack, sf::Vector2f(100, 500));
-
+    drawStack.add(new Tower(Tower::kaspersky, &drawStack, sf::Vector2f(500,500)));
     drawStack.add(&enemy1);
     drawStack.add(&enemy2);
     drawStack.add(&enemy4);

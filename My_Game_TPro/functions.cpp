@@ -10,7 +10,11 @@ json JSONSettings = json::parse(std::ifstream("./config/settings.json"));
 uint8_t LEVEL = 1;
 unsigned MONEY = 0;
 float HEALTH = 0;
-uint8_t DIFFICULT = 1;
+uint8_t DIFFICULT = 1; 
+sf::Vector2f RESOLUTION = sf::Vector2f(
+	(float)JSONSettings["GENERAL"]["resolution"][0],
+	(float)JSONSettings["GENERAL"]["resolution"][1]
+); 
 
 //==================================ENEMY==============================================
 Enemy::Enemy(EnumEnemyType type)
@@ -280,7 +284,7 @@ sf::Vector2f Bullet::getSize() {
 
 sf::Vector2f Bullet::getPos(bool isMiddle) {
 	sf::Vector2f pos = OBJ.getPosition();
-	if (isMiddle)
+	if (!isMiddle)
 	{
 		pos.x += getSize().x / 2;
 		pos.y += getSize().y / 2;
@@ -506,7 +510,6 @@ void Tower::sound()
 	SOUND.play();
 }
 
-//+++++++++++++++++++++---------------------------
 void Tower::tick()
 {
 	STATE_SHOOT = (STATE_SHOOT >= TOWER_VELOCITY)
@@ -894,14 +897,10 @@ sf::Vector2f getPositionOnPathByDistance(float pos, const std::vector<sf::Vector
 
 sf::Vector2f getNewCoordinate(sf::Vector2f pos)
 {
-	sf::Vector2f nowSize(
-		(float)JSONSettings["GENERAL"]["resolution"][0],
-		(float)JSONSettings["GENERAL"]["resolution"][1]
-	);
-	if (nowSize.x == 1920 && nowSize.y == 1080)
+	if (RESOLUTION == sf::Vector2f(1920,1080))
 		return pos;
-	pos.x *= nowSize.x / 1920;
-	pos.y *= nowSize.y / 1080;
+	pos.x *= (float)RESOLUTION.x / 1920.f;
+	pos.y *= (float)RESOLUTION.y / 1080.f;
 	return pos;
 }
 
