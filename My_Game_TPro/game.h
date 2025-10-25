@@ -4,36 +4,45 @@
 #include "functions.h"
 
 class Spawner;
+class TowerManager;
 class GameLogic;
 
+enum EnumGameEvent {//игровые событи€ 
+	bossExist
+};
 
+//==============================SPAWNER===================================
 class Spawner
 {
 public:
 	~Spawner() = default;
-	Spawner(sf::RenderWindow* window, OBJStack* stack, sf::Event* event);
+	Spawner(sf::RenderWindow* window, OBJStack* stack);
 
-	void checkEvent();
-	void draw();
 	void tick();
-	void game();
-	void updateProgress();
+	//вовращает массив из 5 булов (кого можно спавнить) (должна сама обнулить заспавненые)
+	bool* allowSpawnEnemy();
 
 private:
 	sf::RenderWindow* WINDOW;
 	OBJStack* STACK;
-	sf::Event* EVENT;
 
 	float PROGRESS; //высчитываем через весы каждого моба (1 - количество оставшихс€ на их тик пер спавн делить на оначальное)
-	
+
+	unsigned START_COUNT_ALL;
+
 	//0 - basic 1 - fast 2 - tank 3 - miniBoss 4 - Boss
-	int TICK_PER_SPAWN[5]; //высчитываем через врем€ и количество
-	int TICK_OF_ENEMY[5]; //текущие тики
-	int COUNT_OF_MOBS[5]; //из json + рандомизаци€
+	unsigned TICK_OF_ENEMY[5]; //текущие тики
+	unsigned COUNT_MOBS[5]; //из json + рандомизаци€
+	unsigned START_COUNT_MOBS[5]; //из json + рандомизаци€
 };
 
+//==============================TOWER_MANAGER=============================
+
+
 //==============================ќ“ƒ≈Ћ№Ќџ≈ ‘”Ќ ÷»»=========================
+unsigned getSummArray(unsigned* array, uint8_t length = 5);
 
 bool mouseNearPoint(sf::Vector2f point, float distance, sf::RenderWindow* window);
 
-bool mouseClickOnButton(sf::RectangleShape button, sf::RenderWindow* window);
+bool mouseInButton(sf::RectangleShape button, sf::RenderWindow* window);
+

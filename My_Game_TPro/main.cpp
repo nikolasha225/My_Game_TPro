@@ -1,4 +1,4 @@
-#include "functions.h"
+#include "game.h"
 
 int main(uint8_t __difficult = 1, unsigned __id = 0)
 {
@@ -26,7 +26,7 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
 
     //static sf::Clock timer;
 
-    LEVEL = 2;
+    LEVEL = 1;
     DIFFICULT = __difficult;
     HEALTH = JSONSettings["GAME"]["HP"][DIFFICULT - 1];
     MONEY = JSONSettings["GAME"]["startMoney"][DIFFICULT - 1];
@@ -35,34 +35,36 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     bool pauseState = 0;
 
     //отладка
+    sf::Event event;
     OBJStack drawStack;
+    Spawner spawner(&window, &drawStack);
 
-    Enemy enemy1(Enemy::miniBossVirus);
-    Enemy enemy4;
-    Enemy enemy2(Enemy::fastVirus);
-    Enemy enemy3(Enemy::tankVirus);
+    //Enemy enemy1(Enemy::miniBossVirus);
+    //Enemy enemy4;
+    //Enemy enemy2(Enemy::fastVirus);
+    //Enemy enemy3(Enemy::tankVirus);
 
 
-    enemy1.multVelocity(12);
+    //enemy1.multVelocity(3);
 
     //Bullet bullet(Tower::defender, &enemy3, sf::Vector2f(1000,1000));
     //for (auto i : towerPoint[LEVEL - 1]) {
     //    drawStack.add(new Tower(Tower::kaspersky, &drawStack, i));
     //}
     //Tower tower1(Tower::defender, &drawStack, sf::Vector2f(100, 500));
-    drawStack.add(new Tower(Tower::kaspersky, &drawStack, sf::Vector2f(500,500)));
-    drawStack.add(&enemy1);
-    drawStack.add(&enemy2);
-    drawStack.add(&enemy4);
-    drawStack.add(&enemy3);
-    //drawStack.add(&tower1);
+    for (size_t i = 0; i < towerPoint[LEVEL - 1].size(); i++)
+        drawStack.add(new Tower(Tower::defender, &drawStack, towerPoint[LEVEL-1][i]));
+   // drawStack.add(&enemy1);
+    //drawStack.add(&enemy2);
+    //drawStack.add(&enemy4);
+    //drawStack.add(&enemy3);
+    //.add(&tower1);
     //drawStack.add(&bullet);
     std::vector<sf::RectangleShape> path = createSimplePath(wayPoints[LEVEL -1], 20);
 
     //===========================================
     while (window.isOpen())
     {
-        sf::Event event;
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
@@ -82,8 +84,10 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
         }
         else {
         */
+        
+        spawner.tick();
         drawStack.tick();
-
+        
 
         window.clear(sf::Color::Black);
         //тут вся отрисовка
@@ -94,6 +98,7 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
             window.draw(i);
 
         window.display();
+        TIME--;
     }
 
     return 0;

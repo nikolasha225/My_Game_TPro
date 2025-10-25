@@ -1,4 +1,5 @@
 #include "functions.h"
+#include "game.h"
 
 
 //=================================JSON=============================================
@@ -15,35 +16,18 @@ sf::Vector2f RESOLUTION = sf::Vector2f(
 	(float)JSONSettings["GENERAL"]["resolution"][0],
 	(float)JSONSettings["GENERAL"]["resolution"][1]
 ); 
+unsigned long TIME = (float)JSONSettings["GAME"]["roundTimeSec"][LEVEL - 1]
+* (unsigned)JSONSettings["GENERAL"]["framerate"];
+unsigned long START_TIME = TIME;
 
 //==================================ENEMY==============================================
+
 Enemy::Enemy(EnumEnemyType type)
 {
 	TYPE = type;
 	DRAW_STATUS = 1;
 	LAYER = JSONSettings["ENEMY"]["layer"];
-	std::string typeOfGet = "basic";
-	switch (type)
-	{
-	case Enemy::basicVirus:
-		typeOfGet = "basic";
-		break;
-	case Enemy::fastVirus:
-		typeOfGet = "fast";
-		break;
-	case Enemy::tankVirus:
-		typeOfGet = "tank";
-		break;
-	case Enemy::miniBossVirus:
-		typeOfGet = "miniBoss";
-		break;
-	case Enemy::bossVirus:
-		typeOfGet = "boss";
-		break;
-	default:
-		typeOfGet = "basic";
-		break;
-	}
+	std::string typeOfGet = enemyTypes[type];
 
 	POS = 0;
 	HP = JSONSettings["ENEMY"][typeOfGet]["hp"];
@@ -67,6 +51,7 @@ Enemy::Enemy(EnumEnemyType type)
 	START_HP = HP;
 	OBJ.setOrigin(OBJ.getSize().x / 2, OBJ.getSize().y / 2);
 	SOUND_BUFF.loadFromFile(JSONSettings["ENEMY"]["dieSound"]);
+	NEED_MOVE = sf::Vector2f(0, 0);
 }
 
 float Enemy::getHP(bool startHP)
@@ -79,6 +64,18 @@ float Enemy::getHP(bool startHP)
 void Enemy::subHP(float hp)
 {
 	HP -= hp;
+	NEED_MOVE = (
+		sf::Vector2f(
+			RAND_FLOAT(
+				-1.f * (float)JSONSettings["ENEMY"]["mobMoveDisperce"],
+				(float)JSONSettings["ENEMY"]["mobMoveDisperce"]
+			),
+			RAND_FLOAT(
+				-1.f * (float)JSONSettings["ENEMY"]["mobMoveDisperce"],
+				(float)JSONSettings["ENEMY"]["mobMoveDisperce"]
+			)
+		)
+	);
 }
 
 void Enemy::multVelocity(float coef)
@@ -108,14 +105,17 @@ void Enemy::setPos(sf::Vector2f pos, bool toMiddle)
 		pos.x += OBJ.getSize().x / 2;
 		pos.y += OBJ.getSize().y / 2;
 	}
-	OBJ.setPosition(pos);
+
+	OBJ.setPosition(pos + NEED_MOVE);
+	NEED_MOVE = sf::Vector2f(0, 0);
 }
 
-//++++++++++++++++-----------------
 void Enemy::tick()
 {
 	POS += VELOCITY;
-	this->setPos(wayToCoordinate(POS));
+	this->setPos(
+		wayToCoordinate(POS)
+	);
 	if (POS >= 100) {
 		SOUND_BUFF.loadFromFile(JSONSettings["ENEMY"]["damageSound"]);
 		HEALTH -= getDamage();
@@ -127,7 +127,6 @@ void Enemy::setLayer(uint8_t newLayer)
 {
 	LAYER = newLayer;
 }
-
 
 uint8_t Enemy::getLayer()
 {
@@ -229,25 +228,7 @@ Bullet::Bullet(Tower::EnumTowerType type, Enemy* target, sf::Vector2f startPos)
 {
 	if (!target)
 		throw "no_target";
-	std::string bulletType = "";
-	switch (type)
-	{
-	case Tower::defender:
-		bulletType = "defender";
-		break;
-	case Tower::avast:
-		bulletType = "avast";
-		break;
-	case Tower::drWeb:
-		bulletType = "drWeb";
-		break;
-	case Tower::kaspersky:
-		bulletType = "kaspersky";
-		break;
-	default:
-		bulletType = "defender";
-		break;
-	}
+	std::string bulletType = towerTypes[type];
 
 	DAMAGE = (float)JSONSettings["BULLET"][bulletType]["damage"]
 		* (float)JSONSettings["BULLET"]["damageCoeficent"];
@@ -386,28 +367,32 @@ void Bullet::setDamage(float damage)
 	DAMAGE = damage;
 }
 
+bool Bullet::update(std::vector<IGameObject*> targets)
+{
+	if (targets.size() == 0)
+	{
+		complete();
+		return 0;
+	}
+	IS_FLY = 1;
+	TARGET = (Enemy*)targets[0];
+	float dist = getDistance(getPos(), TARGET->getPos());
+	for (auto ENEMY_RAW : targets) {
+		if (getDistance(getPos(), ENEMY_RAW->getPos()) < dist)
+		{
+			dist = getDistance(getPos(), ENEMY_RAW->getPos());
+			TARGET = (Enemy*)ENEMY_RAW;
+		}
+	}
+	return 1;
+}
+
 //============================TOWER=====================================
 
 
 Tower::Tower(EnumTowerType type, OBJStack* stack, sf::Vector2f pos)
 {
-	std::string stringType = "defender";
-	switch (type)
-	{
-	case Tower::defender:
-		break;
-	case Tower::avast:
-		stringType = "avast";
-		break;
-	case Tower::drWeb:
-		stringType = "drWeb";
-		break;
-	case Tower::kaspersky:
-		stringType = "kaspersky";
-		break;
-	default:
-		break;
-	}
+	std::string stringType = towerTypes[type];
 	LAYER = JSONSettings["TOWER"]["layer"];
 	OBJ = sf::RectangleShape(
 		sf::Vector2f(
@@ -685,7 +670,6 @@ std::map<EnumGameObjects, std::vector<IGameObject*>>* OBJStack::getStack()
 	return &stack;
 }
 
-//--------------------------------+++++++++++++++++++++++
 void OBJStack::tick()
 {
 	for (auto& i : renderLineReverce)
@@ -716,10 +700,13 @@ void OBJStack::tick()
 		}
 
 	//проверяем какие пули достигли цели и у каких цель умерла
-	for (auto& BULLET : stack[bullet])
-		if (((Bullet*)BULLET)->isCompleted() || ((Bullet*)BULLET)->targetIsDie())
+	for (auto& BULLET : stack[bullet]) {
+		if (!(((Bullet*)BULLET)->isCompleted()) && ((Bullet*)BULLET)->targetIsDie())
+			if (!((Bullet*)BULLET)->update(stack[enemy]))
+				deleteObj(BULLET);
+		if (((Bullet*)BULLET)->isCompleted())
 			deleteObj(BULLET);
-
+	}
 	//проверяем кто умер
 	for (auto& ENEMY : stack[enemy])
 		if (((Enemy*)ENEMY)->isDie()) {

@@ -18,6 +18,8 @@
 #include <random>
 #include <chrono>
 
+#define M_PI 3.1416
+
 using json = nlohmann::json;
 extern json JSONSettings;
 //extern json JSONScore;
@@ -27,6 +29,8 @@ extern unsigned MONEY;
 extern float HEALTH;
 extern uint8_t DIFFICULT;
 extern sf::Vector2f RESOLUTION;
+extern unsigned long TIME;
+extern unsigned long START_TIME;
 
 //рандом функции
 static std::mt19937 generator([]() {
@@ -150,7 +154,20 @@ const std::vector <sf::Vector2f> towerPoint[3] =
 	}
 };
 
-///\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\точки башен на каждом пути\\\\\\\\\\\\\\\\\\\\\\\
+const std::string enemyTypes[5] = {
+	"basic",
+	"fast",
+	"tank",
+	"miniBoss",
+	"boss"
+};
+
+const std::string towerTypes[4] = {
+	"defender",
+	"avast",
+	"drWeb",
+	"kaspersky"
+};
 
 //=====================================IGameObject============================
 
@@ -243,6 +260,7 @@ private:
 	EnumEnemyType TYPE;
 	float DAMAGE;
 	unsigned PRICE;
+	sf::Vector2f NEED_MOVE;
 
 	uint8_t LAYER;
 	bool DRAW_STATUS;
@@ -353,6 +371,7 @@ public:
 	void multDamage(float coef);
 	void multVelocity(float coef);
 	void setDamage(float damage);
+	bool update(std::vector<IGameObject*> targets);
 
 private:
 	Enemy* TARGET;
