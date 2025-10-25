@@ -52,6 +52,9 @@
     <Filter Include="sound">
       <UniqueIdentifier>{83e0058e-684f-4ebd-868a-da5fa83c2ff3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sound\source">
+      <UniqueIdentifier>{4716f792-419f-4db4-a2ec-c4a650f628a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -90,6 +93,21 @@
       <Filter>sound</Filter>
     </None>
     <None Include="sound\shoot01.ogg">
+      <Filter>sound</Filter>
+    </None>
+    <None Include="sound\round3.ogg">
+      <Filter>sound</Filter>
+    </None>
+    <None Include="sound\round2.ogg">
+      <Filter>sound</Filter>
+    </None>
+    <None Include="sound\round1.ogg">
+      <Filter>sound</Filter>
+    </None>
+    <None Include="sound\victory.ogg">
+      <Filter>sound</Filter>
+    </None>
+    <None Include="sound\haha.ogg">
       <Filter>sound</Filter>
     </None>
   </ItemGroup>
@@ -190,6 +208,42 @@
     </Media>
     <Media Include="sound\shoot02.mp3">
       <Filter>sound</Filter>
+    </Media>
+    <Media Include="sound\source\(поражение) ist oficial, you suck.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\__doubleShoot.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\__manyShoot.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\forMaxPrivetstvie.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\forMaxStartGame.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\shoot01.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\shoot02.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\раунд 1.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\раунд 2.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\раунд 3.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\смех.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\чистая победа.mp3">
+      <Filter>sound\source</Filter>
     </Media>
   </ItemGroup>
 </Project>

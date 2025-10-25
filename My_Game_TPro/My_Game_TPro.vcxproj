@@ -139,8 +139,13 @@
     <None Include="info\instrumentDoc\markDown.md" />
     <None Include="info\instrumentDoc\sfml.md" />
     <None Include="sound\die.ogg" />
+    <None Include="sound\haha.ogg" />
     <None Include="sound\procDamage.ogg" />
+    <None Include="sound\round1.ogg" />
+    <None Include="sound\round2.ogg" />
+    <None Include="sound\round3.ogg" />
     <None Include="sound\shoot01.ogg" />
+    <None Include="sound\victory.ogg" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="functions.h" />
@@ -176,6 +181,18 @@
     <Media Include="sound\forMaxStartGame.mp3" />
     <Media Include="sound\shoot01.mp3" />
     <Media Include="sound\shoot02.mp3" />
+    <Media Include="sound\source\(поражение) ist oficial, you suck.mp3" />
+    <Media Include="sound\source\forMaxPrivetstvie.mp3" />
+    <Media Include="sound\source\forMaxStartGame.mp3" />
+    <Media Include="sound\source\shoot01.mp3" />
+    <Media Include="sound\source\shoot02.mp3" />
+    <Media Include="sound\source\__doubleShoot.mp3" />
+    <Media Include="sound\source\__manyShoot.mp3" />
+    <Media Include="sound\source\раунд 1.mp3" />
+    <Media Include="sound\source\раунд 2.mp3" />
+    <Media Include="sound\source\раунд 3.mp3" />
+    <Media Include="sound\source\смех.mp3" />
+    <Media Include="sound\source\чистая победа.mp3" />
     <Media Include="sound\__doubleShoot.mp3" />
     <Media Include="sound\__manyShoot.mp3" />
   </ItemGroup>

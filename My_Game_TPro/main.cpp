@@ -39,7 +39,7 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     OBJStack drawStack;
     Spawner spawner(&window, &drawStack);
 
-    //Enemy enemy1(Enemy::miniBossVirus);
+    //Enemy enemy1(Enemy::bossVirus);
     //Enemy enemy4;
     //Enemy enemy2(Enemy::fastVirus);
     //Enemy enemy3(Enemy::tankVirus);
@@ -54,7 +54,7 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     //Tower tower1(Tower::defender, &drawStack, sf::Vector2f(100, 500));
     for (size_t i = 0; i < towerPoint[LEVEL - 1].size(); i++)
         drawStack.add(new Tower(Tower::defender, &drawStack, towerPoint[LEVEL-1][i]));
-   // drawStack.add(&enemy1);
+    //drawStack.add(&enemy1);
     //drawStack.add(&enemy2);
     //drawStack.add(&enemy4);
     //drawStack.add(&enemy3);

@@ -10,7 +10,9 @@
   "GAME": {
     "startHP": [ 100, 60, 30 ],
     "startMoney": [ 500, 300, 200 ],
-    "roundTimeSec": [ 600, 700, 800 ]
+    "roundTimeSec": [ 600, 700, 800 ],
+    "soundRound": [ "./sound/round1.ogg", "./sound/round2.ogg", "./sound/round3.ogg" ],
+    "soundVictory": "./sound/victory.ogg"
   },
   "ENEMY": {
     "difficultCoeficent": [ 1, 1.2, 1.5 ],
@@ -65,7 +67,8 @@
       "size": [ 90, 120 ],
       "texture": "./textures/img/BOSS_lowPixel.png",
       "money": 30,
-      "mobCount": 3
+      "mobCount": 3,
+      "spawnSound": "./sound/haha.ogg"
     }
   },
   "BULLET": {

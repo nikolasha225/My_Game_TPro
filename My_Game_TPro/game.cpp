@@ -14,6 +14,9 @@ Spawner::Spawner(sf::RenderWindow* window, OBJStack* stack)
 	}
 	PROGRESS = 0.f;
     START_COUNT_ALL = getSummArray(START_COUNT_MOBS);
+
+    SOUND_BUFF.loadFromFile(JSONSettings["ENEMY"]["boss"]["spawnSound"]);
+    SOUND.setVolume(70);
 }
 
 void Spawner::tick() {
@@ -22,6 +25,10 @@ void Spawner::tick() {
         TICK_OF_ENEMY[i]++;
         if (allowSpawn[i])
             STACK->add(new Enemy((Enemy::EnumEnemyType)i));
+    }
+    if (allowSpawn[4]) {
+        SOUND.setBuffer(SOUND_BUFF);
+        SOUND.play();
     }
 }
 
@@ -36,7 +43,7 @@ bool* Spawner::allowSpawnEnemy()
     // Соотношения спавна по волнам
     const float SPAWN_RATIOS[5][10] = {
         {1.2f, 1.1f, 1.0f, 1.0f, 0.9f, 0.9f, 0.8f, 0.8f, 0.7f, 0.6f},
-        {0.5f, 0.8f, 1.2f, 1.5f, 1.3f, 1.1f, 0.9f, 0.7f, 0.5f, 0.7f},
+        {0.9f, 0.8f, 1.2f, 1.5f, 1.3f, 1.1f, 0.9f, 0.7f, 0.5f, 0.7f},
         {0.0f, 0.0f, 0.1f, 0.7f, 1.0f, 1.3f, 1.4f, 1.2f, 0.9f, 0.5f},
         {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.8f, 1.5f, 1.8f, 1.2f, 0.7f},
         {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.5f, 2.5f}

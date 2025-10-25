@@ -34,6 +34,9 @@ private:
 	unsigned TICK_OF_ENEMY[5]; //текущие тики
 	unsigned COUNT_MOBS[5]; //из json + рандомизация
 	unsigned START_COUNT_MOBS[5]; //из json + рандомизация
+
+	sf::SoundBuffer SOUND_BUFF;
+	sf::Sound SOUND;
 };
 
 //==============================TOWER_MANAGER=============================
