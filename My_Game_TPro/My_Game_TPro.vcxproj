@@ -145,6 +145,7 @@
     <None Include="sound\round2.ogg" />
     <None Include="sound\round3.ogg" />
     <None Include="sound\shoot01.ogg" />
+    <None Include="sound\towerSpawn.ogg" />
     <None Include="sound\victory.ogg" />
   </ItemGroup>
   <ItemGroup>

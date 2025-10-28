@@ -41,6 +41,82 @@ private:
 
 //==============================TOWER_MANAGER=============================
 
+class TowerManager
+{
+public:
+	~TowerManager() = default;
+	TowerManager();
+
+	enum EnumSelectType
+	{
+		other,
+		towerSpace,
+		buyMeny,
+
+	};
+
+	void checkEvents();
+	bool eventSelectTower();
+	bool eventUnselectLast();
+	bool eventBuyTower();
+private:
+	struct DownCell;
+	struct Place;
+
+	enum placeState
+	{
+		empty,
+		select,
+		bye,
+		tower,
+		manage
+	};
+	struct Place
+	{
+		sf::RectangleShape OBJ;
+		sf::Texture TEXTURE;
+		Tower* TOWER;
+		placeState STATE;
+		std::vector<DownCell*> BUY_MENU;
+
+		~Place() = default;
+		Place(sf::Vector2f pos);
+		void setStage(placeState state);
+		void draw(sf::RenderWindow* window);
+		bool isEmpty();
+		void addTower();
+	};
+	struct DownCell
+	{
+		enum EnumCellState
+		{
+			unselectFather,
+			selectFather,
+			selectBuy,
+			manageTower
+		};
+		Place* FATHER;
+		sf::RectangleShape OBJ;
+		sf::RectangleShape DESC;
+		sf::RectangleShape MANAGER;
+		sf::Texture TEXTURE_MANAGER;
+		sf::Texture TEXTURE_TOWER;
+		sf::Texture TEXTURE_DESC;
+		EnumCellState STATE;
+		Tower::EnumTowerType NUMBER;
+
+		~DownCell() = default;
+		DownCell(Place* father, Tower::EnumTowerType numbber);
+		void draw(sf::RenderWindow* window);
+		void select();
+		void unselect();
+		bool tryBue();
+		void removeTower();
+	};
+
+	//ÔÂÂÏÂÌÌ˚Â
+	std::vector<Place*> TOWERS;
+};
 
 //==============================Œ“ƒ≈À‹Õ€≈ ‘”Õ ÷»»=========================
 unsigned getSummArray(unsigned* array, uint8_t length = 5);
