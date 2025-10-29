@@ -220,6 +220,8 @@ TowerManager::Place::Place(sf::Vector2f pos)
         );
     TOWER = nullptr;
     OBJ.setOrigin(OBJ.getSize().x / 2, OBJ.getSize().y / 2);
+    SOUND_BUFF.loadFromFile(JSONSettings["TOWER"]["spawnSound"]);
+    SOUND.setBuffer(SOUND_BUFF);
 }
 
 void TowerManager::Place::setState(placeState state)
@@ -235,6 +237,7 @@ bool TowerManager::Place::isEmpty()
 void TowerManager::Place::addTower(Tower* tower)
 {
     TOWER = tower;
+    SOUND.play();
 }
 
 Tower* TowerManager::Place::getTower()

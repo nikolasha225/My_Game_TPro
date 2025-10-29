@@ -81,6 +81,9 @@ private:
 		placeState STATE;
 		std::vector<DownCell*> BUY_MENU;
 
+		sf::SoundBuffer SOUND_BUFF;
+		sf::Sound SOUND;
+
 		~Place() = default;
 		Place(sf::Vector2f pos);
 		void setState(placeState state);

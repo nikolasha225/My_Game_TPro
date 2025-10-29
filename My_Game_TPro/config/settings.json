@@ -111,6 +111,7 @@
     "buyCellSize": [ 50, 50 ],
     "buyDecsSize": [ 200, 200 ],
     "selectTexture": "./textures/img/select.png",
+    "spawnSound": "./sound/towerSpawn.ogg",
     "defender": {
       "framePerShoot": 1,
       "texture": "./textures/img/defender.png",
