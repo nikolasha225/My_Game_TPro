@@ -192,6 +192,9 @@
     <Image Include="textures\img\icongame.png">
       <Filter>Textures\img</Filter>
     </Image>
+    <Image Include="textures\img\select.png">
+      <Filter>Textures\img</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="sound\__doubleShoot.mp3">

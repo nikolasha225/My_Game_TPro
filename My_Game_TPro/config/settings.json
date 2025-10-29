@@ -104,37 +104,44 @@
   "TOWER": {
     "framePerShootCoeficent": 30,
     "priceCoeficent": 1,
-    "rangeCoeficent": 3000,
+    "rangeCoeficent": 300,
     "layer": 23,
     "shootScale": 0.1,
     "upgrade": [ 1, 1.2, 1.5, 1.8, 2.0, 2.5 ],
+    "buyCellSize": [ 50, 50 ],
+    "buyDecsSize": [ 200, 200 ],
+    "selectTexture": "./textures/img/select.png",
     "defender": {
       "framePerShoot": 1,
       "texture": "./textures/img/defender.png",
       "size": [ 90, 90 ],
       "price": 100,
-      "range": 1
+      "range": 1,
+      "descTexture": "./textures/img/icongame.png"
     },
     "avast": {
       "framePerShoot": 1,
       "texture": "./textures/img/avast.png",
       "size": [ 90, 90 ],
       "price": 150,
-      "range": 1.1
+      "range": 1.1,
+      "descTexture": "./textures/img/icongame.png"
     },
     "drWeb": {
       "framePerShoot": 1,
       "texture": "./textures/img/dr web.png",
       "size": [ 90, 90 ],
       "price": 200,
-      "range": 1.3
+      "range": 1.3,
+      "descTexture": "./textures/img/icongame.png"
     },
     "kaspersky": {
       "framePerShoot": 1,
       "texture": "./textures/img/kaspersky.png",
       "size": [ 90, 90 ],
       "price": 300,
-      "range": 1.5
+      "range": 1.5,
+      "descTexture": "./textures/img/icongame.png"
     }
   },
   "CORE": {

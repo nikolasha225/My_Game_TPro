@@ -180,15 +180,11 @@ public:
 	virtual sf::Vector2f getSize() = 0;//размеры x y
 	virtual void setSize(sf::Vector2f size) = 0;//размеры x y
 	virtual sf::Vector2f getPos(bool isMiddle = 1) = 0;//положение на экране
-	virtual void setMove(sf::Vector2f vector) = 0;//вектор перемещения
 	virtual void setPos(sf::Vector2f vector, bool toMiddle = 1) = 0;//вектор перемещения
-	virtual void setDrawStatus(bool status) = 0;//задаёт статус отрисовки (если надо сделать невидимым)
-	virtual bool getDrawStatus() = 0;//задаёт статус отрисовки (если надо сделать невидимым)
 	virtual void draw(sf::RenderWindow*) = 0;//функция отрисовки
 	virtual EnumGameObjects getTypeObjet() = 0;//возвращает тип объекта;
 	virtual IGameObject* getPtr() = 0;//ссылка на сам объект
 	virtual void tick() = 0;
-	virtual sf::RectangleShape* getShape() = 0;
 private:
 	/*
 	В каждом дочернем должно быть (для игры, меню сам решай):

@@ -45,7 +45,7 @@ class TowerManager
 {
 public:
 	~TowerManager() = default;
-	TowerManager();
+	TowerManager(OBJStack* stack);
 
 	enum EnumSelectType
 	{
@@ -56,9 +56,11 @@ public:
 	};
 
 	void checkEvents();
+
 	bool eventSelectTower();
 	bool eventUnselectLast();
-	bool eventBuyTower();
+	bool eventSelectBuyTower();
+
 private:
 	struct DownCell;
 	struct Place;
@@ -71,7 +73,7 @@ private:
 		tower,
 		manage
 	};
-	struct Place
+	struct Place : public IGameObject
 	{
 		sf::RectangleShape OBJ;
 		sf::Texture TEXTURE;
@@ -81,12 +83,23 @@ private:
 
 		~Place() = default;
 		Place(sf::Vector2f pos);
-		void setStage(placeState state);
-		void draw(sf::RenderWindow* window);
+		void setState(placeState state);
 		bool isEmpty();
-		void addTower();
+		void addTower(Tower* tower);
+		Tower* getTower();
+
+		void draw(sf::RenderWindow* window);
+		uint8_t getLayer();
+		void setLayer(uint8_t layer) {}
+		sf::Vector2f getSize();
+		void setSize(sf::Vector2f size);
+		sf::Vector2f getPos(bool isMiddle = 1);
+		void setPos(sf::Vector2f vector, bool toMiddle = 1);
+		EnumGameObjects getTypeObjet();
+		IGameObject* getPtr();
+		void tick() {};
 	};
-	struct DownCell
+	struct DownCell//++
 	{
 		enum EnumCellState
 		{
@@ -96,7 +109,6 @@ private:
 			manageTower
 		};
 		Place* FATHER;
-		sf::RectangleShape OBJ;
 		sf::RectangleShape DESC;
 		sf::RectangleShape MANAGER;
 		sf::Texture TEXTURE_MANAGER;
@@ -106,16 +118,17 @@ private:
 		Tower::EnumTowerType NUMBER;
 
 		~DownCell() = default;
-		DownCell(Place* father, Tower::EnumTowerType numbber);
-		void draw(sf::RenderWindow* window);
-		void select();
-		void unselect();
-		bool tryBue();
-		void removeTower();
+		DownCell(Place* father, Tower::EnumTowerType number);//++
+		void draw(sf::RenderWindow* window);//++
+		void select(bool isFather = 0);//++
+		void unselect();//++
+		bool tryBuy();//++
 	};
 
 	//ÔÂÂÏÂÌÌ˚Â
 	std::vector<Place*> TOWERS;
+	OBJStack* STACK;
+
 };
 
 //==============================Œ“ƒ≈À‹Õ€≈ ‘”Õ ÷»»=========================

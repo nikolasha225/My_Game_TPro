@@ -190,7 +190,186 @@ bool* Spawner::allowSpawnEnemy()
 
 //==============================TOWER_MANAGER==============================
 
+TowerManager::TowerManager(OBJStack* stack)
+{
+    STACK = stack;
+    for (auto& i : towerPoint[LEVEL-1])
+        TOWERS.push_back(new Place(i));
+    for (auto& i : TOWERS)
+        STACK->add(i);
+}
 
+
+
+//===========PLACE===============
+TowerManager::Place::Place(sf::Vector2f pos)
+{
+    OBJ.setSize(
+        sf::Vector2f(
+            JSONSettings["TOWER"]["kaspersky"]["size"][0],
+            JSONSettings["TOWER"]["kaspersky"]["size"][1]
+        )
+    );
+    OBJ.setPosition(pos);
+    TEXTURE.loadFromFile(JSONSettings["TOWER"]["selectTexture"]);
+    OBJ.setTexture(&TEXTURE);
+    STATE = empty;
+    for (uint8_t i = Tower::defender; i <= Tower::kaspersky; i++)
+        BUY_MENU.push_back(
+            new DownCell(this, (Tower::EnumTowerType)i)
+        );
+    TOWER = nullptr;
+    OBJ.setOrigin(OBJ.getSize().x / 2, OBJ.getSize().y / 2);
+}
+
+void TowerManager::Place::setState(placeState state)
+{
+    STATE = state;
+}
+
+bool TowerManager::Place::isEmpty()
+{
+    return TOWER;
+}
+
+void TowerManager::Place::addTower(Tower* tower)
+{
+    TOWER = tower;
+}
+
+Tower* TowerManager::Place::getTower()
+{
+    return TOWER;
+}
+
+
+//сделать скейлинг в зависимости от time
+void TowerManager::Place::draw(sf::RenderWindow* window)
+{
+    for (auto& i : BUY_MENU)
+        i->draw(window);
+    if (STATE < tower) {
+        OBJ.setScale(
+            sf::Vector2f(1,1)
+            * (float)(1.f - abs(((float)(((int)TIME % 80) - 40))/ 300.f))
+            );
+        window->draw(OBJ);
+    }
+}
+
+uint8_t TowerManager::Place::getLayer() {
+    return 5;
+}
+
+sf::Vector2f TowerManager::Place::getSize() {
+    return OBJ.getSize();
+}
+
+void TowerManager::Place::setSize(sf::Vector2f size)
+{
+    OBJ.setSize(size);
+}
+
+sf::Vector2f TowerManager::Place::getPos(bool isMiddle) {
+    return OBJ.getPosition() - (float)(1-isMiddle) * (OBJ.getPosition()/2.f);
+}
+
+void TowerManager::Place::setPos(sf::Vector2f vector, bool toMiddle)
+{
+    OBJ.setPosition(vector + (float)(1 - toMiddle) * (OBJ.getPosition() / 2.f));
+}
+
+EnumGameObjects TowerManager::Place::getTypeObjet() {
+    return EnumGameObjects::tower;
+}
+
+IGameObject* TowerManager::Place::getPtr() {
+    return this;
+}
+
+//===========DOWN_CELL===========
+
+TowerManager::DownCell::DownCell(Place* father, Tower::EnumTowerType number)
+{
+    FATHER = father;
+    NUMBER = number;
+    TEXTURE_MANAGER.loadFromFile(
+        JSONSettings["TOWER"][towerTypes[number]]["texture"]
+    );
+    MANAGER.setSize(
+        sf::Vector2f(
+            JSONSettings["TOWER"]["buyCellSize"][0],
+            JSONSettings["TOWER"]["buyCellSize"][1]
+        )
+    );
+    MANAGER.setTexture(&TEXTURE_MANAGER);
+    MANAGER.setOrigin(MANAGER.getSize().x / 2, MANAGER.getSize().y / 2);
+    MANAGER.setPosition(
+        sf::Vector2f(
+            FATHER->getPos().x,
+            FATHER->getPos().y + FATHER->getSize().y/2 + MANAGER.getSize().y/2 + MANAGER.getSize().y*(float)NUMBER
+        )
+    );
+    TEXTURE_DESC.loadFromFile(JSONSettings["TOWER"][towerTypes[number]]["descTexture"]);
+    DESC.setSize(
+        sf::Vector2f(
+            JSONSettings["TOWER"]["buyDecsSize"][0],
+            JSONSettings["TOWER"]["buyDecsSize"][1]
+        )
+    );
+    DESC.setTexture(&TEXTURE_DESC);
+    DESC.setOrigin(DESC.getSize().x / 2, DESC.getSize().y / 2);
+    DESC.setPosition(
+        sf::Vector2f(
+            FATHER->getPos().x + MANAGER.getSize().x/2 + DESC.getSize().x/2,
+            FATHER->getPos().y + FATHER->getSize().y / 2 + DESC.getSize().y / 2
+        )
+    );
+    STATE = unselectFather;
+}
+
+void TowerManager::DownCell::draw(sf::RenderWindow* window) {
+    switch (STATE)
+    {
+    case TowerManager::DownCell::unselectFather:
+        return;
+        break;
+    case TowerManager::DownCell::selectFather:
+        window->draw(MANAGER);
+        break;
+    case TowerManager::DownCell::selectBuy:
+        window->draw(MANAGER);
+        window->draw(DESC);
+        break;
+    case TowerManager::DownCell::manageTower:
+        return;
+        break;
+    default:
+        return;
+        break;
+    }
+}
+
+void TowerManager::DownCell::select(bool isFather)
+{
+    STATE = (isFather)?(selectFather):(selectBuy);
+}
+
+void TowerManager::DownCell::unselect()
+{
+    STATE = unselectFather;
+}
+
+bool TowerManager::DownCell::tryBuy()
+{
+    if (MONEY >= FATHER->getTower()->getPrice())
+    {
+        MONEY -= FATHER->getTower()->getPrice();
+        STATE = manageTower;
+        return 1;
+    }
+    return 0;
+}
 
 
 

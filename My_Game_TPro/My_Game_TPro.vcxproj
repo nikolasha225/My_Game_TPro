@@ -173,6 +173,7 @@
     <Image Include="textures\img\kaspersky.png" />
     <Image Include="textures\img\miniBoss.png" />
     <Image Include="textures\img\miniBoss2.png" />
+    <Image Include="textures\img\select.png" />
     <Image Include="textures\img\tank.png" />
     <Image Include="textures\img\tower-d.png" />
     <Image Include="textures\img\virus-d.png" />

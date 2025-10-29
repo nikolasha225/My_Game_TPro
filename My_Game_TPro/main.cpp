@@ -38,6 +38,7 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     sf::Event event;
     OBJStack drawStack;
     Spawner spawner(&window, &drawStack);
+    TowerManager manager(&drawStack);
 
     //Enemy enemy1(Enemy::bossVirus);
     //Enemy enemy4;
@@ -52,14 +53,15 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     //    drawStack.add(new Tower(Tower::kaspersky, &drawStack, i));
     //}
     //Tower tower1(Tower::defender, &drawStack, sf::Vector2f(100, 500));
-    for (size_t i = 0; i < towerPoint[LEVEL - 1].size(); i++)
-        drawStack.add(new Tower(Tower::defender, &drawStack, towerPoint[LEVEL-1][i]));
+    //for (size_t i = 0; i < towerPoint[LEVEL - 1].size(); i++)
+    //    drawStack.add(new Tower(Tower::defender, &drawStack, towerPoint[LEVEL-1][i]));
     //drawStack.add(&enemy1);
     //drawStack.add(&enemy2);
     //drawStack.add(&enemy4);
     //drawStack.add(&enemy3);
     //.add(&tower1);
     //drawStack.add(&bullet);
+
     std::vector<sf::RectangleShape> path = createSimplePath(wayPoints[LEVEL -1], 20);
 
     //===========================================
