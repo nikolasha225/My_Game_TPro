@@ -7,10 +7,6 @@ class Spawner;
 class TowerManager;
 class GameLogic;
 
-enum EnumGameEvent {//игровые событи€ 
-	bossExist
-};
-
 //==============================SPAWNER===================================
 class Spawner
 {
@@ -43,6 +39,9 @@ private:
 
 class TowerManager
 {
+private:
+	struct DownCell;
+	struct Place;
 public:
 	~TowerManager() = default;
 	TowerManager(OBJStack* stack);
@@ -55,42 +54,40 @@ public:
 
 	};
 
-	void checkEvents();
-
-	bool eventSelectTower();
-	bool eventUnselectLast();
-	bool eventSelectBuyTower();
+	void checkEvents(sf::RenderWindow* window);//когда Ћ ћќ“∆»ћј≈“—я
 
 private:
-	struct DownCell;
-	struct Place;
 
-	enum placeState
-	{
-		empty,
-		select,
-		bye,
-		tower,
-		manage
-	};
 	struct Place : public IGameObject
 	{
+		enum placeState
+		{
+			empty,
+			select,
+			tower,
+			selectTower
+		};
 		sf::RectangleShape OBJ;
 		sf::Texture TEXTURE;
 		Tower* TOWER;
+		OBJStack* STACK;
 		placeState STATE;
 		std::vector<DownCell*> BUY_MENU;
 
-		sf::SoundBuffer SOUND_BUFF;
+		sf::SoundBuffer SOUND_BUFF_SPAWN;
+		sf::SoundBuffer SOUND_BUFF_ERROR;
 		sf::Sound SOUND;
 
 		~Place() = default;
-		Place(sf::Vector2f pos);
+		Place(sf::Vector2f pos, OBJStack* stack);
 		void setState(placeState state);
 		bool isEmpty();
+		bool isSelect();
 		void addTower(Tower* tower);
 		Tower* getTower();
-
+		sf::RectangleShape* getShapePtr();
+		void selectPlace();
+		void unselectPlace();
 		void draw(sf::RenderWindow* window);
 		uint8_t getLayer();
 		void setLayer(uint8_t layer) {}
@@ -109,7 +106,7 @@ private:
 			unselectFather,
 			selectFather,
 			selectBuy,
-			manageTower
+			existTower
 		};
 		Place* FATHER;
 		sf::RectangleShape DESC;
@@ -126,6 +123,8 @@ private:
 		void select(bool isFather = 0);//++
 		void unselect();//++
 		bool tryBuy();//++
+		sf::RectangleShape* getCellShapePtr();
+		sf::RectangleShape* getDescShapePtr();
 	};
 
 	//переменные
@@ -139,5 +138,5 @@ unsigned getSummArray(unsigned* array, uint8_t length = 5);
 
 bool mouseNearPoint(sf::Vector2f point, float distance, sf::RenderWindow* window);
 
-bool mouseInButton(sf::RectangleShape button, sf::RenderWindow* window);
+bool mouseInButton(sf::RectangleShape* button, sf::RenderWindow* window);
 

@@ -71,8 +71,19 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
         {
             if (event.type == sf::Event::Closed)
                 window.close();
-            //другие события
-            //  пауза на esc
+
+            // Пауза на ESC
+            //if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
+            //{
+                // код паузы
+            //}
+
+            // НАЖАТИЕ ЛКМ
+            if (event.type == sf::Event::MouseButtonPressed &&
+                event.mouseButton.button == sf::Mouse::Left)
+            {
+                manager.checkEvents(&window);
+            }
         }
         //логика игры
        /* if (pauseState) {

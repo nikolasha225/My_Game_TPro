@@ -12,7 +12,10 @@
     "startMoney": [ 500, 300, 200 ],
     "roundTimeSec": [ 600, 700, 800 ],
     "soundRound": [ "./sound/round1.ogg", "./sound/round2.ogg", "./sound/round3.ogg" ],
-    "soundVictory": "./sound/victory.ogg"
+    "soundVictory": "./sound/victory.ogg",
+    "soundError": "./sound/error.ogg",
+    "soundTowerSpawn": "./sound/towerSpawn.ogg"
+
   },
   "ENEMY": {
     "difficultCoeficent": [ 1, 1.2, 1.5 ],
@@ -111,7 +114,6 @@
     "buyCellSize": [ 50, 50 ],
     "buyDecsSize": [ 200, 200 ],
     "selectTexture": "./textures/img/select.png",
-    "spawnSound": "./sound/towerSpawn.ogg",
     "defender": {
       "framePerShoot": 1,
       "texture": "./textures/img/defender.png",

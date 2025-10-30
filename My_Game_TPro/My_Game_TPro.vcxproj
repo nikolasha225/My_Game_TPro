@@ -139,6 +139,7 @@
     <None Include="info\instrumentDoc\markDown.md" />
     <None Include="info\instrumentDoc\sfml.md" />
     <None Include="sound\die.ogg" />
+    <None Include="sound\error.ogg" />
     <None Include="sound\haha.ogg" />
     <None Include="sound\procDamage.ogg" />
     <None Include="sound\round1.ogg" />

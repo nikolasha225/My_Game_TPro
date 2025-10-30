@@ -113,6 +113,9 @@
     <None Include="sound\towerSpawn.ogg">
       <Filter>sound</Filter>
     </None>
+    <None Include="sound\error.ogg">
+      <Filter>sound</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
