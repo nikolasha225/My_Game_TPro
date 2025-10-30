@@ -195,6 +195,18 @@
     <Image Include="textures\img\select.png">
       <Filter>Textures\img</Filter>
     </Image>
+    <Image Include="textures\img\avastCell.png">
+      <Filter>Textures\img\tower</Filter>
+    </Image>
+    <Image Include="textures\img\defenderCell.png">
+      <Filter>Textures\img\tower</Filter>
+    </Image>
+    <Image Include="textures\img\dr webCell.png">
+      <Filter>Textures\img\tower</Filter>
+    </Image>
+    <Image Include="textures\img\kasperskyCell.png">
+      <Filter>Textures\img\tower</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="sound\__doubleShoot.mp3">

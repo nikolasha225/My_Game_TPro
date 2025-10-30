@@ -115,6 +115,7 @@
     "defender": {
       "framePerShoot": 1,
       "texture": "./textures/img/defender.png",
+      "cellTexture": "./textures/img/defenderCell.png",
       "size": [ 90, 90 ],
       "price": 100,
       "range": 1,
@@ -123,6 +124,7 @@
     "avast": {
       "framePerShoot": 1,
       "texture": "./textures/img/avast.png",
+      "cellTexture": "./textures/img/avastCell.png",
       "size": [ 90, 90 ],
       "price": 150,
       "range": 1.1,
@@ -131,6 +133,7 @@
     "drWeb": {
       "framePerShoot": 1,
       "texture": "./textures/img/dr web.png",
+      "cellTexture": "./textures/img/dr webCell.png",
       "size": [ 90, 90 ],
       "price": 200,
       "range": 1.3,
@@ -139,6 +142,7 @@
     "kaspersky": {
       "framePerShoot": 1,
       "texture": "./textures/img/kaspersky.png",
+      "cellTexture": "./textures/img/kasperskyCell.png",
       "size": [ 90, 90 ],
       "price": 300,
       "range": 1.5,

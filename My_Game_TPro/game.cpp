@@ -297,7 +297,7 @@ TowerManager::DownCell::DownCell(Place* father, Tower::EnumTowerType number)
     FATHER = father;
     NUMBER = number;
     TEXTURE_MANAGER.loadFromFile(
-        JSONSettings["TOWER"][towerTypes[number]]["texture"]
+        JSONSettings["TOWER"][towerTypes[number]]["cellTexture"]
     );
     MANAGER.setSize(
         sf::Vector2f(
