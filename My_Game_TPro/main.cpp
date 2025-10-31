@@ -14,7 +14,7 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     sf::RenderWindow window(
         desktopMode,
         (std::string)JSONSettings["GENERAL"]["title"],
-        sf::Style::Default //Fullscreen/Titlebar/Default
+        sf::Style::Fullscreen //Fullscreen/Titlebar/Default
     );
     window.setVerticalSyncEnabled(JSONSettings["GENERAL"]["vsync"]);
     window.setFramerateLimit(JSONSettings["GENERAL"]["framerate"]);

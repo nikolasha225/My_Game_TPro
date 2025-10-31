@@ -532,11 +532,11 @@ Enemy* Tower::getTarget()
 	std::vector<Enemy*> enemys;
 	for (auto& i : (*(STACK->getStack()))[enemy])
 		enemys.push_back((Enemy*)i);
-	float lastDistance = enemys[0]->getPosPercent();
+	float lastDistance = RANGE + 1;
 	Enemy* lastEnemy = enemys[0];
 	for (auto& ENEMY : enemys) {
-		float distance = ENEMY->getPosPercent();
-		if (lastDistance < distance) {
+		float distance = getDistance(ENEMY->getPos(), this->getPos());
+		if (lastDistance > distance) {
 			lastDistance = distance;
 			lastEnemy = ENEMY;
 		}

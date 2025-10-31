@@ -204,6 +204,27 @@ void TowerManager::checkEvents(sf::RenderWindow* window)
     bool clickedOnSomething = false;
     Place* clickedPlace = nullptr;
 
+    //================== ОБРАБОТКА КЛИКОВ ПО МЕСТАМ С БАШНЯМИ ==================
+    for (auto& place : TOWERS) {
+        if (place->STATE == Place::placeState::tower &&
+            mouseInButton(place->getShapePtr(), window)) {
+            // Тут вставить вызов функции для мест с башнями-------------------
+            clickedOnSomething = 1;
+            clickedPlace = place;
+            break;
+        }
+    }
+    if (clickedOnSomething) {
+        // Снимаем выделение со всех других мест
+        for (auto& place : TOWERS) {
+            if (place != clickedPlace && place->isSelect()) {
+                place->unselectPlace();
+            }
+        }
+        return;
+    }
+
+    //================== ОБРАБОТКА КЛИКОВ ПО ПУСТЫМ МЕСТАМ ==================
     // Сначала проверяем клики по DownCell и DESC (только для выделенных мест)
     for (auto& place : TOWERS) {
         // Пропускаем места с башнями
@@ -214,8 +235,14 @@ void TowerManager::checkEvents(sf::RenderWindow* window)
             for (auto& cell : place->BUY_MENU) {
                 // Клик по DownCell - показываем описание
                 if (mouseInButton(cell->getCellShapePtr(), window)) {
-                    cell->STATE = DownCell::selectBuy;;
-                    clickedOnSomething = true;
+                    // Сбрасываем состояние selectBuy у всех ячеек этого места
+                    for (auto& otherCell : place->BUY_MENU) {
+                        if (otherCell != cell && otherCell->STATE == DownCell::EnumCellState::selectBuy) {
+                            otherCell->STATE = DownCell::selectFather;
+                        }
+                    }
+                    cell->STATE = DownCell::selectBuy;
+                    clickedOnSomething = 1;
                     clickedPlace = place;
                     break;
                 }
@@ -233,7 +260,7 @@ void TowerManager::checkEvents(sf::RenderWindow* window)
                         place->SOUND.play();
                         // Место остается выделенным для повторной попытки
                     }
-                    clickedOnSomething = true;
+                    clickedOnSomething = 1;
                     clickedPlace = place;
                     break;
                 }
@@ -262,8 +289,12 @@ void TowerManager::checkEvents(sf::RenderWindow* window)
         if (mouseInButton(place->getShapePtr(), window)) {
             if (!place->isSelect()) {
                 place->selectPlace();
+                // При выделении нового места сбрасываем все selectBuy состояния
+                for (auto& cell : place->BUY_MENU) {
+                    cell->STATE = DownCell::selectFather;
+                }
             }
-            clickedOnSomething = true;
+            clickedOnSomething = 1;
             clickedPlace = place;
             break;
         }
@@ -398,7 +429,7 @@ void TowerManager::Place::setPos(sf::Vector2f vector, bool toMiddle)
 }
 
 EnumGameObjects TowerManager::Place::getTypeObjet() {
-    return EnumGameObjects::tower;
+    return EnumGameObjects::menuWindowObject;
 }
 
 IGameObject* TowerManager::Place::getPtr() {
@@ -424,8 +455,8 @@ TowerManager::DownCell::DownCell(Place* father, Tower::EnumTowerType number)
     MANAGER.setOrigin(MANAGER.getSize().x / 2, MANAGER.getSize().y / 2);
     MANAGER.setPosition(
         sf::Vector2f(
-            FATHER->getPos().x,
-            FATHER->getPos().y + FATHER->getSize().y/2 + MANAGER.getSize().y/2 + MANAGER.getSize().y*(float)NUMBER
+            FATHER->getPos().x +  (float)(1 - 2*(NUMBER % 2 == 0)) * MANAGER.getSize().x/2,
+            FATHER->getPos().y + FATHER->getSize().y/2 + MANAGER.getSize().y/2 + MANAGER.getSize().y*(float)(NUMBER >= 2)
         )
     );
     TEXTURE_DESC.loadFromFile(JSONSettings["TOWER"][towerTypes[number]]["descTexture"]);
@@ -439,7 +470,7 @@ TowerManager::DownCell::DownCell(Place* father, Tower::EnumTowerType number)
     DESC.setOrigin(DESC.getSize().x / 2, DESC.getSize().y / 2);
     DESC.setPosition(
         sf::Vector2f(
-            FATHER->getPos().x + MANAGER.getSize().x/2 + DESC.getSize().x/2,
+            FATHER->getPos().x + MANAGER.getSize().x + DESC.getSize().x/2,
             FATHER->getPos().y + FATHER->getSize().y / 2 + DESC.getSize().y / 2
         )
     );
