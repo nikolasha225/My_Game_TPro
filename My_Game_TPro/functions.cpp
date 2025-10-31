@@ -495,6 +495,11 @@ void Tower::sound()
 	SOUND.play();
 }
 
+uint8_t Tower::getLevel()
+{
+	return LEVEL;
+}
+
 void Tower::tick()
 {
 	STATE_SHOOT = (STATE_SHOOT >= TOWER_VELOCITY)

@@ -305,6 +305,7 @@ public:
 	EnumTowerType getTowerType();
 	unsigned getPrice();
 	void sound();
+	uint8_t getLevel();
 
 
 private:
