@@ -32,6 +32,8 @@ extern sf::Vector2f RESOLUTION;
 extern unsigned long TIME;
 extern unsigned long START_TIME;
 
+extern sf::Font FONT;
+
 //рандом функции
 static std::mt19937 generator([]() {
 	return std::mt19937(
@@ -328,6 +330,9 @@ private:
 	sf::SoundBuffer SOUND_BUFF;
 	sf::Sound SOUND;
 	uint8_t UPGRADE_STATE;
+
+	sf::RectangleShape OBJ_LEVEL;
+	sf::Text TEXT_LEVEL;
 };
 
 //======================================BULLET======================================

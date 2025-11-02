@@ -5,7 +5,8 @@
     "framerate": 60,
     "resolution": [ 1920, 1080 ],
     "iconPath": "./textures/img/icongame.png",
-    "volume": 50
+    "volume": 50,
+    "font": "./textures/font/font.ttf"
   },
   "GAME": {
     "startHP": [ 100, 60, 30 ],
@@ -115,6 +116,7 @@
     "upgrade": [ 1, 1.2, 1.5, 1.8, 2.0, 2.5 ],
     "buyCellSize": [ 50, 50 ],
     "buyDecsSize": [ 100, 100 ],
+    "levelBoxSize": [ 20, 20 ],
     "selectTexture": "./textures/img/select.png",
     "removeTexture": "./textures/img/remove.png",
     "upgradeTexture": "./textures/img/upgrade.png",

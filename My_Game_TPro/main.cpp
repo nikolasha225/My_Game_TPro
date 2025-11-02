@@ -23,6 +23,7 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     if (icon.loadFromFile(JSONSettings["GENERAL"]["iconPath"])) {
         window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
     }
+    FONT.loadFromFile(JSONSettings["GENERAL"]["font"]);
 
     LEVEL = 1;
     DIFFICULT = __difficult;

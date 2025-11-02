@@ -20,6 +20,9 @@ unsigned long TIME = (float)JSONSettings["GAME"]["roundTimeSec"][LEVEL - 1]
 * (unsigned)JSONSettings["GENERAL"]["framerate"];
 unsigned long START_TIME = TIME;
 
+sf::Font FONT;
+
+
 //==================================ENEMY==============================================
 
 Enemy::Enemy(EnumEnemyType type)
@@ -422,6 +425,35 @@ Tower::Tower(EnumTowerType type, OBJStack* stack, sf::Vector2f pos)
 		* (float)JSONSettings["TOWER"]["rangeCoeficent"];
 	SOUND_BUFF.loadFromFile(JSONSettings["BULLET"]["shootSound"]);
 	SOUND.setVolume(10);
+
+	OBJ_LEVEL.setSize(
+		sf::Vector2f(
+			JSONSettings["TOWER"]["levelBoxSize"][0],
+			JSONSettings["TOWER"]["levelBoxSize"][1]
+		)
+	);
+	OBJ_LEVEL.setFillColor(sf::Color(128, 128, 128, 180));
+	OBJ_LEVEL.setPosition(OBJ.getPosition() + OBJ.getSize() / 2.f - OBJ_LEVEL.getSize());
+	OBJ_LEVEL.setOutlineThickness(2.f);
+	OBJ_LEVEL.setOutlineColor(sf::Color::Black);
+
+	TEXT_LEVEL.setFont(FONT);
+	TEXT_LEVEL.setString(std::to_string(TOWER_LEVEL));
+	TEXT_LEVEL.setCharacterSize(16);
+	TEXT_LEVEL.setFillColor(sf::Color::White);
+	//TEXT_LEVEL.setStyle(sf::Text::Bold
+
+	// Центрирование текста в квадрате
+	sf::FloatRect textBounds = TEXT_LEVEL.getLocalBounds();
+	TEXT_LEVEL.setOrigin(
+		textBounds.left + textBounds.width / 2.f,
+		textBounds.top + textBounds.height / 2.f
+	);
+	TEXT_LEVEL.setPosition(
+		OBJ_LEVEL.getPosition().x + OBJ_LEVEL.getSize().x / 2.f,
+		OBJ_LEVEL.getPosition().y + OBJ_LEVEL.getSize().y / 2.f
+	);
+
 }
 
 uint8_t Tower::getLayer()
@@ -479,6 +511,10 @@ bool Tower::getDrawStatus()
 void Tower::draw(sf::RenderWindow* window)
 {
 	window->draw(OBJ);
+	if (isPointIntoShape((sf::Vector2f)sf::Mouse::getPosition(*window), OBJ)){
+		window->draw(OBJ_LEVEL);
+		window->draw(TEXT_LEVEL);
+	}
 }
 
 EnumGameObjects Tower::getTypeObjet()
@@ -588,6 +624,7 @@ bool Tower::upgrade(uint8_t level)
 	BULLET_DAMAGE *= coef / lastCoef;
 	BULLET_VELOCITY_COEF *= coef / lastCoef;
 	TOWER_VELOCITY = (float) TOWER_VELOCITY / ( coef / lastCoef);
+	TEXT_LEVEL.setString(std::to_string(TOWER_LEVEL));
 	return 1;
 }
 
