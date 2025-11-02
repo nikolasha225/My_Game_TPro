@@ -35,6 +35,7 @@ int main() {
 	}
 	sf::Sound soundhello;
 	soundhello.setBuffer(bufferhello);
+	soundhello.play();
 
 	sf::SoundBuffer bufferstart;
 	if (!bufferstart.loadFromFile("assets/sound/startgame.wav")) {
@@ -99,7 +100,7 @@ int main() {
 		MenuItem(L"Вкл", font, 24, {700.f, 200.f}, audio, false),
 
 		MenuItem(L"Разрешение", font, 30, {100.f, 270.f}, []() {}, true),
-		MenuItem(L"1980 x 1080", font, 24, {700.f, 270.f}, resolution, false),
+		MenuItem(L"1920 x 1080", font, 24, {700.f, 270.f}, resolution, false),
 	// разрешение
 		//music.setLoop(true);        // Зацикливание
 	//music.setVolume(50.f);      // Громкость (0-100)
