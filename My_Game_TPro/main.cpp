@@ -84,18 +84,3 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
 
     return 0;
 }
-
-/*
-getElapsedTime() - возвращает sf::Time прошедшее время
-
-sf::Time elapsed = timer.getElapsedTime();
-
-float seconds = timer.getElapsedTime().asSeconds();
-int milliseconds = timer.getElapsedTime().asMilliseconds();
-int microseconds = timer.getElapsedTime().asMicroseconds();
-
-
-restart() - перезапускает и возвращает прошедшее время
-
-sf::Time elapsed = timer.restart();
-*/

@@ -558,6 +558,14 @@ TowerManager::DownCell::DownCell(Place* father, Tower::EnumTowerType number)
                 JSONSettings["TOWER"]["buyDecsSize"][1]
             )
         );
+        //DESC.setOutlineThickness(borderScale);
+        //DESC.setOutlineColor(
+        //    sf::Color(
+        //        12/2,
+        //        150/2,
+        //        12/2
+        //    )
+        //);
         DESC.setOrigin(DESC.getSize().x / 2, DESC.getSize().y / 2);
         DESC.setPosition(
             sf::Vector2f(
@@ -698,10 +706,6 @@ sf::RectangleShape* TowerManager::DownCell::getDescShapePtr()
 {
     return &DESC;
 }
-
-
-
-
 
 //=====================================Œ“ƒ≈À‹Õ€≈ ‘”Õ ÷»»=======================
 

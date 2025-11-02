@@ -609,7 +609,6 @@ Enemy* Tower::getTarget()
 		: nullptr;
 }
 
-//--------------------------------------------------------------
 bool Tower::upgrade(uint8_t level)
 {
 	float coef = JSONSettings["TOWER"]["upgrade"][TOWER_LEVEL];
