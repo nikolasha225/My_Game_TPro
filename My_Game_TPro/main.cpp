@@ -24,8 +24,6 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
         window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
     }
 
-    //static sf::Clock timer;
-
     LEVEL = 1;
     DIFFICULT = __difficult;
     HEALTH = JSONSettings["GAME"]["HP"][DIFFICULT - 1];
@@ -33,35 +31,12 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
 
     //базовые определения
     bool pauseState = 0;
-
-    //отладка
     sf::Event event;
     OBJStack drawStack;
     Spawner spawner(&window, &drawStack);
     TowerManager manager(&drawStack);
 
-    //Enemy enemy1(Enemy::bossVirus);
-    //Enemy enemy4;
-    //Enemy enemy2(Enemy::fastVirus);
-    //Enemy enemy3(Enemy::tankVirus);
-
-
-    //enemy1.multVelocity(3);
-
-    //Bullet bullet(Tower::defender, &enemy3, sf::Vector2f(1000,1000));
-    //for (auto i : towerPoint[LEVEL - 1]) {
-    //    drawStack.add(new Tower(Tower::kaspersky, &drawStack, i));
-    //}
-    //Tower tower1(Tower::defender, &drawStack, sf::Vector2f(100, 500));
-    //for (size_t i = 0; i < towerPoint[LEVEL - 1].size(); i++)
-    //    drawStack.add(new Tower(Tower::defender, &drawStack, towerPoint[LEVEL-1][i]));
-    //drawStack.add(&enemy1);
-    //drawStack.add(&enemy2);
-    //drawStack.add(&enemy4);
-    //drawStack.add(&enemy3);
-    //.add(&tower1);
-    //drawStack.add(&bullet);
-
+    //пока ктото карту не сделал
     std::vector<sf::RectangleShape> path = createSimplePath(wayPoints[LEVEL -1], 20);
 
     //===========================================
@@ -73,10 +48,10 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
                 window.close();
 
             // Пауза на ESC
-            //if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
-            //{
-                // код паузы
-            //}
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
+            {
+            pauseState = !pauseState;
+            }
 
             // НАЖАТИЕ ЛКМ
             if (event.type == sf::Event::MouseButtonPressed &&
@@ -85,33 +60,25 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
                 manager.checkEvents(&window);
             }
         }
+        window.clear(sf::Color::Black);
         //логика игры
-       /* if (pauseState) {
-            //чтото
-            pauseState = puase(window*);
-            window.clear(sf::Color::Black);
-            window.display();
-        }
-        if (game(window&)) {
-            //чтото
+        if (!pauseState) {
+            spawner.tick();
+            drawStack.tick();
+
+
+            drawStack.draw(&window);
+
+            //отладка
+            for (auto& i : path)
+                window.draw(i);
+
+            TIME--;
         }
         else {
-        */
-        
-        spawner.tick();
-        drawStack.tick();
-        
-
-        window.clear(sf::Color::Black);
-        //тут вся отрисовка
-
-        //отладка
-        drawStack.draw(&window);
-        for(auto i : path)
-            window.draw(i);
-
+            //меню паузы
+        }
         window.display();
-        TIME--;
     }
 
     return 0;

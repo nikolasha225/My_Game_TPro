@@ -76,6 +76,8 @@ private:
 
 		sf::SoundBuffer SOUND_BUFF_SPAWN;
 		sf::SoundBuffer SOUND_BUFF_ERROR;
+		sf::SoundBuffer SOUND_BUFF_UPGRADE;
+		sf::SoundBuffer SOUND_BUFF_DELETE;
 		sf::Sound SOUND;
 
 		~Place() = default;
@@ -106,7 +108,8 @@ private:
 			unselectFather,
 			selectFather,
 			selectBuy,
-			existTower
+			existTower,
+			selectFatherTower
 		};
 		Place* FATHER;
 		sf::RectangleShape DESC;

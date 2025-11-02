@@ -274,7 +274,9 @@ public:
 		defender,
 		avast,
 		drWeb,
-		kaspersky
+		kaspersky,
+		deletedTower,
+		upgradedTower
 	};
 
 	Tower(
@@ -301,7 +303,7 @@ public:
 	//свои
 	Bullet* shoot(Enemy* target); //специально оставил, мб там сделаю другие функции выбора целей (не последнюю а ближайшую и тп)
 	Enemy* getTarget();
-	void upgrade(uint8_t level = 1);
+	bool upgrade(uint8_t level = 1);
 	EnumTowerType getTowerType();
 	unsigned getPrice();
 	void sound();
@@ -311,7 +313,6 @@ public:
 private:
 	sf::RectangleShape OBJ;
 	sf::Texture TEXTURE;
-	sf::Vector2f SCALE;
 	uint8_t TOWER_LEVEL;
 	float BULLET_DAMAGE;
 	float BULLET_VELOCITY_COEF;
@@ -324,9 +325,9 @@ private:
 	float SHOOT_SCALE;
 	unsigned STATE_SHOOT;// < TOWER_VELOCITY
 	float RANGE;
-	//Enemy* LAST_TARGET; // мне слишком в падлу писать оптимизированный код где будет провер€тьс€ не умерла ли последн€€ цель и тп
 	sf::SoundBuffer SOUND_BUFF;
 	sf::Sound SOUND;
+	uint8_t UPGRADE_STATE;
 };
 
 //======================================BULLET======================================

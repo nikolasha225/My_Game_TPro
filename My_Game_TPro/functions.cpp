@@ -392,6 +392,7 @@ bool Bullet::update(std::vector<IGameObject*> targets)
 
 Tower::Tower(EnumTowerType type, OBJStack* stack, sf::Vector2f pos)
 {
+	UPGRADE_STATE = 0;
 	std::string stringType = towerTypes[type];
 	LAYER = JSONSettings["TOWER"]["layer"];
 	OBJ = sf::RectangleShape(
@@ -474,6 +475,7 @@ bool Tower::getDrawStatus()
 	return DRAW_STATUS;
 }
 
+//-------------------------------------------Отрисовка квадратика с уровнем
 void Tower::draw(sf::RenderWindow* window)
 {
 	window->draw(OBJ);
@@ -509,6 +511,26 @@ void Tower::tick()
 		+ (SHOOT_SCALE * ((float)(STATE_SHOOT) / (float)(TOWER_VELOCITY)));
 	if (STATE_SHOOT >= TOWER_VELOCITY)
 		shoot(getTarget());
+	uint8_t delay = 10;
+	if (UPGRADE_STATE && TIME % delay == delay / 2) {
+		OBJ.setFillColor(
+			sf::Color(
+				25,
+				255,
+				25
+			)
+		);
+		UPGRADE_STATE--;
+	}
+	else if(TIME % delay == 0)
+		OBJ.setFillColor(
+			sf::Color(
+				255,
+				255,
+				255
+			)
+		);
+	coefSize *= (UPGRADE_STATE > 0)?(1.2):(1);
 	OBJ.setScale(sf::Vector2f(coefSize,coefSize));
 }
 
@@ -552,16 +574,21 @@ Enemy* Tower::getTarget()
 		: nullptr;
 }
 
-void Tower::upgrade(uint8_t level)
+//--------------------------------------------------------------
+bool Tower::upgrade(uint8_t level)
 {
-	if (TOWER_LEVEL + level > 5)
-		return;
-	TOWER_LEVEL += level;
 	float coef = JSONSettings["TOWER"]["upgrade"][TOWER_LEVEL];
+	float price = coef * (float)JSONSettings["TOWER"][towerTypes[TYPE]]["price"];
+	if (TOWER_LEVEL + level > 5 || price> MONEY)
+		return 0;
+	UPGRADE_STATE = 3;
 	float lastCoef = JSONSettings["TOWER"]["upgrade"][(TOWER_LEVEL > 0) ? (TOWER_LEVEL - 1) : (0)];
+	MONEY -= price;
+	TOWER_LEVEL += level;
 	BULLET_DAMAGE *= coef / lastCoef;
 	BULLET_VELOCITY_COEF *= coef / lastCoef;
-	TOWER_VELOCITY = (float) TOWER_VELOCITY * ( coef / lastCoef);
+	TOWER_VELOCITY = (float) TOWER_VELOCITY / ( coef / lastCoef);
+	return 1;
 }
 
 Tower::EnumTowerType Tower::getTowerType()
@@ -628,6 +655,8 @@ void OBJStack::draw(sf::RenderWindow* window)
 	this->sortByLayer();
 	for (auto i : renderLine)
 		for (auto& obj : stack[i]) {
+			if (obj == nullptr)
+				continue;
 			sf::Vector2f pos = obj->getPos();
 			sf::Vector2f size = obj->getSize();
 			obj->setPos(getNewCoordinate(pos));
@@ -679,7 +708,10 @@ void OBJStack::tick()
 {
 	for (auto& i : renderLineReverce)
 		for (auto& obj : stack[i])
-			obj->tick();
+			if (obj == nullptr)
+				continue;
+			else
+				obj->tick();
 	for (auto& ENEMY : stack[enemy])
 		for (auto& BULLET : stack[bullet])
 		{

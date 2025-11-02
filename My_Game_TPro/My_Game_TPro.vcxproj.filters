@@ -116,6 +116,12 @@
     <None Include="sound\error.ogg">
       <Filter>sound</Filter>
     </None>
+    <None Include="sound\upgrade.ogg">
+      <Filter>sound</Filter>
+    </None>
+    <None Include="sound\delete.ogg">
+      <Filter>sound</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -210,26 +216,14 @@
     <Image Include="textures\img\kasperskyCell.png">
       <Filter>Textures\img\tower</Filter>
     </Image>
+    <Image Include="textures\img\remove.png">
+      <Filter>Textures\img\tower</Filter>
+    </Image>
+    <Image Include="textures\img\upgrade.png">
+      <Filter>Textures\img\tower</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="sound\__doubleShoot.mp3">
-      <Filter>sound</Filter>
-    </Media>
-    <Media Include="sound\__manyShoot.mp3">
-      <Filter>sound</Filter>
-    </Media>
-    <Media Include="sound\forMaxPrivetstvie.mp3">
-      <Filter>sound</Filter>
-    </Media>
-    <Media Include="sound\forMaxStartGame.mp3">
-      <Filter>sound</Filter>
-    </Media>
-    <Media Include="sound\shoot01.mp3">
-      <Filter>sound</Filter>
-    </Media>
-    <Media Include="sound\shoot02.mp3">
-      <Filter>sound</Filter>
-    </Media>
     <Media Include="sound\source\(поражение) ist oficial, you suck.mp3">
       <Filter>sound\source</Filter>
     </Media>
@@ -264,6 +258,15 @@
       <Filter>sound\source</Filter>
     </Media>
     <Media Include="sound\source\чистая победа.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\truum.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\upgrade.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\errr.mp3">
       <Filter>sound\source</Filter>
     </Media>
   </ItemGroup>

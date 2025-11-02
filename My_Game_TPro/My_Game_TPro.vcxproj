@@ -138,6 +138,7 @@
     <None Include="info\instrumentDoc\json.md" />
     <None Include="info\instrumentDoc\markDown.md" />
     <None Include="info\instrumentDoc\sfml.md" />
+    <None Include="sound\delete.ogg" />
     <None Include="sound\die.ogg" />
     <None Include="sound\error.ogg" />
     <None Include="sound\haha.ogg" />
@@ -147,6 +148,7 @@
     <None Include="sound\round3.ogg" />
     <None Include="sound\shoot01.ogg" />
     <None Include="sound\towerSpawn.ogg" />
+    <None Include="sound\upgrade.ogg" />
     <None Include="sound\victory.ogg" />
   </ItemGroup>
   <ItemGroup>
@@ -178,21 +180,22 @@
     <Image Include="textures\img\kasperskyCell.png" />
     <Image Include="textures\img\miniBoss.png" />
     <Image Include="textures\img\miniBoss2.png" />
+    <Image Include="textures\img\remove.png" />
     <Image Include="textures\img\select.png" />
     <Image Include="textures\img\tank.png" />
     <Image Include="textures\img\tower-d.png" />
+    <Image Include="textures\img\upgrade.png" />
     <Image Include="textures\img\virus-d.png" />
   </ItemGroup>
   <ItemGroup>
-    <Media Include="sound\forMaxPrivetstvie.mp3" />
-    <Media Include="sound\forMaxStartGame.mp3" />
-    <Media Include="sound\shoot01.mp3" />
-    <Media Include="sound\shoot02.mp3" />
     <Media Include="sound\source\(поражение) ist oficial, you suck.mp3" />
+    <Media Include="sound\source\errr.mp3" />
     <Media Include="sound\source\forMaxPrivetstvie.mp3" />
     <Media Include="sound\source\forMaxStartGame.mp3" />
     <Media Include="sound\source\shoot01.mp3" />
     <Media Include="sound\source\shoot02.mp3" />
+    <Media Include="sound\source\truum.mp3" />
+    <Media Include="sound\source\upgrade.mp3" />
     <Media Include="sound\source\__doubleShoot.mp3" />
     <Media Include="sound\source\__manyShoot.mp3" />
     <Media Include="sound\source\раунд 1.mp3" />
@@ -200,8 +203,6 @@
     <Media Include="sound\source\раунд 3.mp3" />
     <Media Include="sound\source\смех.mp3" />
     <Media Include="sound\source\чистая победа.mp3" />
-    <Media Include="sound\__doubleShoot.mp3" />
-    <Media Include="sound\__manyShoot.mp3" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -206,12 +206,59 @@ void TowerManager::checkEvents(sf::RenderWindow* window)
 
     //================== ОБРАБОТКА КЛИКОВ ПО МЕСТАМ С БАШНЯМИ ==================
     for (auto& place : TOWERS) {
-        if (place->STATE == Place::placeState::tower &&
-            mouseInButton(place->getShapePtr(), window)) {
-            // Тут вставить вызов функции для мест с башнями-------------------
-            clickedOnSomething = 1;
-            clickedPlace = place;
-            break;
+        if (place->STATE == Place::placeState::tower) {
+            if (mouseInButton(place->getShapePtr(), window)) {
+                // Сбрасываем selectFatherTower у всех других башен
+                for (auto& otherPlace : TOWERS) {
+                    if (otherPlace != place && otherPlace->STATE == Place::placeState::tower) {
+                        for (auto& cell : otherPlace->BUY_MENU) {
+                            if (cell->STATE == DownCell::selectFatherTower) {
+                                cell->STATE = DownCell::unselectFather;
+                            }
+                        }
+                    }
+                }
+                for (auto& cell : place->BUY_MENU)
+                    cell->STATE = DownCell::selectFatherTower;
+                clickedOnSomething = true;
+                clickedPlace = place;
+                break;
+            }
+
+            for (auto& cell : place->BUY_MENU) {
+                if (cell->NUMBER > Tower::kaspersky && mouseInButton(cell->getCellShapePtr(), window)) {
+                    if (cell->NUMBER == Tower::upgradedTower) {
+                        if (place->TOWER->upgrade()) {
+                            place->SOUND.setBuffer(place->SOUND_BUFF_UPGRADE);
+                            place->SOUND.play();
+                        }
+                        else {
+                            place->SOUND.setBuffer(place->SOUND_BUFF_ERROR);
+                            place->SOUND.play();
+                        }
+                    }
+                    else if (cell->NUMBER == Tower::deletedTower) {
+                        place->SOUND.setBuffer(place->SOUND_BUFF_DELETE);
+                        place->SOUND.play();
+                        MONEY += (float)JSONSettings["TOWER"][towerTypes[place->TOWER->getTowerType()]]["price"]
+                            * (float)JSONSettings["TOWER"]["removeCoef"];
+                        if (place->TOWER != nullptr) {
+                            STACK->remove(place->TOWER);
+                            delete place->TOWER;
+                            place->TOWER = nullptr;
+                        }
+                        place->STATE = Place::placeState::empty;
+                        for (auto& menuCell : place->BUY_MENU) {
+                            menuCell->unselect();
+                        }
+                    }
+                    clickedOnSomething = true;
+                    clickedPlace = place;
+                    place->unselectPlace();
+                    break;
+                }
+            }
+            if (clickedOnSomething) break;
         }
     }
     if (clickedOnSomething) {
@@ -242,7 +289,7 @@ void TowerManager::checkEvents(sf::RenderWindow* window)
                         }
                     }
                     cell->STATE = DownCell::selectBuy;
-                    clickedOnSomething = 1;
+                    clickedOnSomething = true;
                     clickedPlace = place;
                     break;
                 }
@@ -260,7 +307,7 @@ void TowerManager::checkEvents(sf::RenderWindow* window)
                         place->SOUND.play();
                         // Место остается выделенным для повторной попытки
                     }
-                    clickedOnSomething = 1;
+                    clickedOnSomething = true;
                     clickedPlace = place;
                     break;
                 }
@@ -271,6 +318,16 @@ void TowerManager::checkEvents(sf::RenderWindow* window)
 
     // Если кликнули на какой-то элемент интерфейса, выходим
     if (clickedOnSomething) {
+        // Сбрасываем selectFatherTower у всех башен
+        for (auto& place : TOWERS) {
+            if (place->STATE == Place::placeState::tower) {
+                for (auto& cell : place->BUY_MENU) {
+                    if (cell->STATE == DownCell::selectFatherTower) {
+                        cell->STATE = DownCell::unselectFather;
+                    }
+                }
+            }
+        }
         // Снимаем выделение со всех других мест, кроме текущего
         for (auto& place : TOWERS) {
             if (place != clickedPlace && place->isSelect()) {
@@ -287,6 +344,17 @@ void TowerManager::checkEvents(sf::RenderWindow* window)
 
         // Клик по месту
         if (mouseInButton(place->getShapePtr(), window)) {
+            // Сбрасываем selectFatherTower у всех башен
+            for (auto& towerPlace : TOWERS) {
+                if (towerPlace->STATE == Place::placeState::tower) {
+                    for (auto& cell : towerPlace->BUY_MENU) {
+                        if (cell->STATE == DownCell::selectFatherTower) {
+                            cell->STATE = DownCell::unselectFather;
+                        }
+                    }
+                }
+            }
+
             if (!place->isSelect()) {
                 place->selectPlace();
                 // При выделении нового места сбрасываем все selectBuy состояния
@@ -294,7 +362,7 @@ void TowerManager::checkEvents(sf::RenderWindow* window)
                     cell->STATE = DownCell::selectFather;
                 }
             }
-            clickedOnSomething = 1;
+            clickedOnSomething = true;
             clickedPlace = place;
             break;
         }
@@ -315,11 +383,17 @@ void TowerManager::checkEvents(sf::RenderWindow* window)
             if (place->isSelect()) {
                 place->unselectPlace();
             }
+            // Сбрасываем selectFatherTower у всех башен
+            if (place->STATE == Place::placeState::tower) {
+                for (auto& cell : place->BUY_MENU) {
+                    if (cell->STATE == DownCell::selectFatherTower) {
+                        cell->STATE = DownCell::unselectFather;
+                    }
+                }
+            }
         }
     }
 }
-
-
 
 //===========PLACE===============
 TowerManager::Place::Place(sf::Vector2f pos, OBJStack* stack)
@@ -335,7 +409,7 @@ TowerManager::Place::Place(sf::Vector2f pos, OBJStack* stack)
     TEXTURE.loadFromFile(JSONSettings["TOWER"]["selectTexture"]);
     OBJ.setTexture(&TEXTURE);
     STATE = empty;
-    for (uint8_t i = Tower::defender; i <= Tower::kaspersky; i++)
+    for (uint8_t i = Tower::defender; i <= Tower::upgradedTower; i++)
         BUY_MENU.push_back(
             new DownCell(this, (Tower::EnumTowerType)i)
         );
@@ -343,6 +417,8 @@ TowerManager::Place::Place(sf::Vector2f pos, OBJStack* stack)
     OBJ.setOrigin(OBJ.getSize().x / 2, OBJ.getSize().y / 2);
     SOUND_BUFF_ERROR.loadFromFile(JSONSettings["GAME"]["soundError"]);
     SOUND_BUFF_SPAWN.loadFromFile(JSONSettings["GAME"]["soundTowerSpawn"]);
+    SOUND_BUFF_UPGRADE.loadFromFile(JSONSettings["GAME"]["soundUpgrade"]);
+    SOUND_BUFF_DELETE.loadFromFile(JSONSettings["GAME"]["soundDelete"]);
 }
 
 void TowerManager::Place::setState(placeState state)
@@ -442,38 +518,53 @@ TowerManager::DownCell::DownCell(Place* father, Tower::EnumTowerType number)
 {
     FATHER = father;
     NUMBER = number;
-    TEXTURE_MANAGER.loadFromFile(
-        JSONSettings["TOWER"][towerTypes[number]]["cellTexture"]
-    );
+
     MANAGER.setSize(
         sf::Vector2f(
             JSONSettings["TOWER"]["buyCellSize"][0],
             JSONSettings["TOWER"]["buyCellSize"][1]
         )
     );
-    MANAGER.setTexture(&TEXTURE_MANAGER);
     MANAGER.setOrigin(MANAGER.getSize().x / 2, MANAGER.getSize().y / 2);
-    MANAGER.setPosition(
-        sf::Vector2f(
-            FATHER->getPos().x +  (float)(1 - 2*(NUMBER % 2 == 0)) * MANAGER.getSize().x/2,
-            FATHER->getPos().y + FATHER->getSize().y/2 + MANAGER.getSize().y/2 + MANAGER.getSize().y*(float)(NUMBER >= 2)
-        )
-    );
-    TEXTURE_DESC.loadFromFile(JSONSettings["TOWER"][towerTypes[number]]["descTexture"]);
-    DESC.setSize(
-        sf::Vector2f(
-            JSONSettings["TOWER"]["buyDecsSize"][0],
-            JSONSettings["TOWER"]["buyDecsSize"][1]
-        )
-    );
-    DESC.setTexture(&TEXTURE_DESC);
-    DESC.setOrigin(DESC.getSize().x / 2, DESC.getSize().y / 2);
-    DESC.setPosition(
-        sf::Vector2f(
-            FATHER->getPos().x + MANAGER.getSize().x + DESC.getSize().x/2,
-            FATHER->getPos().y + FATHER->getSize().y / 2 + DESC.getSize().y / 2
-        )
-    );
+    if (NUMBER <= Tower::kaspersky) {
+        MANAGER.setPosition(
+            sf::Vector2f(
+                FATHER->getPos().x + (float)(1 - 2 * (NUMBER % 2 == 0)) * MANAGER.getSize().x / 2,
+                FATHER->getPos().y + FATHER->getSize().y / 2 + MANAGER.getSize().y / 2 + MANAGER.getSize().y * (float)(NUMBER >= 2)
+            )
+        );
+        TEXTURE_MANAGER.loadFromFile(
+            JSONSettings["TOWER"][towerTypes[number]]["cellTexture"]
+        );
+        MANAGER.setTexture(&TEXTURE_MANAGER);
+        TEXTURE_DESC.loadFromFile(JSONSettings["TOWER"][towerTypes[number]]["descTexture"]);
+        DESC.setSize(
+            sf::Vector2f(
+                JSONSettings["TOWER"]["buyDecsSize"][0],
+                JSONSettings["TOWER"]["buyDecsSize"][1]
+            )
+        );
+        DESC.setOrigin(DESC.getSize().x / 2, DESC.getSize().y / 2);
+        DESC.setTexture(&TEXTURE_DESC);
+        DESC.setPosition(
+            sf::Vector2f(
+                FATHER->getPos().x + MANAGER.getSize().x + DESC.getSize().x / 2,
+                FATHER->getPos().y + FATHER->getSize().y / 2 + DESC.getSize().y / 2
+            )
+        );
+    }
+    else {
+        TEXTURE_MANAGER.loadFromFile(
+            JSONSettings["TOWER"][(number == Tower::upgradedTower) ? ("upgradeTexture") : ("removeTexture")]
+        );
+        MANAGER.setTexture(&TEXTURE_MANAGER);
+        MANAGER.setPosition(
+            sf::Vector2f(
+                father->getPos().x + (1 - 2 * (number == Tower::upgradedTower)) * (MANAGER.getSize().x/2 + father->getSize().x/2),
+                father->getPos().y
+            )
+        );
+    }
     STATE = unselectFather;
 }
 
@@ -484,13 +575,21 @@ void TowerManager::DownCell::draw(sf::RenderWindow* window) {
         return;
         break;
     case TowerManager::DownCell::selectFather:
-        window->draw(MANAGER);
+        if(NUMBER <= Tower::kaspersky)
+            window->draw(MANAGER);
         break;
     case TowerManager::DownCell::EnumCellState::selectBuy:
-        window->draw(MANAGER);
-        window->draw(DESC);
+        if (NUMBER <= Tower::kaspersky) {
+            window->draw(MANAGER);
+            window->draw(DESC);
+        }
         break;
     case TowerManager::DownCell::existTower:
+        return;
+        break;
+    case TowerManager::DownCell::selectFatherTower:
+        if (NUMBER > Tower::kaspersky)
+            window->draw(MANAGER);
         return;
         break;
     default:

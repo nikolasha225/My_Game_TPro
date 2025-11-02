@@ -14,7 +14,9 @@
     "soundRound": [ "./sound/round1.ogg", "./sound/round2.ogg", "./sound/round3.ogg" ],
     "soundVictory": "./sound/victory.ogg",
     "soundError": "./sound/error.ogg",
-    "soundTowerSpawn": "./sound/towerSpawn.ogg"
+    "soundTowerSpawn": "./sound/towerSpawn.ogg",
+    "soundUpgrade": "./sound/upgrade.ogg",
+    "soundDelete": "./sound/delete.ogg"
 
   },
   "ENEMY": {
@@ -114,6 +116,9 @@
     "buyCellSize": [ 50, 50 ],
     "buyDecsSize": [ 100, 100 ],
     "selectTexture": "./textures/img/select.png",
+    "removeTexture": "./textures/img/remove.png",
+    "upgradeTexture": "./textures/img/upgrade.png",
+    "removeCoef": 0.9,
     "defender": {
       "framePerShoot": 1,
       "texture": "./textures/img/defender.png",
