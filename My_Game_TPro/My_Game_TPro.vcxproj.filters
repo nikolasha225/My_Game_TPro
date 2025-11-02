@@ -55,6 +55,9 @@
     <Filter Include="sound\source">
       <UniqueIdentifier>{4716f792-419f-4db4-a2ec-c4a650f628a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Textures\img\map">
+      <UniqueIdentifier>{b11ab7c2-6c22-41d2-9248-4d93b00b5668}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -221,6 +224,15 @@
     </Image>
     <Image Include="textures\img\upgrade.png">
       <Filter>Textures\img\tower</Filter>
+    </Image>
+    <Image Include="textures\img\first.png">
+      <Filter>Textures\img\map</Filter>
+    </Image>
+    <Image Include="textures\img\firstone.png">
+      <Filter>Textures\img\map</Filter>
+    </Image>
+    <Image Include="textures\img\firsttwo.png">
+      <Filter>Textures\img\map</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
