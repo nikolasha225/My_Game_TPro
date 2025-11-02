@@ -109,7 +109,6 @@
   },
   "TOWER": {
     "framePerShootCoeficent": 30,
-    "priceCoeficent": 1,
     "rangeCoeficent": 300,
     "layer": 23,
     "shootScale": 0.1,

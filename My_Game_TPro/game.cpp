@@ -219,7 +219,22 @@ void TowerManager::checkEvents(sf::RenderWindow* window)
                     }
                 }
                 for (auto& cell : place->BUY_MENU)
+                {
                     cell->STATE = DownCell::selectFatherTower;
+                    float price = 0;
+                    if (cell->NUMBER == Tower::upgradedTower)
+                        price = (float)JSONSettings["TOWER"]["upgrade"][cell->FATHER->TOWER->getLevel()]
+                        * (float)JSONSettings["TOWER"][towerTypes[cell->FATHER->TOWER->getTowerType()]]["price"];
+                    else
+                        price = (float)JSONSettings["TOWER"]["removeCoef"]
+                        * (float)JSONSettings["TOWER"][towerTypes[cell->FATHER->TOWER->getTowerType()]]["price"];
+                    cell->TEXT_PRICE.setString(std::to_string((int)price));
+                    sf::FloatRect textBounds = cell->TEXT_PRICE.getLocalBounds();
+                    cell->TEXT_PRICE.setOrigin(
+                        textBounds.left + textBounds.width / 2.f,
+                        textBounds.top + textBounds.height / 2.f
+                    );
+                }
                 clickedOnSomething = true;
                 clickedPlace = place;
                 break;
@@ -537,7 +552,6 @@ TowerManager::DownCell::DownCell(Place* father, Tower::EnumTowerType number)
             JSONSettings["TOWER"][towerTypes[number]]["cellTexture"]
         );
         MANAGER.setTexture(&TEXTURE_MANAGER);
-        TEXTURE_DESC.loadFromFile(JSONSettings["TOWER"][towerTypes[number]]["descTexture"]);
         DESC.setSize(
             sf::Vector2f(
                 JSONSettings["TOWER"]["buyDecsSize"][0],
@@ -545,12 +559,31 @@ TowerManager::DownCell::DownCell(Place* father, Tower::EnumTowerType number)
             )
         );
         DESC.setOrigin(DESC.getSize().x / 2, DESC.getSize().y / 2);
-        DESC.setTexture(&TEXTURE_DESC);
         DESC.setPosition(
             sf::Vector2f(
                 FATHER->getPos().x + MANAGER.getSize().x + DESC.getSize().x / 2,
                 FATHER->getPos().y + FATHER->getSize().y / 2 + DESC.getSize().y / 2
             )
+        );
+
+        DESC.setFillColor(sf::Color(12, 150, 12));
+
+        TEXT_DESC.setFont(FONT);
+        TEXT_DESC.setString(
+            "BUY\n" 
+            + std::to_string((unsigned)JSONSettings["TOWER"][towerTypes[number]]["price"])
+        );
+        TEXT_DESC.setCharacterSize(24);
+        TEXT_DESC.setFillColor(sf::Color::White);
+
+        sf::FloatRect textBounds = TEXT_DESC.getLocalBounds();
+        TEXT_DESC.setOrigin(
+            textBounds.left + textBounds.width / 2.f,
+            textBounds.top + textBounds.height / 2.f
+        );
+        TEXT_DESC.setPosition(
+            DESC.getPosition().x ,
+            DESC.getPosition().y 
         );
     }
     else {
@@ -564,8 +597,36 @@ TowerManager::DownCell::DownCell(Place* father, Tower::EnumTowerType number)
                 father->getPos().y
             )
         );
+
+        TEXT_PRICE.setFont(FONT);
+        TEXT_PRICE.setCharacterSize(16);
+        TEXT_PRICE.setFillColor(sf::Color::White);
+        TEXT_PRICE.setString("000");
+        sf::FloatRect textBounds = TEXT_PRICE.getLocalBounds();
+        TEXT_PRICE.setOrigin(
+            textBounds.left + textBounds.width / 2.f,
+            textBounds.top + textBounds.height / 2.f
+        );
+
+        OBJ_PRICE.setFillColor(sf::Color(80, 160, 80, 180));
+        OBJ_PRICE.setSize(MANAGER.getSize() - sf::Vector2f(0, MANAGER.getSize().y)/2.5f);
+        OBJ_PRICE.setOrigin(OBJ_PRICE.getSize() / 2.f);
+        OBJ_PRICE.setPosition(
+            sf::Vector2f(
+                MANAGER.getPosition().x,
+                MANAGER.getPosition().y + MANAGER.getSize().y / 2.f + OBJ_PRICE.getSize().y / 2.f
+            )
+        );
+        OBJ_PRICE.setOutlineThickness(3.f);
+        OBJ_PRICE.setOutlineColor(sf::Color::Black);
+
+        TEXT_PRICE.setPosition(
+            OBJ_PRICE.getPosition().x,
+            OBJ_PRICE.getPosition().y
+        );
     }
     STATE = unselectFather;
+
 }
 
 void TowerManager::DownCell::draw(sf::RenderWindow* window) {
@@ -582,14 +643,18 @@ void TowerManager::DownCell::draw(sf::RenderWindow* window) {
         if (NUMBER <= Tower::kaspersky) {
             window->draw(MANAGER);
             window->draw(DESC);
+            window->draw(TEXT_DESC);
         }
         break;
     case TowerManager::DownCell::existTower:
         return;
         break;
     case TowerManager::DownCell::selectFatherTower:
-        if (NUMBER > Tower::kaspersky)
+        if (NUMBER > Tower::kaspersky) {
             window->draw(MANAGER);
+            window->draw(OBJ_PRICE);
+            window->draw(TEXT_PRICE);
+        }
         return;
         break;
     default:
@@ -610,8 +675,7 @@ void TowerManager::DownCell::unselect()
 
 bool TowerManager::DownCell::tryBuy()
 {
-    unsigned towerPrice = (unsigned)JSONSettings["TOWER"][towerTypes[NUMBER]]["price"]
-        * (unsigned)JSONSettings["TOWER"]["priceCoeficent"];
+    unsigned towerPrice = (unsigned)JSONSettings["TOWER"][towerTypes[NUMBER]]["price"];
     if (MONEY >= towerPrice)
     {
         MONEY -= towerPrice;

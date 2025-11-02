@@ -112,11 +112,9 @@ private:
 			selectFatherTower
 		};
 		Place* FATHER;
-		sf::RectangleShape DESC;
 		sf::RectangleShape MANAGER;
 		sf::Texture TEXTURE_MANAGER;
 		sf::Texture TEXTURE_TOWER;
-		sf::Texture TEXTURE_DESC;
 		EnumCellState STATE;
 		Tower::EnumTowerType NUMBER;
 
@@ -128,6 +126,13 @@ private:
 		bool tryBuy();//++
 		sf::RectangleShape* getCellShapePtr();
 		sf::RectangleShape* getDescShapePtr();
+
+		sf::Text TEXT_DESC;
+		sf::Text TEXT_PRICE;
+		sf::RectangleShape DESC;
+		sf::RectangleShape OBJ_PRICE;
+
+
 	};
 
 	//переменные

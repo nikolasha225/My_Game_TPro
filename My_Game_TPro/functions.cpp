@@ -405,8 +405,7 @@ Tower::Tower(EnumTowerType type, OBJStack* stack, sf::Vector2f pos)
 		)
 	);
 	TEXTURE.loadFromFile(JSONSettings["TOWER"][stringType]["texture"]);
-	PRICE = (unsigned)JSONSettings["TOWER"][stringType]["price"]
-		* (unsigned)JSONSettings["TOWER"]["priceCoeficent"];
+	PRICE = (unsigned)JSONSettings["TOWER"][stringType]["price"];
 	TOWER_VELOCITY = (unsigned)JSONSettings["TOWER"][stringType]["framePerShoot"]
 		* (unsigned)JSONSettings["TOWER"]["framePerShootCoeficent"];
 	TOWER_LEVEL = 1;
