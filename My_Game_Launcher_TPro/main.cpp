@@ -35,6 +35,7 @@ int main() {
 	}
 	sf::Sound soundhello;
 	soundhello.setBuffer(bufferhello);
+	soundhello.setVolume(5);
 	soundhello.play();
 
 	sf::SoundBuffer bufferstart;
@@ -118,6 +119,14 @@ int main() {
 
 	std::vector<MenuItem> ownersmenu = {
 		MenuItem(L"О создателях", font, 50, {200.f, 50.f}, []() {}, true),
+		MenuItem(L"Ducktor74", font, 28, {100.f, 150.f}, []() {}, true),
+		MenuItem(L"Owner/Dev", font, 22, {650.f, 150.f}, []() {}, true),
+		MenuItem(L"Bucktor74", font, 28, {100.f, 200.f}, []() {}, true),
+		MenuItem(L"Designer/Dev", font, 22, {650.f, 200.f}, []() {}, true),
+		MenuItem(L"Kirill", font, 28, {100.f, 250.f}, []() {}, true),
+		MenuItem(L"Developer", font, 22, {650.f, 250.f}, []() {}, true),
+		MenuItem(L"KRiSH", font, 28, {100.f, 300.f}, []() {}, true),
+		MenuItem(L"Lox", font, 22, {650.f, 300.f}, []() {}, true),
 		MenuItem(L"Назад", font, 36, {100.f, 550.f}, back, false)
 	};
 
