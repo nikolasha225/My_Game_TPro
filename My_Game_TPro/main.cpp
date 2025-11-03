@@ -31,11 +31,15 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     MONEY = JSONSettings["GAME"]["startMoney"][DIFFICULT - 1];
 
     //базовые определения
+
     bool pauseState = 0;
+
     sf::Event event;
     OBJStack drawStack;
     Spawner spawner(&window, &drawStack);
     TowerManager manager(&drawStack);
+
+    VideoPlayer player;
 
     //пока ктото карту не сделал
     std::vector<sf::RectangleShape> path = createSimplePath(wayPoints[LEVEL -1], 20);
@@ -76,9 +80,13 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
 
             TIME--;
         }
-        else {
-            //меню паузы
+        else
+        {
+            drawStack.draw(&window);
+            while (vatchAD(&player))
+                pauseState = 0;
         }
+
         window.display();
     }
 

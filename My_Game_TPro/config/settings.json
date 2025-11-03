@@ -17,8 +17,9 @@
     "soundError": "./sound/error.ogg",
     "soundTowerSpawn": "./sound/towerSpawn.ogg",
     "soundUpgrade": "./sound/upgrade.ogg",
-    "soundDelete": "./sound/delete.ogg"
-
+    "soundDelete": "./sound/delete.ogg",
+    "textureMap": [ "./textures/img/first.png", "./textures/img/second.png", "./textures/img/third.png" ],
+    "videoAD": "./textures/video/ad_01.avi"
   },
   "ENEMY": {
     "difficultCoeficent": [ 1, 1.2, 1.5 ],

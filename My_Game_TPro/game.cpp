@@ -707,6 +707,85 @@ sf::RectangleShape* TowerManager::DownCell::getDescShapePtr()
     return &DESC;
 }
 
+//=====================================VIDEO_PLAYER============================
+
+bool VideoPlayer::playVideo(const std::wstring& path) {
+    stopVideo();
+    CoInitialize(nullptr);
+
+    HRESULT hr = CoCreateInstance(CLSID_FilterGraph, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&graph));
+    if (FAILED(hr)) return false;
+
+    hr = graph->QueryInterface(IID_PPV_ARGS(&control));
+    hr = graph->QueryInterface(IID_PPV_ARGS(&events));
+
+    // пробуем добавить звук
+    IBaseFilter* pAudioRenderer = nullptr;
+    hr = CoCreateInstance(CLSID_DSoundRender, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pAudioRenderer));
+    if (SUCCEEDED(hr)) graph->AddFilter(pAudioRenderer, L"Audio Renderer");
+
+    // Загружаем файл
+    hr = graph->RenderFile(path.c_str(), nullptr);
+    if (FAILED(hr)) {
+        std::wcerr << L"Ошибка загрузки видео: " << path << std::endl;
+        stopVideo();
+        return false;
+    }
+
+    // Настройка видеоокна
+    IVideoWindow* videoWindow = nullptr;
+    if (SUCCEEDED(graph->QueryInterface(IID_PPV_ARGS(&videoWindow)))) {
+        videoWindow->put_WindowStyle(WS_OVERLAPPEDWINDOW | WS_VISIBLE);
+        videoWindow->SetWindowPosition(0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)); // на весь экран
+        videoWindow->put_FullScreenMode(OATRUE);
+        videoWindow->Release();
+    }
+
+    // Запуск
+    control->Run();
+    isPlayingFlag = true;
+    return true;
+}
+
+VideoPlayer::VideoStatus VideoPlayer::checkVideoStatus() {
+    if (!isPlayingFlag) return VIDEO_NOT_STARTED;
+    if (!events) return VIDEO_CLOSED;
+
+    long evCode = 0;
+    LONG_PTR p1 = 0, p2 = 0;
+    if (events->GetEvent(&evCode, &p1, &p2, 0) == S_OK) {
+        if (evCode == EC_COMPLETE) {
+            stopVideo();
+            return VIDEO_FINISHED;
+        }
+        events->FreeEventParams(evCode, p1, p2);
+    }
+    return VIDEO_RUNNING;
+}
+
+void VideoPlayer::stopVideo() {
+    if (control) control->Stop();
+    if (events) {
+        events->Release();
+        events = nullptr;
+    }
+    if (control) {
+        control->Release();
+        control = nullptr;
+    }
+    if (graph) {
+        graph->Release();
+        graph = nullptr;
+    }
+    if (isPlayingFlag) {
+        CoUninitialize();
+        isPlayingFlag = false;
+    }
+    sendAltTab();
+}
+
+
+
 //=====================================ОТДЕЛЬНЫЕ ФУНКЦИИ=======================
 
 unsigned getSummArray(unsigned* array, uint8_t length)
@@ -728,3 +807,40 @@ bool mouseInButton(sf::RectangleShape* button, sf::RenderWindow* window)
 	return isPointIntoShape((sf::Vector2f)sf::Mouse::getPosition(*window), *button);
 }
 
+bool vatchAD(VideoPlayer* player)
+{
+    VideoPlayer::VideoStatus videoStatus = player->checkVideoStatus();
+    if (videoStatus == VideoPlayer::VIDEO_NOT_STARTED)
+    {
+        std::string videoFile = JSONSettings["GAME"]["videoAD"];
+        std::wstring videoPath = std::wstring(videoFile.begin(), videoFile.end());
+        player->playVideo(videoPath);
+    }
+    if (videoStatus != VideoPlayer::VIDEO_RUNNING && videoStatus != VideoPlayer::VIDEO_NOT_STARTED)
+        player->stopVideo();
+    return videoStatus == VideoPlayer::VIDEO_RUNNING;
+}
+
+void sendAltTab() {
+    INPUT inputs[4] = {};
+
+    // ALT down
+    inputs[0].type = INPUT_KEYBOARD;
+    inputs[0].ki.wVk = VK_MENU;
+
+    // TAB down
+    inputs[1].type = INPUT_KEYBOARD;
+    inputs[1].ki.wVk = VK_TAB;
+
+    // TAB up
+    inputs[2].type = INPUT_KEYBOARD;
+    inputs[2].ki.wVk = VK_TAB;
+    inputs[2].ki.dwFlags = KEYEVENTF_KEYUP;
+
+    // ALT up
+    inputs[3].type = INPUT_KEYBOARD;
+    inputs[3].ki.wVk = VK_MENU;
+    inputs[3].ki.dwFlags = KEYEVENTF_KEYUP;
+
+    SendInput(4, inputs, sizeof(INPUT));
+}

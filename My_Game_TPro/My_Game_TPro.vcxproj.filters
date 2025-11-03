@@ -125,6 +125,9 @@
     <None Include="sound\delete.ogg">
       <Filter>sound</Filter>
     </None>
+    <None Include="textures\video\ad_01.avi">
+      <Filter>Textures\video</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -286,6 +289,9 @@
     </Media>
     <Media Include="sound\source\errr.mp3">
       <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="textures\video\ad_01.mp4">
+      <Filter>Textures\video</Filter>
     </Media>
   </ItemGroup>
 </Project>

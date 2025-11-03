@@ -3,9 +3,17 @@
 //‰Îˇ ÍÓÎË Ë ÍË˛ıË
 #include "functions.h"
 
+#pragma once
+#include <Windows.h>
+#include <dshow.h>
+#include <string>
+#pragma comment(lib, "strmiids.lib")
+
 class Spawner;
 class TowerManager;
 class GameLogic;
+
+class VideoPlayer;
 
 //==============================SPAWNER===================================
 class Spawner
@@ -141,6 +149,29 @@ private:
 
 };
 
+//==============================VIDEO_PLAYER===============================
+
+class VideoPlayer {
+private:
+	IGraphBuilder* graph = nullptr;
+	IMediaControl* control = nullptr;
+	IMediaEvent* events = nullptr;
+	bool isPlayingFlag = false;
+
+public:
+	enum VideoStatus {
+		VIDEO_NOT_STARTED = 0,
+		VIDEO_RUNNING = 1,
+		VIDEO_FINISHED = 2,
+		VIDEO_CLOSED = 3
+	};
+
+	bool playVideo(const std::wstring& path);
+	VideoStatus checkVideoStatus();
+	void stopVideo();
+	~VideoPlayer() { stopVideo(); }
+};
+
 //==============================Œ“ƒ≈À‹Õ€≈ ‘”Õ ÷»»=========================
 unsigned getSummArray(unsigned* array, uint8_t length = 5);
 
@@ -148,3 +179,6 @@ bool mouseNearPoint(sf::Vector2f point, float distance, sf::RenderWindow* window
 
 bool mouseInButton(sf::RectangleShape* button, sf::RenderWindow* window);
 
+bool vatchAD(VideoPlayer* player);
+
+void sendAltTab();

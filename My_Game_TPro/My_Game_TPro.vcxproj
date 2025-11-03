@@ -150,6 +150,7 @@
     <None Include="sound\towerSpawn.ogg" />
     <None Include="sound\upgrade.ogg" />
     <None Include="sound\victory.ogg" />
+    <None Include="textures\video\ad_01.avi" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="functions.h" />
@@ -208,6 +209,7 @@
     <Media Include="sound\source\раунд 3.mp3" />
     <Media Include="sound\source\смех.mp3" />
     <Media Include="sound\source\чистая победа.mp3" />
+    <Media Include="textures\video\ad_01.mp4" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
