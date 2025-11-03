@@ -234,6 +234,12 @@
     <Image Include="textures\img\firsttwo.png">
       <Filter>Textures\img\map</Filter>
     </Image>
+    <Image Include="textures\img\second.png">
+      <Filter>Textures\img\map</Filter>
+    </Image>
+    <Image Include="textures\img\third.png">
+      <Filter>Textures\img\map</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="sound\source\(поражение) ist oficial, you suck.mp3">
