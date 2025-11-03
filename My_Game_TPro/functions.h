@@ -66,6 +66,7 @@ class Tower;
 class IGameObject;
 class OBJStack;
 class Core;
+class Map;
 
 //очередь отрисовки
 constexpr EnumGameObjects renderLine[] = {
@@ -93,27 +94,27 @@ constexpr EnumGameObjects renderLineReverce[] = {
 const std::vector<sf::Vector2f> wayPoints[3] = //наши пути
 {
 	{
-		sf::Vector2f(200, 980),   // start
-		sf::Vector2f(200, 300),   // point1
-		sf::Vector2f(1720, 300),  // point2  
-		sf::Vector2f(1720, 880),  // point3
-		sf::Vector2f(500, 880),   // point4
-		sf::Vector2f(500, 520),   // point5
-		sf::Vector2f(1520, 520),  // point6
-		sf::Vector2f(1520, 600)   // end
+		sf::Vector2f(205, 980),   // start
+		sf::Vector2f(205, 300),   // point1
+		sf::Vector2f(1718, 300),  // point2  
+		sf::Vector2f(1718, 882),  // point3
+		sf::Vector2f(503, 882),   // point4
+		sf::Vector2f(503, 529),   // point5
+		sf::Vector2f(1516, 529),  // point6
+		sf::Vector2f(1516, 595)   // end
 	},
 	{
 		sf::Vector2f(200, 980),   // start
 		sf::Vector2f(580, 300),   // point1
 		sf::Vector2f(960, 980),   // point2  
 		sf::Vector2f(1340, 300),  // point3
-		sf::Vector2f(1720, 880)   // end
+		sf::Vector2f(1720, 875)   // end
 	},
 	{
-		sf::Vector2f(200, 980),   // start
-		sf::Vector2f(200, 300),   // point1
-		sf::Vector2f(1720, 300),  // point2
-		sf::Vector2f(1720, 600)   // end
+		sf::Vector2f(201, 980),   // start
+		sf::Vector2f(201, 306),   // point1
+		sf::Vector2f(1718, 306),  // point2
+		sf::Vector2f(1718, 600)   // end
 	}
 };
 
@@ -140,18 +141,13 @@ const std::vector <sf::Vector2f> towerPoint[3] =
 		sf::Vector2f(1600, 480),
 	},
 	{
-		 sf::Vector2f(400, 520),
-		sf::Vector2f(400, 710),
-		sf::Vector2f(400, 900),
-		sf::Vector2f(720, 520),
-		sf::Vector2f(720, 710),
-		sf::Vector2f(720, 900),
-		sf::Vector2f(1050, 520),
-		sf::Vector2f(1050, 710),
-		sf::Vector2f(1050, 900),
-		sf::Vector2f(1400, 520),
-		sf::Vector2f(1400, 710),
-		sf::Vector2f(1400, 900),
+		sf::Vector2f(330, 450),
+		sf::Vector2f(330, 660),
+		sf::Vector2f(330, 900),
+		sf::Vector2f(640, 450),
+		sf::Vector2f(950, 450),
+		sf::Vector2f(1260, 450),
+		sf::Vector2f(1570, 450),
 
 	}
 };
@@ -409,7 +405,7 @@ private:
 	std::vector<IGameObject*> deleted;
 };
 
-//==========================================CORE=================================
+//==========================================CORE====================================
 
 class Core :public IGameObject
 {
@@ -445,6 +441,29 @@ private:
 	float MOVE;
 };
 
+//=========================================MAP======================================
+
+class Map :public IGameObject
+{
+public:
+	Map();
+	~Map() = default;
+	uint8_t getLayer();//слой отрисовки
+	void setLayer(uint8_t layer) {};//слой отрисовки
+	sf::Vector2f getSize();//размеры x y
+	void setSize(sf::Vector2f size);//размеры x y
+	sf::Vector2f getPos(bool isMiddle = 1);//положение на экране
+	void setPos(sf::Vector2f vector, bool toMiddle = 1) {};//вектор перемещения
+	void draw(sf::RenderWindow* window);//функция отрисовки
+	EnumGameObjects getTypeObjet();//возвращает тип объекта;
+	IGameObject* getPtr();//ссылка на сам объект
+	void tick() {};
+
+private:
+	sf::RectangleShape MAP;
+	sf::Texture TEXTURE_MAP;
+};
+
 
 //==================================ОТДЕЛЬНЫЕ ФУНКЦИИ===============================
 
@@ -465,7 +484,3 @@ bool isPointIntoShape(sf::Vector2f point, sf::RectangleShape obj);
 float getWayCoeficent(uint8_t level = LEVEL);
 
 float getWayLength(std::vector<sf::Vector2f> pathPoints);
-
-//=================================DEBUG ONLY====================================
-
-std::vector<sf::RectangleShape> createSimplePath(const std::vector<sf::Vector2f>& points, float width);

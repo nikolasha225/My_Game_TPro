@@ -25,10 +25,14 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     }
     FONT.loadFromFile(JSONSettings["GENERAL"]["font"]);
 
-    LEVEL = 1;
+    LEVEL = 3;
     DIFFICULT = __difficult;
     HEALTH = JSONSettings["GAME"]["HP"][DIFFICULT - 1];
     MONEY = JSONSettings["GAME"]["startMoney"][DIFFICULT - 1];
+
+    TIME = (float)JSONSettings["GAME"]["roundTimeSec"][LEVEL - 1]
+        * (unsigned)JSONSettings["GENERAL"]["framerate"];
+    START_TIME = TIME;
 
     //базовые определения
 
@@ -40,9 +44,6 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     TowerManager manager(&drawStack);
 
     VideoPlayer player;
-
-    //пока ктото карту не сделал
-    std::vector<sf::RectangleShape> path = createSimplePath(wayPoints[LEVEL -1], 20);
 
     //===========================================
     while (window.isOpen())
@@ -73,10 +74,6 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
 
 
             drawStack.draw(&window);
-
-            //отладка
-            for (auto& i : path)
-                window.draw(i);
 
             TIME--;
         }

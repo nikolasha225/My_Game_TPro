@@ -16,8 +16,8 @@ sf::Vector2f RESOLUTION = sf::Vector2f(
 	(float)JSONSettings["GENERAL"]["resolution"][0],
 	(float)JSONSettings["GENERAL"]["resolution"][1]
 ); 
-unsigned long TIME = (float)JSONSettings["GAME"]["roundTimeSec"][LEVEL - 1]
-* (unsigned)JSONSettings["GENERAL"]["framerate"];
+
+unsigned long TIME =0;
 unsigned long START_TIME = TIME;
 
 sf::Font FONT;
@@ -506,7 +506,6 @@ bool Tower::getDrawStatus()
 	return DRAW_STATUS;
 }
 
-//-------------------------------------------Отрисовка квадратика с уровнем
 void Tower::draw(sf::RenderWindow* window)
 {
 	window->draw(OBJ);
@@ -649,7 +648,7 @@ OBJStack::OBJStack()
 	{enemy, {}},
 	{tower, {}},
 	{core, {new Core}},
-	{backgroundStatic, {}},
+	{backgroundStatic, {new Map}},
 	{backgroundDynamic, {}},
 	{menuWindowObject, {}},
 	{effect, {}},
@@ -814,7 +813,6 @@ Core::Core()
 	MOVE = JSONSettings["CORE"]["coreMove"];
 }
 
-//-----------------------------
 void Core::tick() 
 {
 	TICK_COUNTER += (TICK_COUNTER < TICK_DAMAGE);
@@ -921,6 +919,48 @@ bool Core::isDamaged()
 	return 0;
 }
 
+//============================MAP========================================
+
+Map::Map() 
+{
+	MAP.setPosition(sf::Vector2f(0, 0));
+	MAP.setSize(sf::Vector2f(1920, 1080));
+	TEXTURE_MAP.loadFromFile(JSONSettings["GAME"]["textureMap"][LEVEL - 1]);
+	MAP.setTexture(&TEXTURE_MAP);
+}
+
+uint8_t Map::getLayer() {
+	return 1;
+}
+
+sf::Vector2f Map::getSize() {
+	return MAP.getSize();
+}
+
+void Map::setSize(sf::Vector2f size)
+{
+	MAP.setSize(size);
+}
+
+void Map::draw(sf::RenderWindow* window)
+{
+	window->draw(MAP);
+}
+
+EnumGameObjects Map::getTypeObjet()
+{
+	return EnumGameObjects::backgroundStatic;
+}
+
+IGameObject* Map::getPtr()
+{
+	return this;
+}
+
+sf::Vector2f Map::getPos(bool isMiddle)
+{
+	return MAP.getSize() / 2.f;
+}
 //============================ОТДЕЛЬНЫЕ ФУНКЦИИ==========================
 
 sf::Vector2f getPositionOnPathByDistance(float pos, const std::vector<sf::Vector2f> pathPoints)
@@ -1046,41 +1086,4 @@ float getWayLength(std::vector<sf::Vector2f> pathPoints)
 	}
 
 	return totalLength;
-}
-
-//==============================DEBUG ONLY========================================
-
-std::vector<sf::RectangleShape> createSimplePath(const std::vector<sf::Vector2f>& points, float width) {
-	std::vector<sf::RectangleShape> pathSegments;
-
-	if (points.size() < 2) {
-		return pathSegments;
-	}
-
-	// Серо-синий цвет
-	sf::Color pathColor(100, 120, 180);
-
-	for (size_t i = 0; i < points.size() - 1; ++i) {
-		const sf::Vector2f& start = points[i];
-		const sf::Vector2f& end = points[i + 1];
-
-		// Вычисляем длину и угол сегмента
-		sf::Vector2f direction = end - start;
-		float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
-		float angle = std::atan2(direction.y, direction.x) * 180 / 3.14159f;
-
-		// Создаем прямоугольник для сегмента пути
-		sf::RectangleShape segment(sf::Vector2f(length, width));
-		segment.setFillColor(pathColor);
-		segment.setPosition(start);
-		segment.setRotation(angle);
-
-		// Смещаем так чтобы путь был центрирован относительно линии
-		segment.move(-width / 2 * std::sin(angle * 3.14159f / 180),
-			width / 2 * std::cos(angle * 3.14159f / 180));
-
-		pathSegments.push_back(segment);
-	}
-
-	return pathSegments;
 }
