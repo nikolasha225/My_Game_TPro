@@ -1,4 +1,6 @@
 #include "game.h"
+#include "winLoseMenu.h"
+#include "pauseMenu.h"
 
 int main(uint8_t __difficult = 1, unsigned __id = 0)
 {
