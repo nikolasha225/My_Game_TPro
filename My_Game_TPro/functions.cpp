@@ -679,6 +679,7 @@ void OBJStack::remove(IGameObject* obj)
 	);
 
 	if (it != stack[obj->getTypeObjet()].end()) {
+		deleted.push_back(*it);
 		stack[obj->getTypeObjet()].erase(it);
 	}
 }
@@ -735,6 +736,16 @@ size_t OBJStack::getCountOf(EnumGameObjects type)
 std::map<EnumGameObjects, std::vector<IGameObject*>>* OBJStack::getStack()
 {
 	return &stack;
+}
+
+std::vector<IGameObject*> OBJStack::getStackOfType(EnumGameObjects type)
+{
+	return stack[type];
+}
+
+std::vector<IGameObject*> OBJStack::getDeleted()
+{
+	return deleted;
 }
 
 void OBJStack::tick()

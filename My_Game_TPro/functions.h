@@ -400,6 +400,9 @@ public:
 	OBJStack* getPtr();
 	size_t getCountOf(EnumGameObjects type);
 	std::map<EnumGameObjects, std::vector<IGameObject*>>* getStack();
+	std::vector<IGameObject*> getStackOfType(EnumGameObjects type);
+	std::vector<IGameObject*> getDeleted();
+
 private:
 	std::map<EnumGameObjects, std::vector<IGameObject*>> stack;
 	std::vector<IGameObject*> deleted;

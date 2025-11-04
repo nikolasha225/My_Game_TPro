@@ -9,6 +9,8 @@
 #include <string>
 #pragma comment(lib, "strmiids.lib")
 
+#include <chrono>
+
 class Spawner;
 class TowerManager;
 class GameLogic;
@@ -21,7 +23,9 @@ enum EnumGameState
 	PAUSE,
 	WIN,
 	LOSE,
-	AD
+	AD,
+	END_GAME,
+	NEXT_LEVEL
 };
 
 //==============================SPAWNER===================================
@@ -193,4 +197,4 @@ bool vatchAD(VideoPlayer* player);
 
 void sendAltTab();
 
-void writeScore(OBJStack* stack);
+void writeScore(OBJStack* stack, unsigned id);

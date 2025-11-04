@@ -99,7 +99,7 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
 
             TIME--;
 
-            GAME_STATE = (TIME > 0 && SPAWNER.existEnemy()) ? (GAME_STATE) : (WIN);
+            GAME_STATE = (TIME > 0 && SPAWNER.existEnemy()) ? (GAME_STATE) : (NEXT_LEVEL);
             GAME_STATE = (HEALTH > 0) ? (GAME_STATE) : (LOSE);
 
             break;
@@ -110,19 +110,32 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
         case WIN:
             SOUND.setBuffer(SOUND_BUFFER_WIN);
             SOUND.play();
-
-            GAME_STATE = GAME;
+            writeScore(&OBJ_STACK, 123);
+            GAME_STATE = END_GAME;
             break;
         case LOSE:
             SOUND.setBuffer(SOUND_BUFFER_LOSE);
             SOUND.play();
-
-            GAME_STATE = GAME;
+            writeScore(&OBJ_STACK, 123);
+            GAME_STATE = END_GAME;
             HEALTH = 100;
             break;
         case AD:
             while (vatchAD(&VIDEO_PLAYER))
                 GAME_STATE = GAME;
+            break;
+        case END_GAME:
+            OBJ_STACK.draw(&window);
+            break;
+        case NEXT_LEVEL:
+            LEVEL++;
+            if (LEVEL > 3)
+            {
+                GAME_STATE = WIN;
+                break;
+            }
+            //запуск себя с нечт левелом
+
             break;
         default:
             break;

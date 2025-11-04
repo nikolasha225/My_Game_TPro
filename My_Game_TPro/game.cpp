@@ -267,7 +267,7 @@ void TowerManager::checkEvents(sf::RenderWindow* window)
                             * (float)JSONSettings["TOWER"]["removeCoef"];
                         if (place->TOWER != nullptr) {
                             STACK->remove(place->TOWER);
-                            delete place->TOWER;
+                            //delete place->TOWER;
                             place->TOWER = nullptr;
                         }
                         place->STATE = Place::placeState::empty;
@@ -691,7 +691,7 @@ void TowerManager::DownCell::unselect()
 
 bool TowerManager::DownCell::tryBuy()
 {
-    unsigned towerPrice = (unsigned)JSONSettings["TOWER"][towerTypes[NUMBER]]["price"];
+    unsigned towerPrice = (unsigned)JSONSettings["TOWER"][towerTypes[NUMBER]]["price"] * JSONSettings["TOWER"]["upgrade"][FATHER->TOWER->getLevel()];
     if (MONEY >= towerPrice)
     {
         MONEY -= towerPrice;
@@ -719,7 +719,7 @@ sf::RectangleShape* TowerManager::DownCell::getDescShapePtr()
 
 bool VideoPlayer::playVideo(const std::wstring& path) {
     stopVideo();
-    CoInitialize(nullptr);
+    //CoInitialize(nullptr);
 
     HRESULT hr = CoCreateInstance(CLSID_FilterGraph, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&graph));
     if (FAILED(hr)) return false;
@@ -853,12 +853,145 @@ void sendAltTab() {
     SendInput(4, inputs, sizeof(INPUT));
 }
 
-void writeScore(OBJStack* stack)
+void writeScore(OBJStack* stack, unsigned id)
 {
     float totalDamage = 0;
+    unsigned totalMobs[6] = { 0,0,0,0,0,0 };
     unsigned totalTime = 0;
+    unsigned totalTowers[4] = { 0,0,0,0 };
+
+    // Расчет общего времени игры
     for (uint8_t i = 0; i <= LEVEL - 1; i++)
         totalTime += (unsigned)JSONSettings["GAME"]["roundTimeSec"][i];
     totalTime -= TIME / JSONSettings["GENERAL"]["framerate"];
 
+    // Получение всех объектов из стека
+    std::vector<IGameObject*> allObjects = stack->getDeleted();
+    std::vector<Tower*> Towers;
+    std::vector<Enemy*> Enemys;
+
+    // Разделение объектов по типам
+    for (auto& i : allObjects)
+        switch (i->getTypeObjet())
+        {
+        case tower:
+            Towers.push_back((Tower*)i);
+            break;
+        case enemy:
+            Enemys.push_back((Enemy*)i);
+            break;
+        default:
+            continue;
+            break;
+        }
+    for (auto& i : stack->getStackOfType(tower))
+        Towers.push_back((Tower*)i);
+
+    // Подсчет статистики по врагам
+    for (auto& i : Enemys) {
+        totalDamage += i->getHP(1) + abs(i->getHP());
+        totalMobs[5]++;
+        totalMobs[i->getEnemyType()]++;
+    }
+
+    // Подсчет статистики по башням
+    for (auto& i : Towers) {
+        totalTowers[i->getTowerType()]++;
+    }
+
+    // Создание JSON структуры для записи
+    json scoreData;
+
+    // Основная информация о сессии
+    unsigned long long timestamp = std::chrono::system_clock::now().time_since_epoch().count();
+    scoreData["level"] = LEVEL;
+    scoreData["difficulty"] = DIFFICULT;
+    scoreData["resolution_x"] = RESOLUTION.x;
+    scoreData["resolution_y"] = RESOLUTION.y;
+
+    // Игровая статистика
+    scoreData["game_stats"]["total_time_seconds"] = totalTime;
+    scoreData["game_stats"]["remaining_health"] = HEALTH;
+    scoreData["game_stats"]["remaining_money"] = MONEY;
+    scoreData["game_stats"]["total_damage_dealt"] = totalDamage;
+
+    // Статистика по врагам
+    scoreData["enemies"]["total_killed"] = totalMobs[5];
+    scoreData["enemies"]["basic"] = totalMobs[Enemy::basicVirus];
+    scoreData["enemies"]["fast"] = totalMobs[Enemy::fastVirus];
+    scoreData["enemies"]["tank"] = totalMobs[Enemy::tankVirus];
+    scoreData["enemies"]["mini_boss"] = totalMobs[Enemy::miniBossVirus];
+    scoreData["enemies"]["boss"] = totalMobs[Enemy::bossVirus];
+
+    // Статистика по башням
+    for (int i = 0; i < 4; i++) {
+        std::string towerType;
+        switch (i) {
+        case Tower::defender: towerType = "defender"; break;
+        case Tower::avast: towerType = "avast"; break;
+        case Tower::drWeb: towerType = "dr_web"; break;
+        case Tower::kaspersky: towerType = "kaspersky"; break;
+        default: towerType = "unknown"; break;
+        }
+
+        scoreData["towers"][towerType] = totalTowers[i];
+    }
+
+    // Результат игры
+    if (HEALTH <= 0) {
+        scoreData["game_result"] = "lose";
+    }
+    else {
+        scoreData["game_result"] = "win";
+    }
+
+    // Чтение существующего файла (если есть)
+    json existingData;
+    std::ifstream inputFile((std::string)JSONSettings["GENERAL"]["scoreJSON"]);
+    if (inputFile.is_open()) {
+        inputFile >> existingData;
+        inputFile.close();
+    }
+
+    // Если файл не существует или пустой, создаем новую структуру
+    if (!existingData.contains("players")) {
+        existingData["players"] = json::object();
+    }
+
+    // Если у игрока с таким ID еще нет записей, создаем объект для него
+    std::string playerId = std::to_string(id);
+    if (!existingData["players"].contains(playerId)) {
+        existingData["players"][playerId] = json::object();
+    }
+
+    // Добавляем новую сессию с таймстампом как ключ
+    std::string timestampStr = std::to_string(timestamp);
+    existingData["players"][playerId][timestampStr] = scoreData;
+
+    // Ограничиваем количество записей для каждого игрока (например, последние 20 игр)
+    const size_t maxSessionsPerPlayer = 20;
+    if (existingData["players"][playerId].size() > maxSessionsPerPlayer) {
+        // Собираем все таймстампы
+        std::vector<std::string> timestamps;
+        for (auto it = existingData["players"][playerId].begin(); it != existingData["players"][playerId].end(); ++it) {
+            timestamps.push_back(it.key());
+        }
+
+        // Сортируем по убыванию (новые таймстампы first)
+        std::sort(timestamps.begin(), timestamps.end(), [](const std::string& a, const std::string& b) {
+            return std::stoull(a) > std::stoull(b);
+            });
+
+        // Создаем новый объект только с последними maxSessionsPerPlayer играми
+        json newSessions = json::object();
+        for (size_t i = 0; i < std::min(maxSessionsPerPlayer, timestamps.size()); ++i) {
+            newSessions[timestamps[i]] = existingData["players"][playerId][timestamps[i]];
+        }
+        existingData["players"][playerId] = newSessions;
+    }
+
+    // Запись обратно в файл
+    std::ofstream outputFile((std::string)JSONSettings["GENERAL"]["scoreJSON"]);
+    outputFile << existingData.dump(4);
+    outputFile.close();
 }

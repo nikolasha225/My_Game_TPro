@@ -6,7 +6,8 @@
     "resolution": [ 1920, 1080 ],
     "iconPath": "./textures/img/icongame.png",
     "volume": 50,
-    "font": "./textures/font/font.ttf"
+    "font": "./textures/font/font.ttf",
+    "scoreJSON": "./config/score.json"
   },
   "GAME": {
     "startHP": [ 100, 60, 30 ],
@@ -25,7 +26,7 @@
   "ENEMY": {
     "difficultCoeficent": [ 1, 1.2, 1.5 ],
     "velocityCoeficent": 0.01,
-    "damageCoeficent": 10,
+    "damageCoeficent": 1,
     "layer": 20,
     "moneyCoeficent": 10,
     "dieSound": "./sound/die.ogg",
