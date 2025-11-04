@@ -14,6 +14,7 @@
     "roundTimeSec": [ 600, 700, 800 ],
     "soundRound": [ "./sound/round1.ogg", "./sound/round2.ogg", "./sound/round3.ogg" ],
     "soundVictory": "./sound/victory.ogg",
+    "soundLose": "./sound/lose.ogg",
     "soundError": "./sound/error.ogg",
     "soundTowerSpawn": "./sound/towerSpawn.ogg",
     "soundUpgrade": "./sound/upgrade.ogg",
@@ -24,7 +25,7 @@
   "ENEMY": {
     "difficultCoeficent": [ 1, 1.2, 1.5 ],
     "velocityCoeficent": 0.01,
-    "damageCoeficent": 1,
+    "damageCoeficent": 10,
     "layer": 20,
     "moneyCoeficent": 10,
     "dieSound": "./sound/die.ogg",

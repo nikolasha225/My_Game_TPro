@@ -137,6 +137,9 @@
     <None Include="textures\video\ad_01.avi">
       <Filter>Textures\video</Filter>
     </None>
+    <None Include="sound\lose.ogg">
+      <Filter>sound</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">

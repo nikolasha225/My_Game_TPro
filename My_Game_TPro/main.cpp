@@ -29,7 +29,7 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
 
     LEVEL = 1;
     DIFFICULT = __difficult;
-    HEALTH = JSONSettings["GAME"]["HP"][DIFFICULT - 1];
+    HEALTH = JSONSettings["GAME"]["startHP"][DIFFICULT - 1];
     MONEY = JSONSettings["GAME"]["startMoney"][DIFFICULT - 1];
 
     TIME = (float)JSONSettings["GAME"]["roundTimeSec"][LEVEL - 1]
@@ -47,6 +47,18 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
 
     VideoPlayer VIDEO_PLAYER;
 
+    sf::Sound SOUND;
+
+    sf::SoundBuffer SOUND_BUFFER_WIN;
+    sf::SoundBuffer SOUND_BUFFER_LOSE;
+    sf::SoundBuffer SOUND_BUFFER_ROUND;
+
+    SOUND_BUFFER_WIN.loadFromFile(JSONSettings["GAME"]["soundVictory"]);
+    SOUND_BUFFER_LOSE.loadFromFile(JSONSettings["GAME"]["soundLose"]);
+    SOUND_BUFFER_ROUND.loadFromFile(JSONSettings["GAME"]["soundRound"][LEVEL - 1]);
+    
+    SOUND.setBuffer(SOUND_BUFFER_ROUND);
+    SOUND.play();
     //===========================================
     while (window.isOpen())
     {
@@ -86,14 +98,27 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
             OBJ_STACK.draw(&window);
 
             TIME--;
+
+            GAME_STATE = (TIME > 0 && SPAWNER.existEnemy()) ? (GAME_STATE) : (WIN);
+            GAME_STATE = (HEALTH > 0) ? (GAME_STATE) : (LOSE);
+
             break;
         case PAUSE:
             OBJ_STACK.draw(&window);
             GAME_STATE = AD;
             break;
         case WIN:
+            SOUND.setBuffer(SOUND_BUFFER_WIN);
+            SOUND.play();
+
+            GAME_STATE = GAME;
             break;
         case LOSE:
+            SOUND.setBuffer(SOUND_BUFFER_LOSE);
+            SOUND.play();
+
+            GAME_STATE = GAME;
+            HEALTH = 100;
             break;
         case AD:
             while (vatchAD(&VIDEO_PLAYER))
@@ -102,7 +127,6 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
         default:
             break;
         }
-
 
         window.display();
     }

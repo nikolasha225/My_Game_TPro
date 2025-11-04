@@ -144,6 +144,7 @@
     <None Include="sound\die.ogg" />
     <None Include="sound\error.ogg" />
     <None Include="sound\haha.ogg" />
+    <None Include="sound\lose.ogg" />
     <None Include="sound\procDamage.ogg" />
     <None Include="sound\round1.ogg" />
     <None Include="sound\round2.ogg" />

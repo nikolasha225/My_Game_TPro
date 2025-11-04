@@ -188,6 +188,14 @@ bool* Spawner::allowSpawnEnemy()
     return allowSpawn;
 }
 
+bool Spawner::existEnemy()
+{
+    unsigned total = 0;
+    for (uint8_t i = 0; i < 5; i++)
+        total += COUNT_MOBS[i];
+    return total;
+}
+
 //==============================TOWER_MANAGER==============================
 
 TowerManager::TowerManager(OBJStack* stack)
@@ -843,4 +851,14 @@ void sendAltTab() {
     inputs[3].ki.dwFlags = KEYEVENTF_KEYUP;
 
     SendInput(4, inputs, sizeof(INPUT));
+}
+
+void writeScore(OBJStack* stack)
+{
+    float totalDamage = 0;
+    unsigned totalTime = 0;
+    for (uint8_t i = 0; i <= LEVEL - 1; i++)
+        totalTime += (unsigned)JSONSettings["GAME"]["roundTimeSec"][i];
+    totalTime -= TIME / JSONSettings["GENERAL"]["framerate"];
+
 }

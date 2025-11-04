@@ -35,6 +35,8 @@ public:
 	//вовращает массив из 5 булов (кого можно спавнить) (должна сама обнулить заспавненые)
 	bool* allowSpawnEnemy();
 
+	bool existEnemy();
+
 private:
 	sf::RenderWindow* WINDOW;
 	OBJStack* STACK;
@@ -72,7 +74,6 @@ public:
 	};
 
 	void checkEvents(sf::RenderWindow* window);//когда Ћ ћќ“∆»ћј≈“—я
-
 private:
 
 	struct Place : public IGameObject
@@ -191,3 +192,5 @@ bool mouseInButton(sf::RectangleShape* button, sf::RenderWindow* window);
 bool vatchAD(VideoPlayer* player);
 
 void sendAltTab();
+
+void writeScore(OBJStack* stack);
