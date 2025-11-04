@@ -881,6 +881,15 @@ void Core::tick()
 	while (strMoney.size() < 5)
 		strMoney = "0" + strMoney;
 	TEXT_MONEY.setString(strMoney);
+	int ledCoeficent = 180;
+	TEXT_MONEY.setFillColor(
+		sf::Color(
+			255,
+			0,
+			0,
+			255 - abs((int)((float)TIME*1.6f) % ledCoeficent - ledCoeficent/2)
+		)
+	);
 
 	//-----------------hp
 }
