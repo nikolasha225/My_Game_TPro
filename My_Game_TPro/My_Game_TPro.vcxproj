@@ -154,6 +154,12 @@
     <None Include="sound\upgrade.ogg" />
     <None Include="sound\victory.ogg" />
     <None Include="textures\video\ad_01.avi" />
+    <None Include="textures\video\ad_02.avi" />
+    <None Include="textures\video\ad_03.avi" />
+    <None Include="textures\video\ad_04.avi" />
+    <None Include="textures\video\ad_05.avi" />
+    <None Include="textures\video\ad_06.avi" />
+    <None Include="textures\video\ad_07.avi" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="functions.h" />
@@ -215,6 +221,12 @@
     <Media Include="sound\source\смех.mp3" />
     <Media Include="sound\source\чистая победа.mp3" />
     <Media Include="textures\video\ad_01.mp4" />
+    <Media Include="textures\video\ad_02.mp4" />
+    <Media Include="textures\video\ad_03.mp4" />
+    <Media Include="textures\video\ad_04.mp4" />
+    <Media Include="textures\video\ad_05.mp4" />
+    <Media Include="textures\video\ad_06.mp4" />
+    <Media Include="textures\video\ad_07.mp4" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="textures\font\font.ttf" />

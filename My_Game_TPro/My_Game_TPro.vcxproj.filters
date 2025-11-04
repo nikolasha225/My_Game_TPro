@@ -140,6 +140,24 @@
     <None Include="sound\lose.ogg">
       <Filter>sound</Filter>
     </None>
+    <None Include="textures\video\ad_02.avi">
+      <Filter>Textures\video</Filter>
+    </None>
+    <None Include="textures\video\ad_03.avi">
+      <Filter>Textures\video</Filter>
+    </None>
+    <None Include="textures\video\ad_04.avi">
+      <Filter>Textures\video</Filter>
+    </None>
+    <None Include="textures\video\ad_05.avi">
+      <Filter>Textures\video</Filter>
+    </None>
+    <None Include="textures\video\ad_06.avi">
+      <Filter>Textures\video</Filter>
+    </None>
+    <None Include="textures\video\ad_07.avi">
+      <Filter>Textures\video</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -309,6 +327,24 @@
       <Filter>sound\source</Filter>
     </Media>
     <Media Include="textures\video\ad_01.mp4">
+      <Filter>Textures\video</Filter>
+    </Media>
+    <Media Include="textures\video\ad_02.mp4">
+      <Filter>Textures\video</Filter>
+    </Media>
+    <Media Include="textures\video\ad_03.mp4">
+      <Filter>Textures\video</Filter>
+    </Media>
+    <Media Include="textures\video\ad_04.mp4">
+      <Filter>Textures\video</Filter>
+    </Media>
+    <Media Include="textures\video\ad_05.mp4">
+      <Filter>Textures\video</Filter>
+    </Media>
+    <Media Include="textures\video\ad_06.mp4">
+      <Filter>Textures\video</Filter>
+    </Media>
+    <Media Include="textures\video\ad_07.mp4">
       <Filter>Textures\video</Filter>
     </Media>
   </ItemGroup>
