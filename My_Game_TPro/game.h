@@ -15,6 +15,15 @@ class GameLogic;
 
 class VideoPlayer;
 
+enum EnumGameState
+{
+	GAME,
+	PAUSE,
+	WIN,
+	LOSE,
+	AD
+};
+
 //==============================SPAWNER===================================
 class Spawner
 {

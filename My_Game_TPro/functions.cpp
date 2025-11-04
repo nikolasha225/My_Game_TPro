@@ -17,7 +17,7 @@ sf::Vector2f RESOLUTION = sf::Vector2f(
 	(float)JSONSettings["GENERAL"]["resolution"][1]
 ); 
 
-unsigned long TIME =0;
+unsigned long TIME = 0;
 unsigned long START_TIME = TIME;
 
 sf::Font FONT;
@@ -391,7 +391,6 @@ bool Bullet::update(std::vector<IGameObject*> targets)
 }
 
 //============================TOWER=====================================
-
 
 Tower::Tower(EnumTowerType type, OBJStack* stack, sf::Vector2f pos)
 {
@@ -811,8 +810,40 @@ Core::Core()
 	);
 	DRAW_STATUS = 1;
 	MOVE = JSONSettings["CORE"]["coreMove"];
-}
 
+	CAVE.setSize(
+		sf::Vector2f(
+			JSONSettings["CORE"]["caveSize"][0],
+			JSONSettings["CORE"]["caveSize"][1]
+		)
+	);
+	CAVE.setOrigin(CAVE.getSize().x / 2, CAVE.getSize().y / 2);
+	CAVE.setPosition(wayPoints[LEVEL - 1][0] + 0.45f*sf::Vector2f(0, CAVE.getSize().y));
+	TEXTURE_CAVE.loadFromFile(JSONSettings["CORE"]["caveTexture"]);
+	CAVE.setTexture(&TEXTURE_CAVE);
+
+	FONT_SEGMENT.loadFromFile(JSONSettings["CORE"]["sevenSegmentFont"]);
+	
+	TEXT_MONEY.setFont(FONT_SEGMENT);
+	TEXT_MONEY.setString("00000");
+	TEXT_MONEY.setCharacterSize(JSONSettings["GUI"]["money"]["fontSize"]);
+	TEXT_MONEY.setFillColor(sf::Color::Red);
+
+	sf::FloatRect textBounds = TEXT_MONEY.getLocalBounds();
+	TEXT_MONEY.setOrigin(
+		textBounds.left + textBounds.width / 2.f,
+		textBounds.top + textBounds.height / 2.f
+	);
+	TEXT_MONEY.setPosition(
+		sf::Vector2f(
+			JSONSettings["GUI"]["money"]["position"][0],
+			JSONSettings["GUI"]["money"]["position"][1]
+		)
+	);
+
+	//----------------------------HP
+}
+//----------------------------------HP
 void Core::tick() 
 {
 	TICK_COUNTER += (TICK_COUNTER < TICK_DAMAGE);
@@ -843,6 +874,15 @@ void Core::tick()
 			wayToCoordinate(100.f)
 			+ sf::Vector2f(0, CORE.getSize().y / 2)
 		);
+
+	if (MONEY > 99999)
+		MONEY = 99999;
+	std::string strMoney = std::to_string(MONEY);
+	while (strMoney.size() < 5)
+		strMoney = "0" + strMoney;
+	TEXT_MONEY.setString(strMoney);
+
+	//-----------------hp
 }
 
 EnumGameObjects Core::getTypeObjet() 
@@ -853,6 +893,8 @@ EnumGameObjects Core::getTypeObjet()
 void Core::draw(sf::RenderWindow* window)
 {
 	window->draw(CORE);
+	window->draw(CAVE);
+	window->draw(TEXT_MONEY);
 }
 
 uint8_t Core::getLayer()

@@ -25,7 +25,7 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     }
     FONT.loadFromFile(JSONSettings["GENERAL"]["font"]);
 
-    LEVEL = 3;
+    LEVEL = 1;
     DIFFICULT = __difficult;
     HEALTH = JSONSettings["GAME"]["HP"][DIFFICULT - 1];
     MONEY = JSONSettings["GAME"]["startMoney"][DIFFICULT - 1];
@@ -36,53 +36,71 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
 
     //базовые определения
 
-    bool pauseState = 0;
+    EnumGameState GAME_STATE = GAME;
 
-    sf::Event event;
-    OBJStack drawStack;
-    Spawner spawner(&window, &drawStack);
-    TowerManager manager(&drawStack);
+    sf::Event EVENT;
+    OBJStack OBJ_STACK;
+    Spawner SPAWNER(&window, &OBJ_STACK);
+    TowerManager TOWER_MANAGER(&OBJ_STACK);
 
-    VideoPlayer player;
+    VideoPlayer VIDEO_PLAYER;
 
     //===========================================
     while (window.isOpen())
     {
-        while (window.pollEvent(event))
+        //############EVENTS#############
+        while (window.pollEvent(EVENT))
         {
-            if (event.type == sf::Event::Closed)
+            if (EVENT.type == sf::Event::Closed)
                 window.close();
 
             // Пауза на ESC
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
-            {
-            pauseState = !pauseState;
-            }
+            if (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::Escape)
+                if (GAME_STATE == GAME)
+                    GAME_STATE = PAUSE;
+                else if (GAME_STATE == PAUSE)
+                    GAME_STATE = GAME;
 
             // НАЖАТИЕ ЛКМ
-            if (event.type == sf::Event::MouseButtonPressed &&
-                event.mouseButton.button == sf::Mouse::Left)
+            if (EVENT.type == sf::Event::MouseButtonPressed &&
+                EVENT.mouseButton.button == sf::Mouse::Left)
             {
-                manager.checkEvents(&window);
+                TOWER_MANAGER.checkEvents(&window);
             }
         }
+
+        //##########CLEAR####################
+
         window.clear(sf::Color::Black);
-        //логика игры
-        if (!pauseState) {
-            spawner.tick();
-            drawStack.tick();
 
+        //###############TICK#################
+        switch (GAME_STATE)
+        {
+        case GAME:
+            SPAWNER.tick();
 
-            drawStack.draw(&window);
+            OBJ_STACK.tick();
+
+            OBJ_STACK.draw(&window);
 
             TIME--;
+            break;
+        case PAUSE:
+            OBJ_STACK.draw(&window);
+            GAME_STATE = AD;
+            break;
+        case WIN:
+            break;
+        case LOSE:
+            break;
+        case AD:
+            while (vatchAD(&VIDEO_PLAYER))
+                GAME_STATE = GAME;
+            break;
+        default:
+            break;
         }
-        else
-        {
-            drawStack.draw(&window);
-            while (vatchAD(&player))
-                pauseState = 0;
-        }
+
 
         window.display();
     }

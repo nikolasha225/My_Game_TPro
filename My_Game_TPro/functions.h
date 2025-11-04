@@ -439,6 +439,15 @@ private:
 	uint8_t LAYER;
 	bool DRAW_STATUS;
 	float MOVE;
+	
+	sf::RectangleShape CAVE;
+	sf::Texture TEXTURE_CAVE;
+
+	sf::Font FONT_SEGMENT;
+
+	sf::Text TEXT_MONEY;
+	
+	//вывод денег и хп
 };
 
 //=========================================MAP======================================

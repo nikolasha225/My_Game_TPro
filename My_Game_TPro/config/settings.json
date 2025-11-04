@@ -162,12 +162,15 @@
     "coreTexture": "./textures/img/elbrus.png",
     "coreSize": [ 150, 150 ],
     "tickOfDamage": 30,
-    "coreMove": 30
+    "coreMove": 30,
+    "caveSize": [ 150, 250 ],
+    "caveTexture": "./textures/img/elbrus.png",
+    "sevenSegmentFont": "./textures/font/font2.ttf"
   },
   "GUI": {
     "money": {
-      "position": [ 0, 0 ],
-      "size": [ 100, 100 ]
+      "position": [ 308, 142 ],
+      "fontSize": 120
     },
     "health": {
       "position": [ 0, 0 ],
