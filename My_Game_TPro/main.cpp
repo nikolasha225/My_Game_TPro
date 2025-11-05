@@ -129,6 +129,7 @@ int main(int argc, char* argv[])
             break;
         case PAUSE:
             OBJ_STACK.draw(&window);
+            //-----------------отрисовка меню паузы
             GAME_STATE = AD;
             break;
         case WIN:

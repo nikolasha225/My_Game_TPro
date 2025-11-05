@@ -821,7 +821,7 @@ bool vatchAD(VideoPlayer* player)
     VideoPlayer::VideoStatus videoStatus = player->checkVideoStatus();
     if (videoStatus == VideoPlayer::VIDEO_NOT_STARTED)
     {
-        uint8_t number = RAND_INT(0, 5);
+        uint8_t number = RAND_INT(0, JSONSettings["GAME"]["countOfAd"] -1);
         std::string videoFile = JSONSettings["GAME"]["videoAD"][number];
         std::wstring videoPath = std::wstring(videoFile.begin(), videoFile.end());
         player->playVideo(videoPath);

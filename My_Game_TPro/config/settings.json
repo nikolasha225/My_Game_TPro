@@ -21,7 +21,8 @@
     "soundUpgrade": "./sound/upgrade.ogg",
     "soundDelete": "./sound/delete.ogg",
     "textureMap": [ "./textures/img/first.png", "./textures/img/second.png", "./textures/img/third.png" ],
-    "videoAD": [ "./textures/video/ad_01.avi", "./textures/video/ad_03.avi", "./textures/video/ad_04.avi", "./textures/video/ad_05.avi", "./textures/video/ad_06.avi", "./textures/video/ad_07.avi" ]
+    "videoAD": [ "./textures/video/ad_01.avi", "./textures/video/ad_03.avi", "./textures/video/ad_04.avi", "./textures/video/ad_05.avi", "./textures/video/ad_06.avi", "./textures/video/ad_07.avi", "./textures/video/ad_08.avi", "./textures/video/ad_09.avi" ],
+    "countOfAd": 8
   },
   "ENEMY": {
     "difficultCoeficent": [ 1, 1.2, 1.5 ],

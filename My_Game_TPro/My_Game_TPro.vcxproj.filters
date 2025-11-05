@@ -158,6 +158,12 @@
     <None Include="textures\video\ad_07.avi">
       <Filter>Textures\video</Filter>
     </None>
+    <None Include="textures\video\ad_08.avi">
+      <Filter>Textures\video</Filter>
+    </None>
+    <None Include="textures\video\ad_09.avi">
+      <Filter>Textures\video</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -345,6 +351,12 @@
       <Filter>Textures\video</Filter>
     </Media>
     <Media Include="textures\video\ad_07.mp4">
+      <Filter>Textures\video</Filter>
+    </Media>
+    <Media Include="textures\video\ad_08.mp4">
+      <Filter>Textures\video</Filter>
+    </Media>
+    <Media Include="textures\video\ad_09.mp4">
       <Filter>Textures\video</Filter>
     </Media>
   </ItemGroup>

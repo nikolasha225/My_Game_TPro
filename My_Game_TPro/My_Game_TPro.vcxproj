@@ -160,6 +160,8 @@
     <None Include="textures\video\ad_05.avi" />
     <None Include="textures\video\ad_06.avi" />
     <None Include="textures\video\ad_07.avi" />
+    <None Include="textures\video\ad_08.avi" />
+    <None Include="textures\video\ad_09.avi" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="functions.h" />
@@ -227,6 +229,8 @@
     <Media Include="textures\video\ad_05.mp4" />
     <Media Include="textures\video\ad_06.mp4" />
     <Media Include="textures\video\ad_07.mp4" />
+    <Media Include="textures\video\ad_08.mp4" />
+    <Media Include="textures\video\ad_09.mp4" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="textures\font\font.ttf" />
