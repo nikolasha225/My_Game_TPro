@@ -2,13 +2,17 @@
 #include "winLoseMenu.h"
 #include "pauseMenu.h"
 
-int main(uint8_t __difficult = 1, unsigned __id = 0)
+int main(int argc, char* argv[])
 {
 
+    //базовые параметры 
+    uint8_t __difficult = 1;
+    unsigned __id = 0;
+    uint8_t __level = 1;
 
-    //базовые параметры (отладка)
-    __difficult = 1;
-    __id = 0;
+    if (argc > 1) __difficult = static_cast<uint8_t>(std::stoi(argv[1]));
+    if (argc > 2) __id = static_cast<unsigned>(std::stoi(argv[2]));
+    if (argc > 3) __level = static_cast<uint8_t>(std::stoi(argv[3]));
 
 
     // SF базовые преременные
@@ -27,7 +31,7 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     }
     FONT.loadFromFile(JSONSettings["GENERAL"]["font"]);
 
-    LEVEL = 1;
+    LEVEL = __level;
     DIFFICULT = __difficult;
     HEALTH = JSONSettings["GAME"]["startHP"][DIFFICULT - 1];
     MONEY = JSONSettings["GAME"]["startMoney"][DIFFICULT - 1];
@@ -39,6 +43,8 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     //базовые определения
 
     EnumGameState GAME_STATE = GAME;
+
+    bool TO_NEXT_LEVEL = 0;
 
     sf::Event EVENT;
     OBJStack OBJ_STACK;
@@ -59,6 +65,24 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     
     SOUND.setBuffer(SOUND_BUFFER_ROUND);
     SOUND.play();
+
+    auto restartWithNewLevel = [&]() {
+        window.close();
+
+        // Получаем путь к текущему исполняемому файлу
+        char exePath[MAX_PATH];
+        GetModuleFileNameA(NULL, exePath, MAX_PATH);
+
+        // Запускаем новую копию с новыми параметрами
+        std::string command = std::string("\"") + exePath + "\" " +
+            std::to_string(__difficult) + " " +
+            std::to_string(__id) + " " +
+            std::to_string(LEVEL);
+
+        system(command.c_str());
+        exit(0); // Завершаем текущий процесс
+        };
+
     //===========================================
     while (window.isOpen())
     {
@@ -97,9 +121,9 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
 
             OBJ_STACK.draw(&window);
 
-            TIME--;
+            (TIME<=0) ? (0) : (TIME--);
 
-            GAME_STATE = (TIME > 0 && SPAWNER.existEnemy()) ? (GAME_STATE) : (NEXT_LEVEL);
+            GAME_STATE = ((TIME > 0) || OBJ_STACK.getStackOfType(enemy).size()) ? (GAME_STATE) : (NEXT_LEVEL);
             GAME_STATE = (HEALTH > 0) ? (GAME_STATE) : (LOSE);
 
             break;
@@ -134,8 +158,12 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
                 GAME_STATE = WIN;
                 break;
             }
-            //запуск себя с нечт левелом
+            OBJ_STACK.draw(&window);
+            //---------------отрисовка менюшки перехода к следующему левелу
 
+            //запуск себя с нечт левелом
+            if(TO_NEXT_LEVEL)
+                restartWithNewLevel();
             break;
         default:
             break;

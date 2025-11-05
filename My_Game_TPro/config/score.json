@@ -1,0 +1,33 @@
+{
+    "players": {
+        "123": {
+            "17623631428914534": {
+                "difficulty": 1,
+                "enemies": {
+                    "basic": 234,
+                    "boss": 2,
+                    "fast": 116,
+                    "mini_boss": 10,
+                    "tank": 33,
+                    "total_killed": 395
+                },
+                "game_result": "win",
+                "game_stats": {
+                    "remaining_health": 100.0,
+                    "remaining_money": 2975,
+                    "total_damage_dealt": 128054.0,
+                    "total_time_seconds": 1501
+                },
+                "level": 4,
+                "resolution_x": 1920.0,
+                "resolution_y": 1080.0,
+                "towers": {
+                    "avast": 1,
+                    "defender": 0,
+                    "dr_web": 0,
+                    "kaspersky": 3
+                }
+            }
+        }
+    }
+}

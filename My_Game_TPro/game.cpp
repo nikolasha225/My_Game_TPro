@@ -251,6 +251,7 @@ void TowerManager::checkEvents(sf::RenderWindow* window)
             for (auto& cell : place->BUY_MENU) {
                 if (cell->NUMBER > Tower::kaspersky && mouseInButton(cell->getCellShapePtr(), window)) {
                     if (cell->NUMBER == Tower::upgradedTower) {
+
                         if (place->TOWER->upgrade()) {
                             place->SOUND.setBuffer(place->SOUND_BUFF_UPGRADE);
                             place->SOUND.play();
@@ -691,7 +692,7 @@ void TowerManager::DownCell::unselect()
 
 bool TowerManager::DownCell::tryBuy()
 {
-    unsigned towerPrice = (unsigned)JSONSettings["TOWER"][towerTypes[NUMBER]]["price"] * JSONSettings["TOWER"]["upgrade"][FATHER->TOWER->getLevel()];
+    unsigned towerPrice = (unsigned)JSONSettings["TOWER"][towerTypes[NUMBER]]["price"];
     if (MONEY >= towerPrice)
     {
         MONEY -= towerPrice;
@@ -864,7 +865,7 @@ void writeScore(OBJStack* stack, unsigned id)
     // Расчет общего времени игры
     for (uint8_t i = 0; i <= LEVEL - 1; i++)
         totalTime += (unsigned)JSONSettings["GAME"]["roundTimeSec"][i];
-    totalTime -= TIME / JSONSettings["GENERAL"]["framerate"];
+    totalTime -= (TIME) / JSONSettings["GENERAL"]["framerate"];
 
     // Получение всех объектов из стека
     std::vector<IGameObject*> allObjects = stack->getDeleted();

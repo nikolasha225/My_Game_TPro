@@ -532,7 +532,7 @@ void Tower::sound()
 
 uint8_t Tower::getLevel()
 {
-	return LEVEL;
+	return TOWER_LEVEL;
 }
 
 void Tower::tick()
