@@ -6,6 +6,7 @@
 #include <vector>
 #include <functional>
 #include <cmath> // для sin
+#include "game.h"
 
 class MenuItem;
 
@@ -20,3 +21,5 @@ public:
     void update(float time);
     bool gettitle() const;
 };
+
+void renderPause(sf::RenderWindow* window, EnumGameState& gameState);

@@ -89,7 +89,7 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
             break;
         case PAUSE:
             OBJ_STACK.draw(&window);
-            GAME_STATE = AD;
+            renderPause(&window, GAME_STATE);
             break;
         case WIN:
             break;

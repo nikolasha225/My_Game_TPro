@@ -1,4 +1,5 @@
 #include "pauseMenu.h"
+#include "game.h"
 MenuItem::MenuItem(const sf::String& label, sf::Font& font, unsigned int size, const sf::Vector2f& pos, std::function<void()> callback, bool title)
     : onClick(callback), title(title)
 {
@@ -38,6 +39,63 @@ bool MenuItem::gettitle() const {
 }
 
 
-void renderPause() {
+void renderPause(sf::RenderWindow* window, EnumGameState& gameState) {
+    sf::Font font;
+    if (!font.loadFromFile("textures/font/PressStart2P-Regular.ttf")) {
+        std::cerr << "Не удалось загрузить шрифт!\n";
+        return;
+    }
+    sf::RectangleShape overlay(sf::Vector2f(window->getSize()));
+    overlay.setFillColor(sf::Color(0, 0, 0, 150));
 
+    std::vector<MenuItem> pauseMenu = {
+        MenuItem(L"МЕНЮ", font, 50, {1000.f, 250.f}, [&gameState]() {
+                gameState = GAME;
+            }, true),
+        MenuItem(L"Продолжить", font, 36, {100.f, 550.f}, []() {}, false),
+        MenuItem(L"Выйти", font, 36, {100.f, 200.f}, []() {}, false)
+    };
+    bool menuActive = true;
+
+    while (window->isOpen() && menuActive) {
+        window->clear(sf::Color(30, 30, 30)); //изначальный фон
+        sf::Event event;
+        while (window->pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window->close();
+                menuActive = false;
+            }
+        }
+        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+            gameState = GAME;
+            menuActive = false;
+        }
+        if (event.type == sf::Event::MouseButtonPressed &&
+            event.mouseButton.button == sf::Mouse::Left) {
+            for (auto& item : pauseMenu) {
+                if (item.isMouseOver(*window)) {
+                    item.onClick();
+                    if (gameState == GAME) {
+                        menuActive = false;
+                    }
+                    break;
+                }
+            }
+        }
+        sf::Clock clock;
+        float time = clock.getElapsedTime().asSeconds();
+        for (auto& item : pauseMenu) {
+            item.hovered = item.isMouseOver(*window);
+            item.update(time);
+        }
+        window->clear(sf::Color(30, 30, 30));
+
+        window->draw(overlay);
+
+        for (const auto& item : pauseMenu) {
+            window->draw(item.text);
+        }
+
+        window->display();
+    }
 }
