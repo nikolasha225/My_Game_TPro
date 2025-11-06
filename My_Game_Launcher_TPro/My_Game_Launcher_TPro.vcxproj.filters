@@ -52,4 +52,9 @@
       <Filter>assets\sound</Filter>
     </Media>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="records.json">
+      <Filter>Исходные файлы</Filter>
+    </None>
+  </ItemGroup>
 </Project>
