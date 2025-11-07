@@ -1,12 +1,14 @@
 #include "pauseMenu.h"
 #include "game.h"
-MenuItem::MenuItem(const sf::String& label, sf::Font& font, unsigned int size, const sf::Vector2f& pos, std::function<void()> callback, bool title)
-    : onClick(callback), title(title)
+MenuItem::MenuItem(const sf::String& label, sf::Font& font, unsigned int size,
+    const sf::Vector2f& pos, std::function<void()> callback,
+    bool title, const sf::Color& normalColor, const sf::Color& hoverColor)
+    : onClick(callback), title(title), normalColor(normalColor), hoverColor(hoverColor)
 {
     text.setFont(font);
     text.setString(label);
     text.setCharacterSize(size);
-    text.setFillColor(sf::Color(180, 255, 180)); // мягкий зелёный
+    text.setFillColor(normalColor); // используем переданный цвет
     text.setPosition(pos);
 }
 
@@ -18,18 +20,23 @@ bool MenuItem::isMouseOver(const sf::RenderWindow& window) const {
 
 void MenuItem::update(float time) {
     if (hovered && !title) {
-        // Переливающийся зелёный (плавно пульсирует)
+        // Используем hoverColor для анимации при наведении
         float pulse = (std::sin(time * 3.0f) + 1.f) / 2.f; // 0..1
-        sf::Uint8 green = static_cast<sf::Uint8>(180 + 75 * pulse); // 180..255
-        text.setFillColor(sf::Color(0, green, 0));
 
-        // Обводка тоже переливается, но слабее
+        // Интерполируем между normalColor и hoverColor
+        sf::Uint8 r = static_cast<sf::Uint8>(normalColor.r + (hoverColor.r - normalColor.r) * pulse);
+        sf::Uint8 g = static_cast<sf::Uint8>(normalColor.g + (hoverColor.g - normalColor.g) * pulse);
+        sf::Uint8 b = static_cast<sf::Uint8>(normalColor.b + (hoverColor.b - normalColor.b) * pulse);
+
+        text.setFillColor(sf::Color(r, g, b));
+
+        // Обводка тоже переливается
         sf::Uint8 glow = static_cast<sf::Uint8>(80 + 100 * pulse);
         text.setOutlineColor(sf::Color(0, glow, 0));
     }
     else {
-        // Цвет, когда не наведено
-        text.setFillColor(sf::Color::Yellow);
+        // Цвет, когда не наведено - используем normalColor
+        text.setFillColor(normalColor);
         text.setOutlineColor(sf::Color(0, 60, 0));
     }
 }
@@ -56,16 +63,23 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState) {
     sf::RectangleShape overlay(sf::Vector2f(window->getSize()));
     overlay.setFillColor(sf::Color(0, 0, 0, 150));
 
-    sf::RectangleShape menuBackground(sf::Vector2f(600.f, 400.f));
-    menuBackground.setFillColor(sf::Color(20, 20, 30, 200));
-    menuBackground.setOutlineColor(sf::Color(100, 150, 100, 150));
-    menuBackground.setOutlineThickness(3.f);
-    menuBackground.setPosition(700.f, 400.f);
+    sf::RectangleShape menuBorder(sf::Vector2f(800.f, 600.f));
+    menuBorder.setFillColor(sf::Color(20, 20, 30, 200));
+    menuBorder.setOutlineColor(sf::Color(100, 150, 100, 150));
+    menuBorder.setOutlineThickness(3.f);
+    menuBorder.setPosition(600.f, 300.f);
+
+    sf::Texture backgroundTexture;
+    if (!backgroundTexture.loadFromFile("textures/img/firsttwowithprop.png")) {
+        return;
+    }
+    sf::Sprite menuBackground(backgroundTexture);
+    menuBackground.setPosition(600.f, 300.f);
 
     std::vector<MenuItem> pauseMenu = {
-        MenuItem(L"МЕНЮ", font, 50, {750.f, 450.f}, []() {}, true),
-        MenuItem(L"Продолжить", font, 36, {710.f, 500.f}, [&gameState]() {gameState = GAME;}, false),
-        MenuItem(L"Выйти", font, 36, {725.f, 600.f}, [&window]() {window->close();}, false) // выйти в лаунчер
+        MenuItem(L"Продолжить", font, 36, {800.f, 400.f}, [&gameState]() {gameState = GAME;}, false,   sf::Color(100, 255, 100),    // нормальный - светлый зеленый
+        sf::Color(0, 255, 0)),
+        MenuItem(L"Выйти из игры", font, 36, {750.f, 700.f}, [&window]() {window->close();}, false) // выйти в лаунчер
     };
     bool menuActive = true;
 
@@ -102,6 +116,7 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState) {
 
         window->draw(backgroundSprite);
         window->draw(overlay);
+        window->draw(menuBorder);
         window->draw(menuBackground);
 
         for (const auto& item : pauseMenu) {
