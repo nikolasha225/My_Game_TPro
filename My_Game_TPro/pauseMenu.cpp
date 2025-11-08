@@ -1,5 +1,6 @@
 #include "pauseMenu.h"
 #include "game.h"
+
 MenuItem::MenuItem(const sf::String& label, sf::Font& font, unsigned int size,
     const sf::Vector2f& pos, std::function<void()> callback,
     bool title, const sf::Color& normalColor, const sf::Color& hoverColor)
@@ -8,8 +9,12 @@ MenuItem::MenuItem(const sf::String& label, sf::Font& font, unsigned int size,
     text.setFont(font);
     text.setString(label);
     text.setCharacterSize(size);
-    text.setFillColor(normalColor); // используем переданный цвет
+    text.setFillColor(normalColor);
     text.setPosition(pos);
+
+    // Добавляем обводку для лучшей видимости
+    text.setOutlineThickness(2.f);
+    text.setOutlineColor(sf::Color(0, 60, 0));
 }
 
 bool MenuItem::isMouseOver(const sf::RenderWindow& window) const {
@@ -20,22 +25,23 @@ bool MenuItem::isMouseOver(const sf::RenderWindow& window) const {
 
 void MenuItem::update(float time) {
     if (hovered && !title) {
-        // Используем hoverColor для анимации при наведении
-        float pulse = (std::sin(time * 3.0f) + 1.f) / 2.f; // 0..1
+        // Интенсивная пульсация цвета
+        float pulse = (std::sin(time * 6.0f) + 1.f) / 2.f; // Быстрая пульсация
 
-        // Интерполируем между normalColor и hoverColor
+        // Яркое переливание между цветами
         sf::Uint8 r = static_cast<sf::Uint8>(normalColor.r + (hoverColor.r - normalColor.r) * pulse);
         sf::Uint8 g = static_cast<sf::Uint8>(normalColor.g + (hoverColor.g - normalColor.g) * pulse);
         sf::Uint8 b = static_cast<sf::Uint8>(normalColor.b + (hoverColor.b - normalColor.b) * pulse);
 
         text.setFillColor(sf::Color(r, g, b));
 
-        // Обводка тоже переливается
-        sf::Uint8 glow = static_cast<sf::Uint8>(80 + 100 * pulse);
-        text.setOutlineColor(sf::Color(0, glow, 0));
+        // Пульсирующая обводка
+        sf::Uint8 glow = static_cast<sf::Uint8>(100 + 155 * pulse);
+        text.setOutlineColor(sf::Color(0, glow, 0)); // Зеленая пульсирующая обводка
+
     }
     else {
-        // Цвет, когда не наведено - используем normalColor
+        // Возвращаем к нормальному состоянию
         text.setFillColor(normalColor);
         text.setOutlineColor(sf::Color(0, 60, 0));
     }
@@ -45,7 +51,6 @@ bool MenuItem::gettitle() const {
     return this->title;
 }
 
-
 void renderPause(sf::RenderWindow* window, EnumGameState& gameState) {
     sf::Font font;
     if (!font.loadFromFile("textures/font/PressStart2P-Regular.ttf")) {
@@ -53,13 +58,13 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState) {
         return;
     }
 
-    //для заднего фона
+    // Для заднего фона
     sf::Texture gameScreenshot;
     gameScreenshot.create(window->getSize().x, window->getSize().y);
     gameScreenshot.update(*window);
     sf::Sprite backgroundSprite(gameScreenshot);
 
-    //просто по красоте
+    // Затемнение
     sf::RectangleShape overlay(sf::Vector2f(window->getSize()));
     overlay.setFillColor(sf::Color(0, 0, 0, 150));
 
@@ -70,20 +75,31 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState) {
     menuBorder.setPosition(600.f, 300.f);
 
     sf::Texture backgroundTexture;
-    if (!backgroundTexture.loadFromFile("textures/img/firsttwowithprop.png")) {
+    if (!backgroundTexture.loadFromFile("textures/img/menupause.png")) {
         return;
     }
     sf::Sprite menuBackground(backgroundTexture);
     menuBackground.setPosition(600.f, 300.f);
 
+    // Контрастные цвета для пульсации
     std::vector<MenuItem> pauseMenu = {
-        MenuItem(L"Продолжить", font, 36, {800.f, 400.f}, [&gameState]() {gameState = GAME;}, false,   sf::Color(100, 255, 100),    // нормальный - светлый зеленый
-        sf::Color(0, 255, 0)),
-        MenuItem(L"Выйти из игры", font, 36, {750.f, 700.f}, [&window]() {window->close();}, false) // выйти в лаунчер
+        MenuItem(L"Продолжить", font, 36, {830.f, 400.f},
+                [&gameState]() {gameState = GAME;}, false,
+                sf::Color(100, 255, 100),    // Ярко-зеленый
+                sf::Color(0, 255, 0)),       // Очень яркий зеленый
+
+        MenuItem(L"Выйти из игры", font, 36, {780.f, 700.f},
+                [&window]() {window->close();}, false,
+                sf::Color(255, 100, 100),    // Красный
+                sf::Color(255, 0, 0))        // Ярко-красный
     };
+
     bool menuActive = true;
+    sf::Clock animationClock;
 
     while (window->isOpen() && menuActive) {
+        float time = animationClock.getElapsedTime().asSeconds();
+
         sf::Event event;
         while (window->pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
@@ -106,11 +122,17 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState) {
                     }
                 }
             }
+
+            // Обработка движения мыши для обновления наведения
+            if (event.type == sf::Event::MouseMoved) {
+                for (auto& item : pauseMenu) {
+                    item.hovered = item.isMouseOver(*window);
+                }
+            }
         }
-        sf::Clock clock;
-        float time = clock.getElapsedTime().asSeconds();
+
+        // Обновляем анимации всех элементов
         for (auto& item : pauseMenu) {
-            item.hovered = item.isMouseOver(*window);
             item.update(time);
         }
 
