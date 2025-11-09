@@ -33,3 +33,5 @@ private:
 };
 
 void renderPause(sf::RenderWindow* window, EnumGameState& gameState);
+void renderWin(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level);
+void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level);

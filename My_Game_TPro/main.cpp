@@ -1,6 +1,5 @@
 #include "game.h"
-#include "winLoseMenu.h"
-#include "pauseMenu.h"
+#include "allMenu.h"
 
 int main(uint8_t __difficult = 1, unsigned __id = 0)
 {
@@ -69,6 +68,11 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
             {
                 TOWER_MANAGER.checkEvents(&window);
             }
+
+            if (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::W)
+                GAME_STATE = WIN;
+            if (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::L)
+                GAME_STATE = LOSE;
         }
 
         //##########CLEAR####################
@@ -92,8 +96,10 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
             renderPause(&window, GAME_STATE);
             break;
         case WIN:
+            renderWin(&window, GAME_STATE, LEVEL);
             break;
         case LOSE:
+            renderLose(&window, GAME_STATE, LEVEL);
             break;
         case AD:
             while (vatchAD(&VIDEO_PLAYER))
