@@ -288,6 +288,41 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
         return;
     }
 
+    sf::String player = L"Unknown";
+    sf::String Killed = L"0";
+
+    //#######################jSON#######################
+    try {
+        std::ifstream scoreFile("config/score.json");
+        if (scoreFile.is_open()) {
+            nlohmann::json scoreData;
+            scoreFile >> scoreData;
+            scoreFile.close();
+
+            if (scoreData.contains("players") && !scoreData["players"].empty()) {
+                auto players = scoreData["players"];
+                auto firstPlayer = players.begin();
+
+                std::string nameStr = firstPlayer.key();
+                player = sf::String::fromUtf8(nameStr.begin(), nameStr.end());
+
+                if (!firstPlayer.value().empty()) {
+                    auto firstSession = firstPlayer.value().begin();
+                    if (firstSession.value().contains("enemies") &&
+                        firstSession.value()["enemies"].contains("total_killed")) {
+                        int killed = firstSession.value()["enemies"]["total_killed"];
+                        Killed = std::to_wstring(killed);
+                    }
+                }
+            }
+        }
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Ошибка загрузки score.json: " << e.what() << std::endl;
+        player = L"Ошибка";
+        Killed = L"0";
+    }
+
     // zatmenie
     sf::RectangleShape overlay(sf::Vector2f(window->getSize()));
     overlay.setFillColor(sf::Color(50, 0, 0, 150)); //red
@@ -327,13 +362,13 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
         MenuItem(L"Оператор:", font, 14, {centerX - 250.f, startY + 7 * itemSpacing - 30.f}, []() {}, true,
         sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
 
-        MenuItem(L"Alex", font, 14, {centerX + 250.f, startY + 7 * itemSpacing - 30.f}, []() {}, true,
+        MenuItem(player, font, 14, {centerX + 250.f, startY + 7 * itemSpacing - 30.f}, []() {}, true,
         sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
 
         MenuItem(L"Убито мобов:", font, 14, {centerX - 250.f, startY + 7 * itemSpacing}, []() {}, true,
         sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
 
-        MenuItem(L"23", font, 14, {centerX + 250.f, startY + 7 * itemSpacing}, []() {}, true,
+        MenuItem(Killed, font, 14, {centerX + 250.f, startY + 7 * itemSpacing}, []() {}, true,
         sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
 
         MenuItem(L"-->Оставить на произвол судьбы<--", font, 24, {centerX, startY + 8 * itemSpacing}, [&window]() { window->close(); }, false,
