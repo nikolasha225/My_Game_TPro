@@ -32,6 +32,6 @@ private:
     sf::Color hoverColor;
 };
 
-void renderPause(sf::RenderWindow* window, EnumGameState& gameState);
-void renderWin(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level);
-void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level);
+void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::function<void(sf::RenderWindow*)> drawStack);
+void renderWin(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level, std::function<void(sf::RenderWindow*)> drawStack);
+void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level, std::function<void(sf::RenderWindow*)> drawStack);

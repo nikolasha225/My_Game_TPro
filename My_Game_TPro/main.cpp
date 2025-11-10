@@ -46,6 +46,10 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
 
     VideoPlayer VIDEO_PLAYER;
 
+    auto drawGameBackground = [&](sf::RenderWindow* wnd) {
+        OBJ_STACK.draw(wnd);
+        };
+
     //===========================================
     while (window.isOpen())
     {
@@ -93,13 +97,13 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
             break;
         case PAUSE:
             OBJ_STACK.draw(&window);
-            renderPause(&window, GAME_STATE);
+            renderPause(&window, GAME_STATE, drawGameBackground);
             break;
         case WIN:
-            renderWin(&window, GAME_STATE, LEVEL);
+            renderWin(&window, GAME_STATE, LEVEL, drawGameBackground);
             break;
         case LOSE:
-            renderLose(&window, GAME_STATE, LEVEL);
+            renderLose(&window, GAME_STATE, LEVEL, drawGameBackground);
             break;
         case AD:
             while (vatchAD(&VIDEO_PLAYER))

@@ -23,7 +23,6 @@ bool MenuItem::isMouseOver(const sf::RenderWindow& window) const {
 
 void MenuItem::update(float time) {
     if (hovered && !title) {
-        // Интенсивная пульсация цвета
         float pulse = (std::sin(time * 6.0f) + 1.f) / 2.f; // Быстрая пульсация
 
         // Яркое переливание между цветами
@@ -49,44 +48,43 @@ bool MenuItem::gettitle() const {
     return this->title;
 }
 
-void renderPause(sf::RenderWindow* window, EnumGameState& gameState) {
+void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::function<void(sf::RenderWindow*)> drawStack) {
     sf::Font font;
     if (!font.loadFromFile("textures/font/PressStart2P-Regular.ttf")) {
         std::cerr << "Не удалось загрузить шрифт!\n";
         return;
     }
 
-    // Для заднего фона
-    sf::Texture gameScreenshot;
-    gameScreenshot.create(window->getSize().x, window->getSize().y);
-    gameScreenshot.update(*window);
-    sf::Sprite backgroundSprite(gameScreenshot);
-
-    // Затемнение
+    // zatmenue
     sf::RectangleShape overlay(sf::Vector2f(window->getSize()));
     overlay.setFillColor(sf::Color(0, 0, 0, 150));
 
+    // for center
+    sf::Vector2u windowSize = window->getSize();
+    float menuWidth = 800.f;
+    float menuHeight = 600.f;
+    float menuX = (windowSize.x - menuWidth) / 2.f;
+    float menuY = (windowSize.y - menuHeight) / 2.f;
+
     sf::RectangleShape menuBorder(sf::Vector2f(800.f, 600.f));
-    menuBorder.setFillColor(sf::Color(20, 20, 30, 200));
+    menuBorder.setFillColor(sf::Color(30, 30, 30));
     menuBorder.setOutlineColor(sf::Color(100, 150, 100, 150));
     menuBorder.setOutlineThickness(3.f);
-    menuBorder.setPosition(600.f, 300.f);
+    menuBorder.setPosition(menuX, menuY);
 
-    sf::Texture backgroundTexture;
-    if (!backgroundTexture.loadFromFile("textures/img/menupause.png")) {
-        return;
-    }
-    sf::Sprite menuBackground(backgroundTexture);
-    menuBackground.setPosition(600.f, 300.f);
+    // Центральные координаты для текста
+    float centerX = menuX + menuWidth / 2.f;
+    float startY = menuY + 100.f;
+    float itemSpacing = 80.f;
 
     // Контрастные цвета для пульсации
     std::vector<MenuItem> pauseMenu = {
-        MenuItem(L"Продолжить", font, 36, {830.f, 400.f},
+        MenuItem(L"Продолжить", font, 36, {centerX, startY},
                 [&gameState]() {gameState = GAME;}, false,
                 sf::Color(100, 255, 100),    // Ярко-зеленый
                 sf::Color(0, 255, 0)),       // Очень яркий зеленый
 
-        MenuItem(L"Выйти из игры", font, 36, {780.f, 700.f},
+        MenuItem(L"Выйти из игры", font, 36, {1000.f, 800.f},
                 [&window]() {window->close();}, false,
                 sf::Color(255, 100, 100),    // Красный
                 sf::Color(255, 0, 0))        // Ярко-красный
@@ -121,7 +119,6 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState) {
                 }
             }
 
-            // Обработка движения мыши для обновления наведения
             if (event.type == sf::Event::MouseMoved) {
                 for (auto& item : pauseMenu) {
                     item.hovered = item.isMouseOver(*window);
@@ -129,15 +126,13 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState) {
             }
         }
 
-        // Обновляем анимации всех элементов
         for (auto& item : pauseMenu) {
             item.update(time);
         }
 
-        window->draw(backgroundSprite);
+        drawStack(window);
         window->draw(overlay);
         window->draw(menuBorder);
-        window->draw(menuBackground);
 
         for (const auto& item : pauseMenu) {
             window->draw(item.text);
@@ -147,29 +142,30 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState) {
     }
 }
 
-void renderWin(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level) {
+void renderWin(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level, std::function<void(sf::RenderWindow*)> drawStack) {
     sf::Font font;
     if (!font.loadFromFile("textures/font/PressStart2P-Regular.ttf")) {
         std::cerr << "Не удалось загрузить шрифт!\n";
         return;
     }
 
-    // Затемнение с зеленым оттенком для победы
+    // zatmenie
     sf::RectangleShape overlay(sf::Vector2f(window->getSize()));
-    overlay.setFillColor(sf::Color(0, 50, 0, 150));
+    overlay.setFillColor(sf::Color(0, 50, 0, 150)); // green
 
-    sf::RectangleShape menuBorder(sf::Vector2f(800.f, 600.f));
-    menuBorder.setFillColor(sf::Color(20, 40, 20, 200));
+    // for center
+    sf::Vector2u windowSize = window->getSize();
+    float menuWidth = 900.f;
+    float menuHeight = 700.f;
+    float menuX = (windowSize.x - menuWidth) / 2.f;
+    float menuY = (windowSize.y - menuHeight) / 2.f;
+
+    sf::RectangleShape menuBorder(sf::Vector2f(menuWidth, menuHeight));
+    menuBorder.setFillColor(sf::Color(30, 30, 30));
     menuBorder.setOutlineColor(sf::Color(100, 255, 100, 200));
     menuBorder.setOutlineThickness(5.f);
-    menuBorder.setPosition(600.f, 300.f);
+    menuBorder.setPosition(menuX, menuY);
 
-    sf::Texture backgroundTexture;
-    if (!backgroundTexture.loadFromFile("textures/img/menupause.png")) {
-        return;
-    }
-    sf::Sprite menuBackground(backgroundTexture);
-    menuBackground.setPosition(600.f, 300.f);
 
     // Создаем текст с номером уровня
     sf::String levelText = L"Поздравляем, вы прошли Level " + std::to_wstring(Level) + L"!";
@@ -189,20 +185,26 @@ void renderWin(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level
     }
 
     std::vector<MenuItem> winMenu = {
-              MenuItem(levelText, font, 28, {650.f, 350.f}, []() {}, true,
-              sf::Color(100, 255, 100), sf::Color(100, 255, 100)),
+        MenuItem(L"Вы успешно отразили первую атаку", font, 24, {1000.f, 350.f}, []() {}, true,
+        sf::Color(100, 255, 100), sf::Color(100, 255, 100)),
 
-              MenuItem(nextButtonText, font, 32, {700.f, 450.f}, nextAction, false,
-              sf::Color(100, 255, 100), sf::Color(0, 255, 0)),
-       
-              MenuItem(L"Перезапустить уровень", font, 32, {680.f, 520.f}, [&gameState]() { gameState = GAME; }, false,
-              sf::Color(255, 255, 100), sf::Color(255, 255, 0)),
-              
-              MenuItem(L"Выйти в меню", font, 32, {750.f, 590.f}, [&window]() { window->close(); }, false,
-              sf::Color(255, 100, 100), sf::Color(255, 0, 0)),
-                     
-              MenuItem(currentLevel, font, 20, {700.f, 670.f}, []() {}, true,
-              sf::Color(200, 200, 200), sf::Color(200, 200, 200))
+        MenuItem(L"Теперь враг рвётся с другого направления", font, 24, {1000.f, 400.f}, []() {}, true,
+        sf::Color(100, 255, 100), sf::Color(100, 255, 100)),
+
+        MenuItem(L"--->Следующий рубеж<---", font, 32, {1000.f, 500.f}, nextAction, false,
+        sf::Color(100, 255, 100), sf::Color(0, 255, 0)),
+
+        MenuItem(L"--->Попытаться снова<---", font, 32, {1000.f, 570.f}, [&gameState]() { gameState = GAME; }, false,
+        sf::Color(255, 255, 100), sf::Color(255, 255, 0)),
+
+        MenuItem(L"Техническая информация:", font, 16, {1000.f, 650.f}, []() {}, true,
+        sf::Color(200, 200, 200), sf::Color(200, 200, 200)),
+
+        MenuItem(L"Оператор: Alex, Убито мобов: 42", font, 14, {1000.f, 680.f}, []() {}, true,
+        sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
+
+        MenuItem(L"--->Оставить на произвол судьбы<---", font, 32, {1000.f, 750.f}, [&window]() { window->close(); }, false,
+        sf::Color(255, 100, 100), sf::Color(255, 0, 0))
     };
 
     bool menuActive = true;
@@ -242,9 +244,9 @@ void renderWin(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level
             item.update(time);
         }
 
+        drawStack(window);
         window->draw(overlay);
         window->draw(menuBorder);
-        window->draw(menuBackground);
 
         for (const auto& item : winMenu) {
             window->draw(item.text);
@@ -254,48 +256,53 @@ void renderWin(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level
     }
 }
 
-void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level) {
+void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level, std::function<void(sf::RenderWindow*)> drawStack) {
     sf::Font font;
     if (!font.loadFromFile("textures/font/PressStart2P-Regular.ttf")) {
         std::cerr << "Не удалось загрузить шрифт!\n";
         return;
     }
 
-    // Затемнение с красным оттенком для проигрыша
+    // zatmenie
     sf::RectangleShape overlay(sf::Vector2f(window->getSize()));
-    overlay.setFillColor(sf::Color(50, 0, 0, 150));
+    overlay.setFillColor(sf::Color(50, 0, 0, 150)); //red
 
-    sf::RectangleShape menuBorder(sf::Vector2f(800.f, 600.f));
-    menuBorder.setFillColor(sf::Color(40, 20, 20, 200));
+    // for center
+    sf::Vector2u windowSize = window->getSize();
+    float menuWidth = 900.f;
+    float menuHeight = 700.f;
+    float menuX = (windowSize.x - menuWidth) / 2.f;
+    float menuY = (windowSize.y - menuHeight) / 2.f;
+
+    sf::RectangleShape menuBorder(sf::Vector2f(menuWidth, menuHeight));
+    menuBorder.setFillColor(sf::Color(30, 30, 30));
     menuBorder.setOutlineColor(sf::Color(255, 100, 100, 200));
     menuBorder.setOutlineThickness(5.f);
-    menuBorder.setPosition(600.f, 300.f);
-
-    sf::Texture backgroundTexture;
-    if (!backgroundTexture.loadFromFile("textures/img/menupause.png")) {
-        return;
-    }
-    sf::Sprite menuBackground(backgroundTexture);
-    menuBackground.setPosition(600.f, 300.f);
+    menuBorder.setPosition(menuX, menuY);
 
     sf::String levelMessage = L"Уровень " + std::to_wstring(Level) + L" не пройден";
 
     std::vector<MenuItem> loseMenu = {
-
-        MenuItem(L"Вы проиграли!", font, 36, {750.f, 350.f}, []() {}, true,
+        MenuItem(L"Вы проиграли!", font, 36, {1000.f, 350.f}, []() {}, true,
         sf::Color(255, 100, 100), sf::Color(255, 100, 100)),
 
-        MenuItem(levelMessage, font, 24, {700.f, 420.f}, []() {}, true,
+        MenuItem(levelMessage, font, 24, {1000.f, 420.f}, []() {}, true,
         sf::Color(255, 200, 100), sf::Color(255, 200, 100)),
 
-        MenuItem(L"Попробовать снова", font, 32, {700.f, 480.f}, [&gameState]() { gameState = GAME; }, false,
+        MenuItem(L"--->Попробовать снова<---", font, 32, {1000.f, 500.f}, [&gameState]() { gameState = GAME; }, false,
         sf::Color(255, 255, 100), sf::Color(255, 255, 0)),
 
-        MenuItem(L"Выбрать уровень", font, 32, {710.f, 550.f}, [&gameState]() { gameState = GAME; }, false,
+        MenuItem(L"--->Выбрать уровень<---", font, 32, {1000.f, 570.f}, [&gameState]() { gameState = GAME; }, false,
         sf::Color(100, 200, 255), sf::Color(0, 150, 255)),
 
-        MenuItem(L"Выйти в меню", font, 32, {750.f, 620.f}, [&window]() { window->close(); }, false,
-        sf::Color(255, 100, 100), sf::Color(255, 0, 0)),
+        MenuItem(L"Техническая информация:", font, 16, {1000.f, 650.f}, []() {}, true,
+        sf::Color(200, 200, 200), sf::Color(200, 200, 200)),
+
+        MenuItem(L"Оператор: Alex, Убито мобов: 23", font, 14, {1000.f, 680.f}, []() {}, true,
+        sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
+
+        MenuItem(L"--->Оставить на произвол судьбы<---", font, 32, {1000.f, 750.f}, [&window]() { window->close(); }, false,
+        sf::Color(255, 100, 100), sf::Color(255, 0, 0))
     };
 
     bool menuActive = true;
@@ -339,9 +346,9 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
             item.update(time);
         }
 
+        drawStack(window);
         window->draw(overlay);
         window->draw(menuBorder);
-        window->draw(menuBackground);
 
         for (const auto& item : loseMenu) {
             window->draw(item.text);
