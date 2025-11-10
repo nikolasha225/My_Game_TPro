@@ -34,6 +34,7 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
     TIME = (float)JSONSettings["GAME"]["roundTimeSec"][LEVEL - 1]
         * (unsigned)JSONSettings["GENERAL"]["framerate"];
     START_TIME = TIME;
+    AdTimer adTimer(JSONSettings["GAME"]["adDelay"]);
 
     //базовые определени€
 
@@ -106,9 +107,17 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
             renderLose(&window, GAME_STATE, LEVEL, drawGameBackground);
             break;
         case AD:
-            while (vatchAD(&VIDEO_PLAYER))
-                GAME_STATE = GAME;
+            if (adTimer.canShowAd()) {
+                while (vatchAD(&VIDEO_PLAYER)) {
+                    GAME_STATE = GAME;
+                    adTimer.recordAdShown(); // «аписываем врем€ показа
+                }
                 MONEY += JSONSettings["GAME"]["adPrice"];
+            }
+            else {
+                unsigned int remaining = adTimer.getRemainingSeconds();
+                GAME_STATE = GAME;
+            }
             break;
         default:
             break;

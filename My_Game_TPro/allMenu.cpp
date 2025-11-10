@@ -83,20 +83,14 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::functi
     float itemSpacing = 100.f;
 
     std::vector<MenuItem> pauseMenu = {
-        MenuItem(L"-->Продолжить<--", font, 36, {centerX, startY},
-                [&gameState]() {gameState = GAME;}, false,
-                sf::Color(100, 255, 100),    // Ярко-зеленый
-                sf::Color(0, 255, 0)),       // Очень яркий зеленый
+        MenuItem(L"-->Продолжить<--", font, 36, {centerX, startY}, [&gameState]() {gameState = GAME;}, false,
+                sf::Color(100, 255, 100), sf::Color(0, 255, 0)),
 
-        MenuItem(L"Реклама(50 монет)", font, 36, {centerX, startY + itemSpacing},
-                [&gameState]() {gameState = AD;}, false,
-                sf::Color(255, 255, 100),    // Желтый
-                sf::Color(255, 255, 0)),       
+        MenuItem(L"Реклама(50 монет)", font, 36, {centerX, startY + itemSpacing}, [&gameState]() {gameState = AD;}, false,
+                sf::Color(255, 255, 100), sf::Color(255, 255, 0)),       
 
-        MenuItem(L"Выйти из игры", font, 36, {centerX, startY + 4 * itemSpacing},
-                [&window]() {window->close();}, false,
-                sf::Color(255, 100, 100),    // Красный
-                sf::Color(255, 0, 0))        // Ярко-красный
+        MenuItem(L"Выйти из игры", font, 36, {centerX, startY + 4 * itemSpacing}, [&window]() {window->close();}, false,
+                sf::Color(255, 100, 100), sf::Color(255, 0, 0))
     };
 
     bool menuActive = true;

@@ -7,8 +7,53 @@
 #include <functional>
 #include <cmath> // для sin
 #include "game.h"
+#include <chrono>
 
 class MenuItem;
+class AdTimer;
+
+
+class AdTimer {
+private:
+    std::chrono::steady_clock::time_point lastAdTime;
+    unsigned int adDelaySeconds;
+
+public:
+    AdTimer(unsigned int delaySeconds = 300) : adDelaySeconds(delaySeconds) {}
+
+    bool canShowAd() const {
+        if (lastAdTime.time_since_epoch().count() == 0) {
+            return true;
+        }
+
+        auto now = std::chrono::steady_clock::now();
+        auto timeSinceLastAd = std::chrono::duration_cast<std::chrono::seconds>(now - lastAdTime).count();
+        return timeSinceLastAd >= adDelaySeconds;
+    }
+
+    void recordAdShown() {
+        lastAdTime = std::chrono::steady_clock::now();
+    }
+
+    unsigned int getRemainingSeconds() const {
+        if (lastAdTime.time_since_epoch().count() == 0) {
+            return 0;
+        }
+
+        auto now = std::chrono::steady_clock::now();
+        auto timeSinceLastAd = std::chrono::duration_cast<std::chrono::seconds>(now - lastAdTime).count();
+
+        if (timeSinceLastAd >= adDelaySeconds) {
+            return 0;
+        }
+
+        return adDelaySeconds - timeSinceLastAd;
+    }
+
+    void setDelay(unsigned int delaySeconds) {
+        adDelaySeconds = delaySeconds;
+    }
+};
 
 class MenuItem {
 public:
