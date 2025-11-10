@@ -13,6 +13,11 @@ MenuItem::MenuItem(const sf::String& label, sf::Font& font, unsigned int size,
     text.setPosition(pos);
     text.setOutlineThickness(2.f);
     text.setOutlineColor(sf::Color(0, 60, 0));
+
+    // Автоматическое центрирование
+    sf::FloatRect textBounds = text.getLocalBounds();
+    text.setOrigin(textBounds.left + textBounds.width / 2.0f,
+        textBounds.top + textBounds.height / 2.0f);
 }
 
 bool MenuItem::isMouseOver(const sf::RenderWindow& window) const {
@@ -72,19 +77,23 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::functi
     menuBorder.setOutlineThickness(3.f);
     menuBorder.setPosition(menuX, menuY);
 
-    // Центральные координаты для текста
+    // center for text
     float centerX = menuX + menuWidth / 2.f;
-    float startY = menuY + 100.f;
-    float itemSpacing = 80.f;
+    float startY = menuY + 100.f;  // Начинаем ниже от верха
+    float itemSpacing = 100.f;
 
-    // Контрастные цвета для пульсации
     std::vector<MenuItem> pauseMenu = {
         MenuItem(L"Продолжить", font, 36, {centerX, startY},
                 [&gameState]() {gameState = GAME;}, false,
                 sf::Color(100, 255, 100),    // Ярко-зеленый
                 sf::Color(0, 255, 0)),       // Очень яркий зеленый
 
-        MenuItem(L"Выйти из игры", font, 36, {1000.f, 800.f},
+        MenuItem(L"Реклама(50 монет)", font, 36, {centerX, startY + itemSpacing},
+                [&gameState]() {gameState = AD;}, false,
+                sf::Color(255, 255, 100),    // Желтый
+                sf::Color(255, 255, 0)),       
+
+        MenuItem(L"Выйти из игры", font, 36, {centerX, startY + 4 * itemSpacing},
                 [&window]() {window->close();}, false,
                 sf::Color(255, 100, 100),    // Красный
                 sf::Color(255, 0, 0))        // Ярко-красный
@@ -112,6 +121,10 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::functi
                     if (item.isMouseOver(*window)) {
                         item.onClick();
                         if (gameState == GAME) {
+                            menuActive = false;
+                        }
+                        //advertisment
+                        if (gameState == AD) {
                             menuActive = false;
                         }
                         break;
