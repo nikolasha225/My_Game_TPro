@@ -108,9 +108,7 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
         case AD:
             while (vatchAD(&VIDEO_PLAYER))
                 GAME_STATE = GAME;
-                MONEY += 25;
-
-                //????????????????????????????????????
+                MONEY += JSONSettings["GAME"]["adPrice"];
             break;
         default:
             break;

@@ -19,7 +19,9 @@
     "soundUpgrade": "./sound/upgrade.ogg",
     "soundDelete": "./sound/delete.ogg",
     "textureMap": [ "./textures/img/first.png", "./textures/img/second.png", "./textures/img/third.png" ],
-    "videoAD": "./textures/video/ad_01.avi"
+    "videoAD": "./textures/video/ad_01.avi",
+    "adPrice": 25,
+    "adDelay": 300
   },
   "ENEMY": {
     "difficultCoeficent": [ 1, 1.2, 1.5 ],
