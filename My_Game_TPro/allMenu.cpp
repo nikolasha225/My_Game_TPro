@@ -1,6 +1,41 @@
 #include "allMenu.h"
 #include "game.h"
 
+    AdTimer::AdTimer(unsigned int delaySeconds) : adDelaySeconds(delaySeconds) {}
+
+    bool AdTimer::canShowAd() const {
+        if (lastAdTime.time_since_epoch().count() == 0) {
+            return true;
+        }
+
+        auto now = std::chrono::steady_clock::now();
+        auto timeSinceLastAd = std::chrono::duration_cast<std::chrono::seconds>(now - lastAdTime).count();
+        return timeSinceLastAd >= adDelaySeconds;
+    }
+
+    void AdTimer::recordAdShown() {
+        lastAdTime = std::chrono::steady_clock::now();
+    }
+
+    unsigned int AdTimer::getRemainingSeconds() const {
+        if (lastAdTime.time_since_epoch().count() == 0) {
+            return 0;
+        }
+
+        auto now = std::chrono::steady_clock::now();
+        auto timeSinceLastAd = std::chrono::duration_cast<std::chrono::seconds>(now - lastAdTime).count();
+
+        if (timeSinceLastAd >= adDelaySeconds) {
+            return 0;
+        }
+
+        return adDelaySeconds - timeSinceLastAd;
+    }
+
+    void AdTimer::setDelay(unsigned int delaySeconds) {
+        adDelaySeconds = delaySeconds;
+    }
+
 MenuItem::MenuItem(const sf::String& label, sf::Font& font, unsigned int size,
     const sf::Vector2f& pos, std::function<void()> callback,
     bool title, const sf::Color& normalColor, const sf::Color& hoverColor)
@@ -53,18 +88,18 @@ bool MenuItem::gettitle() const {
     return this->title;
 }
 
-void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::function<void(sf::RenderWindow*)> drawStack) {
+void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::function<void(sf::RenderWindow*)> drawStack, AdTimer& adTimer) {
     sf::Font font;
     if (!font.loadFromFile("textures/font/PressStart2P-Regular.ttf")) {
         std::cerr << "Не удалось загрузить шрифт!\n";
         return;
     }
 
-    // zatmenue
+    // Затемнение
     sf::RectangleShape overlay(sf::Vector2f(window->getSize()));
     overlay.setFillColor(sf::Color(0, 0, 0, 150));
 
-    // for center
+    // Для центрирования
     sf::Vector2u windowSize = window->getSize();
     float menuWidth = 800.f;
     float menuHeight = 600.f;
@@ -77,24 +112,36 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::functi
     menuBorder.setOutlineThickness(3.f);
     menuBorder.setPosition(menuX, menuY);
 
-    // center for text
+    // Центр для текста
     float centerX = menuX + menuWidth / 2.f;
-    float startY = menuY + 100.f;  // Начинаем ниже от верха
-    float itemSpacing = 100.f;
+    float startY = menuY + 100.f;
+    float itemSpacing = 80.f;
 
+    // Создаем элементы меню
+    sf::String adText = L"";
     std::vector<MenuItem> pauseMenu = {
         MenuItem(L"-->Продолжить<--", font, 36, {centerX, startY}, [&gameState]() {gameState = GAME;}, false,
                 sf::Color(100, 255, 100), sf::Color(0, 255, 0)),
 
         MenuItem(L"Реклама(50 монет)", font, 36, {centerX, startY + itemSpacing}, [&gameState]() {gameState = AD;}, false,
-                sf::Color(255, 255, 100), sf::Color(255, 255, 0)),       
+                sf::Color(255, 255, 100), sf::Color(255, 255, 0)),
+
+        MenuItem(adText, font, 20, {centerX, startY + 2 * itemSpacing}, []() {}, true,
+                sf::Color(200, 200, 100), sf::Color(200, 200, 100)),
 
         MenuItem(L"Выйти из игры", font, 36, {centerX, startY + 4 * itemSpacing}, [&window]() {window->close();}, false,
                 sf::Color(255, 100, 100), sf::Color(255, 0, 0))
     };
 
+    // Центрируем весь текст
+    for (auto& item : pauseMenu) {
+        sf::FloatRect textBounds = item.text.getLocalBounds();
+        item.text.setOrigin(textBounds.width / 2.f, textBounds.height / 2.f);
+    }
+
     bool menuActive = true;
     sf::Clock animationClock;
+    sf::Clock adUpdateClock;
 
     while (window->isOpen() && menuActive) {
         float time = animationClock.getElapsedTime().asSeconds();
@@ -113,12 +160,13 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::functi
                 event.mouseButton.button == sf::Mouse::Left) {
                 for (auto& item : pauseMenu) {
                     if (item.isMouseOver(*window)) {
-                        item.onClick();
-                        if (gameState == GAME) {
-                            menuActive = false;
+                        // Проверка для кнопки рекламы
+                        if (item.text.getString() == L"Реклама(50 монет)" && !adTimer.canShowAd()) {
+                            // Не переходим в AD, если реклама недоступна
+                            continue;
                         }
-                        //advertisment
-                        if (gameState == AD) {
+                        item.onClick();
+                        if (gameState == GAME || gameState == AD) {
                             menuActive = false;
                         }
                         break;
@@ -133,10 +181,31 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::functi
             }
         }
 
+        // Обновляем анимации
         for (auto& item : pauseMenu) {
             item.update(time);
         }
 
+        // Обновляем текст рекламы каждые 0.5 секунды
+        if (adUpdateClock.getElapsedTime().asSeconds() > 0.5f) {
+            if (adTimer.canShowAd()) {
+                pauseMenu[2].text.setString(L"Доступно сейчас!");
+                pauseMenu[2].text.setFillColor(sf::Color(100, 255, 100)); // Зеленый
+            }
+            else {
+                unsigned int remaining = adTimer.getRemainingSeconds();
+                pauseMenu[2].text.setString(L"Доступно через: " + std::to_wstring(remaining) + L" сек.");
+                pauseMenu[2].text.setFillColor(sf::Color(255, 150, 100)); // Оранжевый
+            }
+
+            // Пере-центрируем текст после изменения
+            sf::FloatRect textBounds = pauseMenu[2].text.getLocalBounds();
+            pauseMenu[2].text.setOrigin(textBounds.width / 2.f, textBounds.height / 2.f);
+
+            adUpdateClock.restart();
+        }
+
+        // Отрисовка
         drawStack(window);
         window->draw(overlay);
         window->draw(menuBorder);

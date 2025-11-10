@@ -98,7 +98,7 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
             break;
         case PAUSE:
             OBJ_STACK.draw(&window);
-            renderPause(&window, GAME_STATE, drawGameBackground);
+            renderPause(&window, GAME_STATE, drawGameBackground, adTimer);
             break;
         case WIN:
             renderWin(&window, GAME_STATE, LEVEL, drawGameBackground);
