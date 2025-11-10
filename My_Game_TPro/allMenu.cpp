@@ -83,7 +83,7 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::functi
     float itemSpacing = 100.f;
 
     std::vector<MenuItem> pauseMenu = {
-        MenuItem(L"Продолжить", font, 36, {centerX, startY},
+        MenuItem(L"-->Продолжить<--", font, 36, {centerX, startY},
                 [&gameState]() {gameState = GAME;}, false,
                 sf::Color(100, 255, 100),    // Ярко-зеленый
                 sf::Color(0, 255, 0)),       // Очень яркий зеленый
@@ -179,6 +179,9 @@ void renderWin(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level
     menuBorder.setOutlineThickness(5.f);
     menuBorder.setPosition(menuX, menuY);
 
+    float centerX = menuX + menuWidth / 2.f;
+    float startY = menuY + 100.f;  // Начинаем ниже от верха
+    float itemSpacing = 60.f;
 
     // Создаем текст с номером уровня
     sf::String levelText = L"Поздравляем, вы прошли Level " + std::to_wstring(Level) + L"!";
@@ -187,36 +190,45 @@ void renderWin(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level
     // Определяем следующие действия в зависимости от уровня
     std::function<void()> nextAction;
     sf::String nextButtonText;
+    sf::String currentAttack;
+    sf::String nextAttack;
+    sf::String tryAgain;
 
     if (Level < 3) {
-        nextButtonText = L"Следующий уровень";
+        nextButtonText = L"-->Следующий рубеж<--";
+        currentAttack = L"Вы успешно отразили " + std::to_wstring(Level) + L" атаку!";
+        nextAttack = L"Теперь враг рвётся с другого направления";
+        tryAgain = L"-->Попробовать снова<--";
         nextAction = [&gameState]() { gameState = GAME;};
     }
     else {
-        nextButtonText = L"Завершить игру";
+        nextButtonText = L"-->Завершить игру<--";
+        currentAttack = L"Вы успешно отразили все атаки!";
+        nextAttack = L"Враг полностью повержен";
+        tryAgain = L"Начать заново";
         nextAction = [&window]() { window->close(); };
     }
 
     std::vector<MenuItem> winMenu = {
-        MenuItem(L"Вы успешно отразили первую атаку", font, 24, {1000.f, 350.f}, []() {}, true,
+        MenuItem(currentAttack, font, 24, {centerX, startY - 50.f}, []() {}, true,
         sf::Color(100, 255, 100), sf::Color(100, 255, 100)),
 
-        MenuItem(L"Теперь враг рвётся с другого направления", font, 24, {1000.f, 400.f}, []() {}, true,
+        MenuItem(nextAttack, font, 20, {centerX, startY + itemSpacing}, []() {}, true,
         sf::Color(100, 255, 100), sf::Color(100, 255, 100)),
 
-        MenuItem(L"--->Следующий рубеж<---", font, 32, {1000.f, 500.f}, nextAction, false,
+        MenuItem(nextButtonText, font, 32, {centerX, startY + 3 * itemSpacing}, nextAction, false,
         sf::Color(100, 255, 100), sf::Color(0, 255, 0)),
 
-        MenuItem(L"--->Попытаться снова<---", font, 32, {1000.f, 570.f}, [&gameState]() { gameState = GAME; }, false,
+        MenuItem(tryAgain, font, 32, {centerX, startY + 4 * itemSpacing}, [&gameState]() { gameState = GAME; }, false,
         sf::Color(255, 255, 100), sf::Color(255, 255, 0)),
 
-        MenuItem(L"Техническая информация:", font, 16, {1000.f, 650.f}, []() {}, true,
+        MenuItem(L"Техническая информация:", font, 16, {centerX, startY + 5 * itemSpacing}, []() {}, true,
         sf::Color(200, 200, 200), sf::Color(200, 200, 200)),
 
-        MenuItem(L"Оператор: Alex, Убито мобов: 42", font, 14, {1000.f, 680.f}, []() {}, true,
+        MenuItem(L"Оператор: Alex, Убито мобов: 42", font, 14, {centerX, startY + 6 * itemSpacing}, []() {}, true,
         sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
 
-        MenuItem(L"--->Оставить на произвол судьбы<---", font, 32, {1000.f, 750.f}, [&window]() { window->close(); }, false,
+        MenuItem(L"-->Оставить на произвол судьбы<--", font, 24, {centerX, startY + 8 * itemSpacing}, [&window]() { window->close(); }, false,
         sf::Color(255, 100, 100), sf::Color(255, 0, 0))
     };
 
@@ -293,30 +305,55 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
     menuBorder.setOutlineThickness(5.f);
     menuBorder.setPosition(menuX, menuY);
 
-    sf::String levelMessage = L"Уровень " + std::to_wstring(Level) + L" не пройден";
+    float centerX = menuX + menuWidth / 2.f;
+    float startY = menuY + 100.f;
+    float itemSpacing = 60.f;
+
+    sf::String levelMessage = L"Вы не выдержали " + std::to_wstring(Level) + L" волну вирусов";
 
     std::vector<MenuItem> loseMenu = {
-        MenuItem(L"Вы проиграли!", font, 36, {1000.f, 350.f}, []() {}, true,
+        MenuItem(L"FATAL ERROR", font, 36, {centerX, startY - 50.f}, []() {}, true,
         sf::Color(255, 100, 100), sf::Color(255, 100, 100)),
 
-        MenuItem(levelMessage, font, 24, {1000.f, 420.f}, []() {}, true,
+        MenuItem(levelMessage, font, 24, {centerX, startY + itemSpacing}, []() {}, true,
         sf::Color(255, 200, 100), sf::Color(255, 200, 100)),
 
-        MenuItem(L"--->Попробовать снова<---", font, 32, {1000.f, 500.f}, [&gameState]() { gameState = GAME; }, false,
+        MenuItem(L"-->Попробовать снова<--", font, 32, {centerX, startY + 3 * itemSpacing}, [&gameState]() { gameState = GAME; }, false,
         sf::Color(255, 255, 100), sf::Color(255, 255, 0)),
 
-        MenuItem(L"--->Выбрать уровень<---", font, 32, {1000.f, 570.f}, [&gameState]() { gameState = GAME; }, false,
-        sf::Color(100, 200, 255), sf::Color(0, 150, 255)),
-
-        MenuItem(L"Техническая информация:", font, 16, {1000.f, 650.f}, []() {}, true,
+        MenuItem(L"Техническая информация:", font, 16, {centerX, startY + 6 * itemSpacing}, []() {}, true,
         sf::Color(200, 200, 200), sf::Color(200, 200, 200)),
 
-        MenuItem(L"Оператор: Alex, Убито мобов: 23", font, 14, {1000.f, 680.f}, []() {}, true,
+        MenuItem(L"Оператор:", font, 14, {centerX - 250.f, startY + 7 * itemSpacing - 30.f}, []() {}, true,
         sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
 
-        MenuItem(L"--->Оставить на произвол судьбы<---", font, 32, {1000.f, 750.f}, [&window]() { window->close(); }, false,
+        MenuItem(L"Alex", font, 14, {centerX + 250.f, startY + 7 * itemSpacing - 30.f}, []() {}, true,
+        sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
+
+        MenuItem(L"Убито мобов:", font, 14, {centerX - 250.f, startY + 7 * itemSpacing}, []() {}, true,
+        sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
+
+        MenuItem(L"23", font, 14, {centerX + 250.f, startY + 7 * itemSpacing}, []() {}, true,
+        sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
+
+        MenuItem(L"-->Оставить на произвол судьбы<--", font, 24, {centerX, startY + 8 * itemSpacing}, [&window]() { window->close(); }, false,
         sf::Color(255, 100, 100), sf::Color(255, 0, 0))
     };
+
+    //#######################ДЛЯ ТЕХ ИНФЫ#######################
+    for (auto& item : loseMenu) {
+        sf::FloatRect textBounds = item.text.getLocalBounds();
+        if (item.text.getString() == L"Оператор:" || item.text.getString() == L"Убито мобов:") {
+            item.text.setOrigin(0, textBounds.height / 2.f); //левишь
+        }
+        else if (item.text.getString() == L"Alex" || item.text.getString() == L"23") {
+            item.text.setOrigin(textBounds.width, textBounds.height / 2.f); //правишь
+        }
+        else {
+            //по базе
+            item.text.setOrigin(textBounds.width / 2.f, textBounds.height / 2.f);
+        }
+    }
 
     bool menuActive = true;
     sf::Clock animationClock;
