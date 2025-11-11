@@ -107,17 +107,7 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
             renderLose(&window, GAME_STATE, LEVEL, drawGameBackground);
             break;
         case AD:
-            if (adTimer.canShowAd()) {
-                while (vatchAD(&VIDEO_PLAYER)) {
-                    GAME_STATE = GAME;
-                    adTimer.recordAdShown(); // Записываем время показа
-                }
-                MONEY += JSONSettings["GAME"]["adPrice"];
-            }
-            else {
-                unsigned int remaining = adTimer.getRemainingSeconds();
-                GAME_STATE = GAME;
-            }
+            renderAd(GAME_STATE, adTimer, VIDEO_PLAYER);
             break;
         default:
             break;

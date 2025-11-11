@@ -88,6 +88,9 @@ bool MenuItem::gettitle() const {
     return this->title;
 }
 
+
+//#################################PAUUUUUUUUUUUUUUSE#################################
+
 void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::function<void(sf::RenderWindow*)> drawStack, AdTimer& adTimer) {
     sf::Font font;
     if (!font.loadFromFile("textures/font/PressStart2P-Regular.ttf")) {
@@ -95,11 +98,9 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::functi
         return;
     }
 
-    // Затемнение
     sf::RectangleShape overlay(sf::Vector2f(window->getSize()));
     overlay.setFillColor(sf::Color(0, 0, 0, 150));
 
-    // Для центрирования
     sf::Vector2u windowSize = window->getSize();
     float menuWidth = 800.f;
     float menuHeight = 600.f;
@@ -112,7 +113,6 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::functi
     menuBorder.setOutlineThickness(3.f);
     menuBorder.setPosition(menuX, menuY);
 
-    // Центр для текста
     float centerX = menuX + menuWidth / 2.f;
     float startY = menuY + 100.f;
     float itemSpacing = 80.f;
@@ -127,7 +127,7 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::functi
                 sf::Color(255, 255, 100), sf::Color(255, 255, 0)),
 
         MenuItem(adText, font, 20, {centerX, startY + 2 * itemSpacing}, []() {}, true,
-                sf::Color(200, 200, 100), sf::Color(200, 200, 100)),
+                sf::Color(200, 200, 100)),
 
         MenuItem(L"Выйти из игры", font, 36, {centerX, startY + 4 * itemSpacing}, [&window]() {window->close();}, false,
                 sf::Color(255, 100, 100), sf::Color(255, 0, 0))
@@ -190,12 +190,10 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::functi
         if (adUpdateClock.getElapsedTime().asSeconds() > 0.5f) {
             if (adTimer.canShowAd()) {
                 pauseMenu[2].text.setString(L"Доступно сейчас!");
-                pauseMenu[2].text.setFillColor(sf::Color(100, 255, 100)); // Зеленый
             }
             else {
                 unsigned int remaining = adTimer.getRemainingSeconds();
                 pauseMenu[2].text.setString(L"Доступно через: " + std::to_wstring(remaining) + L" сек.");
-                pauseMenu[2].text.setFillColor(sf::Color(255, 150, 100)); // Оранжевый
             }
 
             // Пере-центрируем текст после изменения
@@ -217,6 +215,8 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::functi
         window->display();
     }
 }
+
+//#################################WIIIIIIIIIIIIIIN#################################
 
 void renderWin(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level, std::function<void(sf::RenderWindow*)> drawStack) {
     sf::Font font;
@@ -343,6 +343,8 @@ void renderWin(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level
         window->display();
     }
 }
+
+//#################################LOOOOOOOOOOOOOOOOOOOSE#################################
 
 void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level, std::function<void(sf::RenderWindow*)> drawStack) {
     sf::Font font;
@@ -503,5 +505,19 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
         }
 
         window->display();
+    }
+}
+
+void renderAd(EnumGameState& GAME_STATE, AdTimer& adTimer, VideoPlayer& VIDEO_PLAYER) {
+    if (adTimer.canShowAd()) {
+        while (vatchAD(&VIDEO_PLAYER)) {
+            GAME_STATE = GAME;
+            adTimer.recordAdShown();
+        }
+        MONEY += JSONSettings["GAME"]["adPrice"];
+    }
+    else {
+        unsigned int remaining = adTimer.getRemainingSeconds();
+        GAME_STATE = GAME;
     }
 }
