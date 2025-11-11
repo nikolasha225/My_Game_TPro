@@ -78,6 +78,8 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
                 GAME_STATE = WIN;
             if (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::L)
                 GAME_STATE = LOSE;
+            if (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::O)
+                GAME_STATE = OVER;
         }
 
         //##########CLEAR####################
@@ -108,6 +110,9 @@ int main(uint8_t __difficult = 1, unsigned __id = 0)
             break;
         case AD:
             renderAd(GAME_STATE, adTimer, VIDEO_PLAYER);
+            break;
+        case OVER:
+            renderOver(&window, GAME_STATE, drawGameBackground);
             break;
         default:
             break;

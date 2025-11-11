@@ -21,7 +21,8 @@ enum EnumGameState
 	PAUSE,
 	WIN,
 	LOSE,
-	AD
+	AD,
+	OVER
 };
 
 //==============================SPAWNER===================================

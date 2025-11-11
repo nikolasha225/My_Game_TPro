@@ -262,7 +262,9 @@ void renderWin(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level
         currentAttack = L"Вы успешно отразили " + std::to_wstring(Level) + L" атаку!";
         nextAttack = L"Теперь враг рвётся с другого направления";
         tryAgain = L"-->Попробовать снова<--";
-        nextAction = [&gameState]() { gameState = GAME;};
+        nextAction = [&gameState]() { gameState = GAME;
+            // level += 1; ????????????
+            };
     }
     else {
         nextButtonText = L"-->Завершить игру<--";
@@ -507,6 +509,110 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
         window->display();
     }
 }
+
+//#################################GAME OVER#################################
+
+void renderOver(sf::RenderWindow* window, EnumGameState& gameState, std::function<void(sf::RenderWindow*)> drawStack) {
+    sf::Font font;
+    if (!font.loadFromFile("textures/font/PressStart2P-Regular.ttf")) {
+        std::cerr << "Не удалось загрузить шрифт!\n";
+        return;
+    }
+
+    sf::RectangleShape overlay(sf::Vector2f(window->getSize()));
+    overlay.setFillColor(sf::Color(0, 50, 0, 150)); // green
+
+    sf::Vector2u windowSize = window->getSize();
+    float menuWidth = 900.f;
+    float menuHeight = 700.f;
+    float menuX = (windowSize.x - menuWidth) / 2.f;
+    float menuY = (windowSize.y - menuHeight) / 2.f;
+
+    sf::RectangleShape menuBorder(sf::Vector2f(menuWidth, menuHeight));
+    menuBorder.setFillColor(sf::Color(30, 30, 30));
+    menuBorder.setOutlineColor(sf::Color(100, 255, 100, 200));
+    menuBorder.setOutlineThickness(5.f);
+    menuBorder.setPosition(menuX, menuY);
+
+    float centerX = menuX + menuWidth / 2.f;
+    float startY = menuY + 100.f;
+    float itemSpacing = 60.f;
+
+    // Создаем текст с номером уровня
+    sf::String levelText = L"Поздравляем, вы отразили все атаки!";
+
+    // Определяем следующие действия в зависимости от уровня
+
+    std::vector<MenuItem> winMenu = {
+        MenuItem(L"GAME WIN", font, 32, {centerX, startY - 50.f}, []() {}, true,
+        sf::Color(100, 255, 100), sf::Color(100, 255, 100)),
+
+        MenuItem(L"Враг полностью повержен", font, 26, {centerX, startY + 2 * itemSpacing}, []() {}, true,
+        sf::Color(100, 255, 100), sf::Color(100, 255, 100)),
+
+        MenuItem(L"Начать заново", font, 32, {centerX, startY + 4 * itemSpacing}, [&gameState]() { gameState = GAME; }, false,
+        sf::Color(255, 255, 100), sf::Color(255, 255, 0)),
+
+        MenuItem(L"Техническая информация:", font, 16, {centerX, startY + 5 * itemSpacing}, []() {}, true,
+        sf::Color(200, 200, 200), sf::Color(200, 200, 200)),
+
+        MenuItem(L"Оператор: Alex, Убито мобов: 42", font, 14, {centerX, startY + 6 * itemSpacing}, []() {}, true,
+        sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
+
+        MenuItem(L"-->Оставить на произвол судьбы<--", font, 24, {centerX, startY + 8 * itemSpacing}, [&window]() { window->close(); }, false,
+        sf::Color(255, 100, 100), sf::Color(255, 0, 0))
+    };
+
+    bool menuActive = true;
+    sf::Clock animationClock;
+
+    while (window->isOpen() && menuActive) {
+        float time = animationClock.getElapsedTime().asSeconds();
+
+        sf::Event event;
+        while (window->pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window->close();
+                menuActive = false;
+            }
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+                menuActive = false;
+            }
+            if (event.type == sf::Event::MouseButtonPressed &&
+                event.mouseButton.button == sf::Mouse::Left) {
+                for (auto& item : winMenu) {
+                    if (!item.gettitle() && item.isMouseOver(*window)) {
+                        item.onClick();
+                        menuActive = false;
+                        break;
+                    }
+                }
+            }
+
+            if (event.type == sf::Event::MouseMoved) {
+                for (auto& item : winMenu) {
+                    item.hovered = item.isMouseOver(*window);
+                }
+            }
+        }
+
+        for (auto& item : winMenu) {
+            item.update(time);
+        }
+
+        drawStack(window);
+        window->draw(overlay);
+        window->draw(menuBorder);
+
+        for (const auto& item : winMenu) {
+            window->draw(item.text);
+        }
+
+        window->display();
+    }
+}
+
+
 
 void renderAd(EnumGameState& GAME_STATE, AdTimer& adTimer, VideoPlayer& VIDEO_PLAYER) {
     if (adTimer.canShowAd()) {
