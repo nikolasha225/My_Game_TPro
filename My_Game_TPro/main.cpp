@@ -64,7 +64,9 @@ int main(int argc, char* argv[])
     SOUND_BUFFER_ROUND.loadFromFile(JSONSettings["GAME"]["soundRound"][LEVEL - 1]);
     
     SOUND.setBuffer(SOUND_BUFFER_ROUND);
+    Sleep(100);
     SOUND.play();
+    Sleep(100);
 
     auto restartWithNewLevel = [&]() {
         window.close();
