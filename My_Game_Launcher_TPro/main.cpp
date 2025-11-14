@@ -54,6 +54,7 @@ int main() {
 
 	// ============= Функции пунктов меню =============
 	auto startGame = [&soundstart, &window]() {
+		Sleep(100);//надо чтоб прогрузилась
 		soundstart.play();
 		system("My_Game_TPro.exe");//тут надо добавить параметры (глянь как они у меня идут, там id и уровень сложности) (просто через пробел как стринг добавить)
 		window.close();
@@ -70,6 +71,7 @@ int main() {
 		};
 	auto exitGame = [&window]() {
 		window.close(); 
+		exit(0);
 		};
 	auto back = [&screen]() {
 		screen = "main";
@@ -137,6 +139,8 @@ int main() {
 	};
 
 	sf::Clock clock;
+
+	screen = "main";//на всякий
 
 	while (window.isOpen()) {
 		float time = clock.getElapsedTime().asSeconds();
