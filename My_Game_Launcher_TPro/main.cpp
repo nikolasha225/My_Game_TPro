@@ -1,4 +1,5 @@
 ﻿#include "mainMenu.h"
+#include "Windows.h"
 
 int main() {
 
@@ -36,7 +37,9 @@ int main() {
 	sf::Sound soundhello;
 	soundhello.setBuffer(bufferhello);
 	soundhello.setVolume(5);
+	Sleep(100);//надо чтоб прогрузилась
 	soundhello.play();
+	Sleep(100);//надо чтоб прогрузилась
 
 	sf::SoundBuffer bufferstart;
 	if (!bufferstart.loadFromFile("assets/sound/startgame.wav")) {
@@ -52,15 +55,16 @@ int main() {
 	// ============= Функции пунктов меню =============
 	auto startGame = [&soundstart, &window]() {
 		soundstart.play();
-		system("My_Game_TPro.exe");
+		system("My_Game_TPro.exe");//тут надо добавить параметры (глянь как они у меня идут, там id и уровень сложности) (просто через пробел как стринг добавить)
 		window.close();
+		exit(0);
 		};
 	auto openSettings = [&screen]() {
 		screen = "settings";
 		};
 	auto records = [&screen]() {
-		screen = "records";
 		};
+		screen = "records";
 	auto owners = [&screen]() {
 		screen = "owners";
 		};
