@@ -35,6 +35,8 @@ int main() {
 	}
 	sf::Sound soundhello;
 	soundhello.setBuffer(bufferhello);
+	soundhello.setVolume(5);
+	soundhello.play();
 
 	sf::SoundBuffer bufferstart;
 	if (!bufferstart.loadFromFile("assets/sound/startgame.wav")) {
@@ -101,7 +103,7 @@ int main() {
 		MenuItem(L"Вкл", font, 24, {700.f, 200.f}, audio, false),
 
 		MenuItem(L"Разрешение", font, 30, {100.f, 270.f}, []() {}, true),
-		MenuItem(L"1980 x 1080", font, 24, {700.f, 270.f}, resolution, false),
+		MenuItem(L"1920 x 1080", font, 24, {700.f, 270.f}, resolution, false),
 	// разрешение
 		//music.setLoop(true);        // Зацикливание
 	//music.setVolume(50.f);      // Громкость (0-100)
@@ -119,6 +121,14 @@ int main() {
 
 	std::vector<MenuItem> ownersmenu = {
 		MenuItem(L"О создателях", font, 50, {200.f, 50.f}, []() {}, true),
+		MenuItem(L"Ducktor74", font, 28, {100.f, 150.f}, []() {}, true),
+		MenuItem(L"Owner/Dev", font, 22, {650.f, 150.f}, []() {}, true),
+		MenuItem(L"Bucktor74", font, 28, {100.f, 200.f}, []() {}, true),
+		MenuItem(L"Designer/Dev", font, 22, {650.f, 200.f}, []() {}, true),
+		MenuItem(L"Kirill", font, 28, {100.f, 250.f}, []() {}, true),
+		MenuItem(L"Developer", font, 22, {650.f, 250.f}, []() {}, true),
+		MenuItem(L"KRiSH", font, 28, {100.f, 300.f}, []() {}, true),
+		MenuItem(L"Lox", font, 22, {650.f, 300.f}, []() {}, true),
 		MenuItem(L"Назад", font, 36, {100.f, 550.f}, back, false)
 	};
 
