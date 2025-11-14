@@ -48,8 +48,10 @@ int main() {
 	bool needsRedraw = true;
 
 	// ============= Функции пунктов меню =============
-	auto startGame = [&soundstart]() {
+	auto startGame = [&soundstart, &window]() {
 		soundstart.play();
+		system("My_Game_TPro.exe");
+		window.close();
 		};
 	auto openSettings = [&screen]() {
 		screen = "settings";
