@@ -1,5 +1,7 @@
 #include "game.h"
 
+unsigned long long TIME_STAMP_SCORE;
+
 //==============================SPAWNER===================================
 Spawner::Spawner(sf::RenderWindow* window, OBJStack* stack)
 {
@@ -906,6 +908,7 @@ void writeScore(OBJStack* stack, unsigned id)
 
     // Основная информация о сессии
     unsigned long long timestamp = std::chrono::system_clock::now().time_since_epoch().count();
+    TIME_STAMP_SCORE = timestamp;
     scoreData["level"] = LEVEL;
     scoreData["difficulty"] = DIFFICULT;
     scoreData["resolution_x"] = RESOLUTION.x;

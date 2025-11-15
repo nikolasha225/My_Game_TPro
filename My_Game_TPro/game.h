@@ -29,6 +29,8 @@ enum EnumGameState
 	OVER
 };
 
+extern unsigned long long TIME_STAMP_SCORE;
+
 //==============================SPAWNER===================================
 class Spawner
 {

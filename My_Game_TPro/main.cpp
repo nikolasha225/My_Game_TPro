@@ -1,4 +1,4 @@
-#include "game.h"
+﻿#include "game.h"
 #include "allMenu.h"
 
 int main(int argc, char* argv[])
@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
     SOUND.play();
     Sleep(100);
 
-    auto restartWithNewLevel = [&]() {
+    auto restartWithNewLevel = [&]() {//Добафь кнопочкам функционал---------------------------------------------------------
         window.close();
 
         // �������� ���� � �������� ������������ �����
@@ -98,20 +98,21 @@ int main(int argc, char* argv[])
             if (EVENT.type == sf::Event::Closed)
                 window.close();
 
-            // ����� �� ESC
+            // pause menu
             if (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::Escape)
                 if (GAME_STATE == GAME)
                     GAME_STATE = PAUSE;
                 else if (GAME_STATE == PAUSE)
                     GAME_STATE = GAME;
 
-            // ������� ���
+            // tower check mouse
             if (EVENT.type == sf::Event::MouseButtonPressed &&
                 EVENT.mouseButton.button == sf::Mouse::Left)
             {
                 TOWER_MANAGER.checkEvents(&window);
             }
 
+            //--------------------------------- TODO: Условия победы/поражения и тп ---------------for me NOT MAX
             if (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::W)
                 GAME_STATE = WIN;
             if (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::L)
@@ -163,6 +164,10 @@ int main(int argc, char* argv[])
             renderAd(GAME_STATE, adTimer, VIDEO_PLAYER);
             break;
         case OVER:
+            SOUND.setBuffer(SOUND_BUFFER_WIN);
+            SOUND.play();
+            writeScore(&OBJ_STACK, 123);
+            GAME_STATE = END_GAME;
             renderOver(&window, GAME_STATE, drawGameBackground);
             break;
         default:

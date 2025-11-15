@@ -258,16 +258,16 @@ void renderWin(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level
     sf::String tryAgain;
 
     if (Level < 3) {
-        nextButtonText = L"-->Следующий рубеж<--";
+        nextButtonText = L"-> Следующий рубеж <-";
         currentAttack = L"Вы успешно отразили " + std::to_wstring(Level) + L" атаку!";
         nextAttack = L"Теперь враг рвётся с другого направления";
-        tryAgain = L"-->Попробовать снова<--";
+        tryAgain = L"->Попробовать снова<-";
         nextAction = [&gameState]() { gameState = GAME;
             // level += 1; ????????????
             };
     }
     else {
-        nextButtonText = L"-->Завершить игру<--";
+        nextButtonText = L"-> Завершить  игру <-";
         currentAttack = L"Вы успешно отразили все атаки!";
         nextAttack = L"Враг полностью повержен";
         tryAgain = L"Начать заново";
@@ -290,10 +290,10 @@ void renderWin(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level
         MenuItem(L"Техническая информация:", font, 16, {centerX, startY + 5 * itemSpacing}, []() {}, true,
         sf::Color(200, 200, 200), sf::Color(200, 200, 200)),
 
-        MenuItem(L"Оператор: Alex, Убито мобов: 42", font, 14, {centerX, startY + 6 * itemSpacing}, []() {}, true,
-        sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
+        MenuItem(L"Оператор: Alex, Убито мобов: 42", font, 14, {centerX, startY + 6 * itemSpacing}, []() {}, true,//-------------------------------------------------------ЧЗНХ + добавь вместо имени ID оператора
+        sf::Color(150, 150, 150), sf::Color(150, 150, 150)),//специально для тебя чтоб правильно подсасывал externОМ обьявил TIME_STAMP_SCORE в game.h (ключ к текущим статам нашего игрока)
 
-        MenuItem(L"-->Оставить на произвол судьбы<--", font, 24, {centerX, startY + 8 * itemSpacing}, [&window]() { window->close(); }, false,
+        MenuItem(L"->Оставить на произвол судьбы<-", font, 24, {centerX, startY + 8 * itemSpacing}, [&window]() { window->close(); }, false,
         sf::Color(255, 100, 100), sf::Color(255, 0, 0))
     };
 
@@ -366,7 +366,7 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
             scoreFile >> scoreData;
             scoreFile.close();
 
-            if (scoreData.contains("players") && !scoreData["players"].empty()) {
+            if (scoreData.contains("players") && !scoreData["players"].empty()) {//---------------------------------------не фирст а наш ирок (есть переменная __id)------------------------------------------------
                 auto players = scoreData["players"];
                 auto firstPlayer = players.begin();
 
