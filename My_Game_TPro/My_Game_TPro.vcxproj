@@ -130,8 +130,7 @@
     <ClCompile Include="functions.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="pauseMenu.cpp" />
-    <ClCompile Include="winLoseMenu.cpp" />
+    <ClCompile Include="allMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config\score.json" />
@@ -166,8 +165,7 @@
   <ItemGroup>
     <ClInclude Include="functions.h" />
     <ClInclude Include="game.h" />
-    <ClInclude Include="pauseMenu.h" />
-    <ClInclude Include="winLoseMenu.h" />
+    <ClInclude Include="allMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\debug\base.png" />

@@ -1,11 +1,10 @@
 #include "game.h"
-#include "winLoseMenu.h"
-#include "pauseMenu.h"
+#include "allMenu.h"
 
 int main(int argc, char* argv[])
 {
 
-    //базовые параметры 
+    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
     uint8_t __difficult = 1;
     unsigned __id = 0;
     uint8_t __level = 1;
@@ -15,7 +14,7 @@ int main(int argc, char* argv[])
     if (argc > 3) __level = static_cast<uint8_t>(std::stoi(argv[3]));
 
 
-    // SF базовые преременные
+    // SF пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
     sf::RenderWindow window(
         desktopMode,
@@ -39,8 +38,9 @@ int main(int argc, char* argv[])
     TIME = (float)JSONSettings["GAME"]["roundTimeSec"][LEVEL - 1]
         * (unsigned)JSONSettings["GENERAL"]["framerate"];
     START_TIME = TIME;
+    AdTimer adTimer(JSONSettings["GAME"]["adDelay"]);
 
-    //базовые определения
+    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
     EnumGameState GAME_STATE = GAME;
 
@@ -53,7 +53,11 @@ int main(int argc, char* argv[])
 
     VideoPlayer VIDEO_PLAYER;
 
-    sf::Sound SOUND;
+    auto drawGameBackground = [&](sf::RenderWindow* wnd) {
+        OBJ_STACK.draw(wnd);
+        };
+
+        sf::Sound SOUND;
 
     sf::SoundBuffer SOUND_BUFFER_WIN;
     sf::SoundBuffer SOUND_BUFFER_LOSE;
@@ -71,18 +75,18 @@ int main(int argc, char* argv[])
     auto restartWithNewLevel = [&]() {
         window.close();
 
-        // Получаем путь к текущему исполняемому файлу
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         char exePath[MAX_PATH];
         GetModuleFileNameA(NULL, exePath, MAX_PATH);
 
-        // Запускаем новую копию с новыми параметрами
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         std::string command = std::string("\"") + exePath + "\" " +
             std::to_string(__difficult) + " " +
             std::to_string(__id) + " " +
             std::to_string(LEVEL);
 
         system(command.c_str());
-        exit(0); // Завершаем текущий процесс
+        exit(0); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         };
 
     //===========================================
@@ -94,19 +98,26 @@ int main(int argc, char* argv[])
             if (EVENT.type == sf::Event::Closed)
                 window.close();
 
-            // Пауза на ESC
+            // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ ESC
             if (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::Escape)
                 if (GAME_STATE == GAME)
                     GAME_STATE = PAUSE;
                 else if (GAME_STATE == PAUSE)
                     GAME_STATE = GAME;
 
-            // НАЖАТИЕ ЛКМ
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
             if (EVENT.type == sf::Event::MouseButtonPressed &&
                 EVENT.mouseButton.button == sf::Mouse::Left)
             {
                 TOWER_MANAGER.checkEvents(&window);
             }
+
+            if (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::W)
+                GAME_STATE = WIN;
+            if (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::L)
+                GAME_STATE = LOSE;
+            if (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::O)
+                GAME_STATE = OVER;
         }
 
         //##########CLEAR####################
@@ -131,42 +142,28 @@ int main(int argc, char* argv[])
             break;
         case PAUSE:
             OBJ_STACK.draw(&window);
-            //-----------------отрисовка меню паузы
-            GAME_STATE = AD;
+            renderPause(&window, GAME_STATE, drawGameBackground, adTimer);
             break;
         case WIN:
-            SOUND.setBuffer(SOUND_BUFFER_WIN);
-            SOUND.play();
-            writeScore(&OBJ_STACK, 123);
-            GAME_STATE = END_GAME;
+        SOUND.setBuffer(SOUND_BUFFER_WIN);
+        SOUND.play();
+        writeScore(&OBJ_STACK, 123);
+        GAME_STATE = END_GAME;
+        renderWin(&window, GAME_STATE, LEVEL, drawGameBackground);
             break;
         case LOSE:
-            SOUND.setBuffer(SOUND_BUFFER_LOSE);
-            SOUND.play();
-            writeScore(&OBJ_STACK, 123);
-            GAME_STATE = END_GAME;
-            HEALTH = 100;
+        SOUND.setBuffer(SOUND_BUFFER_LOSE);
+        SOUND.play();
+        writeScore(&OBJ_STACK, 123);
+        GAME_STATE = END_GAME;
+        HEALTH = 100;
+        renderLose(&window, GAME_STATE, LEVEL, drawGameBackground);
             break;
         case AD:
-            while (vatchAD(&VIDEO_PLAYER))
-                GAME_STATE = GAME;
+            renderAd(GAME_STATE, adTimer, VIDEO_PLAYER);
             break;
-        case END_GAME:
-            OBJ_STACK.draw(&window);
-            break;
-        case NEXT_LEVEL:
-            LEVEL++;
-            if (LEVEL > 3)
-            {
-                GAME_STATE = WIN;
-                break;
-            }
-            OBJ_STACK.draw(&window);
-            //---------------отрисовка менюшки перехода к следующему левелу
-
-            //запуск себя с нечт левелом
-            if(TO_NEXT_LEVEL)
-                restartWithNewLevel();
+        case OVER:
+            renderOver(&window, GAME_STATE, drawGameBackground);
             break;
         default:
             break;

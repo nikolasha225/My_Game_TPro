@@ -1,6 +1,6 @@
 #pragma once
 
-//для коли и кирюхи
+//пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 #include "functions.h"
 
 #pragma once
@@ -25,7 +25,8 @@ enum EnumGameState
 	LOSE,
 	AD,
 	END_GAME,
-	NEXT_LEVEL
+	NEXT_LEVEL,
+	OVER
 };
 
 //==============================SPAWNER===================================
@@ -36,7 +37,7 @@ public:
 	Spawner(sf::RenderWindow* window, OBJStack* stack);
 
 	void tick();
-	//вовращает массив из 5 булов (кого можно спавнить) (должна сама обнулить заспавненые)
+	//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 5 пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ) (пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
 	bool* allowSpawnEnemy();
 
 	bool existEnemy();
@@ -45,14 +46,14 @@ private:
 	sf::RenderWindow* WINDOW;
 	OBJStack* STACK;
 
-	float PROGRESS; //высчитываем через весы каждого моба (1 - количество оставшихся на их тик пер спавн делить на оначальное)
+	float PROGRESS; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ (1 - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
 
 	unsigned START_COUNT_ALL;
 
 	//0 - basic 1 - fast 2 - tank 3 - miniBoss 4 - Boss
-	unsigned TICK_OF_ENEMY[5]; //текущие тики
-	unsigned COUNT_MOBS[5]; //из json + рандомизация
-	unsigned START_COUNT_MOBS[5]; //из json + рандомизация
+	unsigned TICK_OF_ENEMY[5]; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+	unsigned COUNT_MOBS[5]; //пїЅпїЅ json + пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	unsigned START_COUNT_MOBS[5]; //пїЅпїЅ json + пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
 	sf::SoundBuffer SOUND_BUFF;
 	sf::Sound SOUND;
@@ -77,7 +78,7 @@ public:
 
 	};
 
-	void checkEvents(sf::RenderWindow* window);//когда ЛКМОТЖИМАЕТСЯ
+	void checkEvents(sf::RenderWindow* window);//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 private:
 
 	struct Place : public IGameObject
@@ -157,7 +158,7 @@ private:
 
 	};
 
-	//переменные
+	//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	std::vector<Place*> TOWERS;
 	OBJStack* STACK;
 
@@ -186,7 +187,7 @@ public:
 	~VideoPlayer() { stopVideo(); }
 };
 
-//==============================ОТДЕЛЬНЫЕ ФУНКЦИИ=========================
+//==============================пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ=========================
 unsigned getSummArray(unsigned* array, uint8_t length = 5);
 
 bool mouseNearPoint(sf::Vector2f point, float distance, sf::RenderWindow* window);
