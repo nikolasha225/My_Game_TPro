@@ -2,9 +2,14 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream>
+#include <fstream>
+#include <algorithm>
 #include <vector>
 #include <functional>
 #include <cmath> // для sin
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
 
 class MenuItem;
 class AdvancedMatrixBackground;
@@ -20,6 +25,12 @@ public:
     void update(float time);
 	bool gettitle() const;
 };
+
+struct Record {
+	std::string playerId;
+	int total_kills;
+};
+
 
 struct SymbolChain {
 	std::vector<sf::Text> symbols;
@@ -54,3 +65,5 @@ public:
 	void updating(float deltaTime);
 	void draw(sf::RenderWindow& window);
 };
+
+void updateRecords(std::vector<MenuItem>& recordsmenu, sf::Font& font);

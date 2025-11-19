@@ -1,6 +1,5 @@
 ﻿#include "mainMenu.h"
 
-
     MenuItem::MenuItem(const sf::String& label, sf::Font& font, unsigned int size, const sf::Vector2f& pos, std::function<void()> callback, bool title)
         : onClick(callback), title(title)
     {
@@ -39,7 +38,7 @@
 		return this->title;
 	}
 
-		AdvancedMatrixBackground::AdvancedMatrixBackground() : spawnTimer(0.f), spawnInterval(0.1f), columns(30) {
+	AdvancedMatrixBackground::AdvancedMatrixBackground() : spawnTimer(0.f), spawnInterval(0.1f), columns(30) {
 			if (!font.loadFromFile("assets/fonts/PressStart2P-Regular.ttf")) {
 				std::cerr << "Не удалось загрузить шрифт для матрицы!\n";
 			}
@@ -53,7 +52,7 @@
 			srand(static_cast<unsigned int>(time(nullptr)));
 		}
 
-		void AdvancedMatrixBackground::createNewChain(int column) {
+	void AdvancedMatrixBackground::createNewChain(int column) {
 			SymbolChain chain;
 			chain.positionY = -100;
 			chain.speed = 100.f;
@@ -91,7 +90,7 @@
 			chains.push_back(chain);
 			}
 
-			void AdvancedMatrixBackground::updating(float deltaTime) {
+	void AdvancedMatrixBackground::updating(float deltaTime) {
 				spawnTimer += deltaTime;
 
 				if (spawnTimer >= spawnInterval) {
@@ -119,7 +118,7 @@
 
 							wchar_t symbols[] = { L'A', L'B', L'C', L'D', L'E', L'F', L'G', L'Y', L'X', L'Z',
 										L'0', L'1', L'2', L'3', L'4', L'5', L'6', L'7', L'8', L'9',
-										L'+', L'-', L'~', L')', L'(', L'^', L'☆', L'★', L'◆', L'■',
+										L'+', L'-', L'~', L')', L'(', L'^', L'☆', L'O', L'◆', L'■',
 										L'|', L'/', L'?', L'!', L'@', L'#', L'*', L'&', L'$', L'%' };
 
 							chain.symbols[i].setString(std::wstring(1, symbols[rand() % 40]));
@@ -150,5 +149,68 @@
 				for (auto& symbol : chain.symbols) {
 					window.draw(symbol);
 				}
+			}
+		}
+
+		std::vector<Record> loadRecords() {
+			std::vector<Record> records;
+			std::ifstream file("records.json");
+
+			if (!file.is_open()) {
+				std::cerr << "Не удалось открыть records.json" << std::endl;
+				return records;
+			}
+
+			try {
+				json data = json::parse(file);
+
+				// player.key() - это и есть имя игрока (например "123")
+				for (auto& player : data["players"].items()) {
+					std::string playerName = player.key();  //эт имя игрока
+
+					for (auto& game : player.value().items()) {
+						int total_kills = game.value()["enemies"]["total_killed"];
+						records.push_back({ playerName, total_kills });
+					}
+				}
+				file.close();
+				std::sort(records.begin(), records.end(), [](const Record& a, const Record& b) {
+					return a.total_kills > b.total_kills;
+					});
+				if (records.size() > 5) {
+					records.resize(10);
+				}
+
+				std::cout << "Загружено " << records.size() << " рекордов" << std::endl;
+
+			}
+			catch (const std::exception& e) {
+				std::cerr << "Ошибка парсинга JSON: " << e.what() << std::endl;
+			}
+
+			return records;
+		}
+
+		void updateRecords(std::vector<MenuItem>& recordsmenu, sf::Font& font) {
+			auto topRecords = loadRecords();
+
+			if (recordsmenu.size() > 2) {
+				recordsmenu.erase(recordsmenu.begin() + 1, recordsmenu.end() - 1);
+			}
+			float y = 150.f;
+			for (int i = 0; i < topRecords.size(); i++) {
+				//playerId как имя игрока !!!!!!!!!!!!!
+				std::string text = std::to_string(i + 1) + ". " + topRecords[i].playerId +
+					" - " + std::to_string(topRecords[i].total_kills) + " kills";
+				std::wstring wtext(text.begin(), text.end());
+
+				recordsmenu.insert(recordsmenu.end() - 1,
+					MenuItem(wtext, font, 20, { 100.f, y }, []() {}, true));
+				y += 40.f;
+			}
+
+			if (topRecords.empty()) {
+				recordsmenu.insert(recordsmenu.end() - 1,
+					MenuItem(L"Пока нет рекордов", font, 24, { 150.f, 150.f }, []() {}, true));
 			}
 		}

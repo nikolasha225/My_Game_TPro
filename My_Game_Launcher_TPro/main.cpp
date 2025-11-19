@@ -12,7 +12,6 @@ int main() {
 	window.setFramerateLimit(60);
 	window.setVerticalSyncEnabled(true);
 
-
 	AdvancedMatrixBackground matrixBackground;
 
 	sf::Font font;
@@ -51,7 +50,7 @@ int main() {
 
 	std::string screen = "main";
 	bool needsRedraw = true;
-
+	std::vector<MenuItem> recordsmenu;
 	// ============= Функции пунктов меню =============
 	auto startGame = [&soundstart, &window]() {
 		Sleep(100);//надо чтоб прогрузилась
@@ -63,9 +62,10 @@ int main() {
 	auto openSettings = [&screen]() {
 		screen = "settings";
 		};
-	auto records = [&screen]() {
-		};
+	auto records = [&screen, &recordsmenu, &font]() {
+		updateRecords(recordsmenu, font);
 		screen = "records";
+		};
 	auto owners = [&screen]() {
 		screen = "owners";
 		};
@@ -129,7 +129,7 @@ int main() {
 	};
 	soundVolumeItem = &settingsmenu[3];
 
-	std::vector<MenuItem> recordsmenu = {
+	recordsmenu = {
 		MenuItem(L"Таблица рекордов", font, 50, {140.f, 50.f}, []() {}, true),
 		MenuItem(L"Назад", font, 36, {100.f, 550.f}, back, false)
 
@@ -145,6 +145,7 @@ int main() {
 		MenuItem(L"Developer", font, 22, {650.f, 250.f}, []() {}, true),
 		MenuItem(L"Назад", font, 36, {100.f, 550.f}, back, false)
 	};
+
 
 	sf::Clock clock;
 
