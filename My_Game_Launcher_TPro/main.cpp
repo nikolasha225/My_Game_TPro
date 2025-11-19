@@ -56,7 +56,7 @@ int main() {
 	auto startGame = [&soundstart, &window]() {
 		Sleep(100);//надо чтоб прогрузилась
 		soundstart.play();
-		system("My_Game_TPro.exe");//тут надо добавить параметры (глянь как они у меня идут, там id и уровень сложности) (просто через пробел как стринг добавить)
+		system("My_Game_TPro.exe 1 0 1");//тут надо добавить параметры (глянь как они у меня идут, там id и уровень сложности) (просто через пробел как стринг добавить)
 		window.close();
 		exit(0);
 		};
@@ -77,16 +77,28 @@ int main() {
 		screen = "main";
 		};
 
-	bool isSoundOn = true;
-	MenuItem* soundToggle = nullptr;
+	int soundVolume = 100;
+	MenuItem* soundVolumeItem = nullptr;
 
-	auto audio = [&isSoundOn, &soundToggle, &soundclick, &soundstart] {
-		isSoundOn = !isSoundOn;
-		if (soundToggle) {
-			soundToggle->text.setString(isSoundOn ? L"Вкл" : L"Выкл");
+	auto increaseVolume = [&soundVolume, &soundVolumeItem, &soundclick, &soundstart] {
+		if (soundVolume < 100) {
+			soundVolume += 10;
+			if (soundVolumeItem) {
+				soundVolumeItem->text.setString(std::to_string(soundVolume));
+			}
+			soundclick.setVolume(static_cast<float>(soundVolume));
+			soundstart.setVolume(static_cast<float>(soundVolume));
 		}
-		soundclick.setVolume(isSoundOn ? 100.f : 0.f);
-		soundstart.setVolume(isSoundOn ? 100.f : 0.f);
+	};
+	auto decreaseVolume = [&soundVolume, &soundVolumeItem, &soundclick, &soundstart] {
+		if (soundVolume > 0) {
+			soundVolume -= 10;
+			if (soundVolumeItem) {
+				soundVolumeItem->text.setString(std::to_string(soundVolume));
+			}
+			soundclick.setVolume(static_cast<float>(soundVolume));
+			soundstart.setVolume(static_cast<float>(soundVolume));
+		}
 		};
 
 	auto resolution = [] {
@@ -105,19 +117,17 @@ int main() {
 	std::vector<MenuItem> settingsmenu = {
 		MenuItem(L"Настройки", font, 50, {300.f, 50.f}, []() {}, true),
 
-		MenuItem(L"Звук", font, 30, {100.f, 200.f}, []() {}, true),
-		MenuItem(L"Вкл", font, 24, {700.f, 200.f}, audio, false),
+		MenuItem(L"Громкость", font, 30, {100.f, 200.f}, []() {}, true),
+		MenuItem(L"-", font, 24, {700.f, 200.f}, decreaseVolume, false),
+		MenuItem(L"100", font, 24, {750.f, 200.f}, []() {}, true),
+		MenuItem(L"+", font, 24, {850.f, 200.f}, increaseVolume, false),
 
 		MenuItem(L"Разрешение", font, 30, {100.f, 270.f}, []() {}, true),
 		MenuItem(L"1920 x 1080", font, 24, {700.f, 270.f}, resolution, false),
-	// разрешение
-		//music.setLoop(true);        // Зацикливание
-	//music.setVolume(50.f);      // Громкость (0-100)
-	//music.setPitch(1.0f);       // Высота тона
 
 		MenuItem(L"Сохранить", font, 36, {350.f, 440.f}, back, false)
 	};
-	soundToggle = &settingsmenu[2];
+	soundVolumeItem = &settingsmenu[3];
 
 	std::vector<MenuItem> recordsmenu = {
 		MenuItem(L"Таблица рекордов", font, 50, {140.f, 50.f}, []() {}, true),
@@ -133,8 +143,6 @@ int main() {
 		MenuItem(L"Designer/Dev", font, 22, {650.f, 200.f}, []() {}, true),
 		MenuItem(L"Kirill", font, 28, {100.f, 250.f}, []() {}, true),
 		MenuItem(L"Developer", font, 22, {650.f, 250.f}, []() {}, true),
-		MenuItem(L"KRiSH", font, 28, {100.f, 300.f}, []() {}, true),
-		MenuItem(L"Lox", font, 22, {650.f, 300.f}, []() {}, true),
 		MenuItem(L"Назад", font, 36, {100.f, 550.f}, back, false)
 	};
 
