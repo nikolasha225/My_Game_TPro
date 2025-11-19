@@ -76,6 +76,9 @@ int main() {
 	auto back = [&screen]() {
 		screen = "main";
 		};
+	auto backtosettings = [&screen]() {
+		screen = "settings";
+		};
 
 	int soundVolume = 100;
 	MenuItem* soundVolumeItem = nullptr;
@@ -109,7 +112,7 @@ int main() {
 		MenuItem(L"Guards of ELBRUS", font, 50, {100.f, 50.f}, []() {}, true),
 		MenuItem(L"Старт", font, 36, { 100.f, 200.f }, startGame, false),
 		MenuItem(L"Настройки", font, 36, { 100.f, 270.f }, openSettings, false),
-		MenuItem(L"Таблица лидеров", font, 36, { 100.f, 340.f }, records, false),
+		//MenuItem(L"Таблица лидеров", font, 36, { 100.f, 340.f }, records, false),
 		MenuItem(L"О создателях", font, 36, { 100.f, 410.f }, owners, false),
 		MenuItem(L"Выход", font, 36, { 100.f, 480.f }, exitGame, false)
 	};
@@ -122,8 +125,7 @@ int main() {
 		MenuItem(L"100", font, 24, {750.f, 200.f}, []() {}, true),
 		MenuItem(L"+", font, 24, {850.f, 200.f}, increaseVolume, false),
 
-		MenuItem(L"Разрешение", font, 30, {100.f, 270.f}, []() {}, true),
-		MenuItem(L"1920 x 1080", font, 24, {700.f, 270.f}, resolution, false),
+		MenuItem(L"Таблица лидеров", font, 30, {300.f, 300.f}, records, false),
 
 		MenuItem(L"Сохранить", font, 36, {350.f, 440.f}, back, false)
 	};
@@ -131,7 +133,7 @@ int main() {
 
 	recordsmenu = {
 		MenuItem(L"Таблица рекордов", font, 50, {140.f, 50.f}, []() {}, true),
-		MenuItem(L"Назад", font, 36, {100.f, 550.f}, back, false)
+		MenuItem(L"Назад", font, 36, {100.f, 550.f}, backtosettings, false)
 
 	};
 
