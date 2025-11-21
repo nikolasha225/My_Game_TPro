@@ -12,7 +12,7 @@
   "GAME": {
     "startHP": [ 100, 60, 30 ],
     "startMoney": [ 500, 300, 200 ],
-    "roundTimeSec": [ 600, 700, 800 ],
+    "roundTimeSec": [ 5, 5, 5 ],
     "soundRound": [ "./sound/round1.ogg", "./sound/round2.ogg", "./sound/round3.ogg" ],
     "soundVictory": "./sound/victory.ogg",
     "soundLose": "./sound/lose.ogg",

@@ -1,0 +1,20 @@
+{
+  "conversations": [
+    {
+      "firstMessage": "Error: No OpenRouter API key configured. Please set your API key in Settings.",
+      "messageCount": 1,
+      "messages": [
+        {
+          "hide_message": false,
+          "isStreaming": false,
+          "role": "assistant",
+          "text": "Error: No OpenRouter API key configured. Please set your API key in Settings.",
+          "timestamp": "2025-11-21 22:52:36",
+          "tool_call_id": "",
+          "tool_calls": null
+        }
+      ],
+      "timestamp": "2025-11-21 22:52:41"
+    }
+  ]
+}

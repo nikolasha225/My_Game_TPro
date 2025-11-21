@@ -250,41 +250,50 @@ void TowerManager::checkEvents(sf::RenderWindow* window)
                 break;
             }
 
+            bool isTowerSelected = false;
             for (auto& cell : place->BUY_MENU) {
-                if (cell->NUMBER > Tower::kaspersky && mouseInButton(cell->getCellShapePtr(), window)) {
-                    if (cell->NUMBER == Tower::upgradedTower) {
-
-                        if (place->TOWER->upgrade()) {
-                            place->SOUND.setBuffer(place->SOUND_BUFF_UPGRADE);
-                            place->SOUND.play();
-                        }
-                        else {
-                            place->SOUND.setBuffer(place->SOUND_BUFF_ERROR);
-                            place->SOUND.play();
-                        }
-                    }
-                    else if (cell->NUMBER == Tower::deletedTower) {
-                        place->SOUND.setBuffer(place->SOUND_BUFF_DELETE);
-                        place->SOUND.play();
-                        MONEY += (float)JSONSettings["TOWER"][towerTypes[place->TOWER->getTowerType()]]["price"]
-                            * (float)JSONSettings["TOWER"]["removeCoef"];
-                        if (place->TOWER != nullptr) {
-                            STACK->remove(place->TOWER);
-                            //delete place->TOWER;
-                            place->TOWER = nullptr;
-                        }
-                        place->STATE = Place::placeState::empty;
-                        for (auto& menuCell : place->BUY_MENU) {
-                            menuCell->unselect();
-                        }
-                    }
-                    clickedOnSomething = true;
-                    clickedPlace = place;
-                    place->unselectPlace();
+                if (cell->STATE == DownCell::selectFatherTower) {
+                    isTowerSelected = true;
                     break;
                 }
             }
-            if (clickedOnSomething) break;
+            if (isTowerSelected) {
+                for (auto& cell : place->BUY_MENU) {
+                    if (cell->NUMBER > Tower::kaspersky && mouseInButton(cell->getCellShapePtr(), window)) {
+                        if (cell->NUMBER == Tower::upgradedTower) {
+
+                            if (place->TOWER->upgrade()) {
+                                place->SOUND.setBuffer(place->SOUND_BUFF_UPGRADE);
+                                place->SOUND.play();
+                            }
+                            else {
+                                place->SOUND.setBuffer(place->SOUND_BUFF_ERROR);
+                                place->SOUND.play();
+                            }
+                        }
+                        else if (cell->NUMBER == Tower::deletedTower) {
+                            place->SOUND.setBuffer(place->SOUND_BUFF_DELETE);
+                            place->SOUND.play();
+                            MONEY += (float)JSONSettings["TOWER"][towerTypes[place->TOWER->getTowerType()]]["price"]
+                                * (float)JSONSettings["TOWER"]["removeCoef"];
+                            if (place->TOWER != nullptr) {
+                                STACK->remove(place->TOWER);
+                                //delete place->TOWER;
+                                place->TOWER = nullptr;
+                            }
+                            place->STATE = Place::placeState::empty;
+                            for (auto& menuCell : place->BUY_MENU) {
+                                menuCell->unselect();
+                            }
+                        }
+                        clickedOnSomething = true;
+                        clickedPlace = place;
+                        place->unselectPlace();
+                        break;
+                    }
+                }
+                if (clickedOnSomething) break;
+            }
         }
     }
     if (clickedOnSomething) {
@@ -670,6 +679,8 @@ void TowerManager::DownCell::draw(sf::RenderWindow* window) {
         break;
     case TowerManager::DownCell::selectFatherTower:
         if (NUMBER > Tower::kaspersky) {
+            if (FATHER->TOWER->getLevel() == 5 && NUMBER == Tower::upgradedTower)
+                return;
             window->draw(MANAGER);
             window->draw(OBJ_PRICE);
             window->draw(TEXT_PRICE);

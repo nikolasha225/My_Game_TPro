@@ -99,11 +99,13 @@ int main(int argc, char* argv[])
                 window.close();
 
             // pause menu
-            if (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::Escape)
+            if (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::Escape) {
                 if (GAME_STATE == GAME)
                     GAME_STATE = PAUSE;
-                else if (GAME_STATE == PAUSE)
+                else if(GAME_STATE == PAUSE)
                     GAME_STATE = GAME;
+                break;
+            }
 
             // tower check mouse
             if (EVENT.type == sf::Event::MouseButtonPressed &&
@@ -112,13 +114,15 @@ int main(int argc, char* argv[])
                 TOWER_MANAGER.checkEvents(&window);
             }
 
-            //--------------------------------- TODO: Условия победы/поражения и тп ---------------for me NOT MAX
-            if (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::W)
-                GAME_STATE = WIN;
-            if (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::L)
+            if (OBJ_STACK.getCountOf(enemy) == 0 && TIME == 0 || (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::W)) {
+                if(LEVEL == 3)
+                    GAME_STATE = OVER;
+                else
+                    GAME_STATE = WIN;
+                break;
+            }
+            if (HEALTH <= 0)
                 GAME_STATE = LOSE;
-            if (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::O)
-                GAME_STATE = OVER;
         }
 
         //##########CLEAR####################
@@ -148,9 +152,11 @@ int main(int argc, char* argv[])
         case WIN:
         SOUND.setBuffer(SOUND_BUFFER_WIN);
         SOUND.play();
-        writeScore(&OBJ_STACK, 123);
-        GAME_STATE = END_GAME;
-        renderWin(&window, GAME_STATE, LEVEL, drawGameBackground);
+        if (!TO_NEXT_LEVEL) {
+            LEVEL++;
+            renderWin(&window, GAME_STATE, LEVEL-1, drawGameBackground);//TODO:переход на следующий левел !!! функция restartWithNewLevel
+            TO_NEXT_LEVEL = 1;
+        }
             break;
         case LOSE:
         SOUND.setBuffer(SOUND_BUFFER_LOSE);
@@ -158,7 +164,7 @@ int main(int argc, char* argv[])
         writeScore(&OBJ_STACK, 123);
         GAME_STATE = END_GAME;
         HEALTH = 100;
-        renderLose(&window, GAME_STATE, LEVEL, drawGameBackground);
+        renderLose(&window, GAME_STATE, LEVEL, drawGameBackground);//TODO: рестарт левела на кнопуку (restartWithNewLevel) (надо перед рестартом установить LEVEL = 0)
             break;
         case AD:
             renderAd(GAME_STATE, adTimer, VIDEO_PLAYER);
