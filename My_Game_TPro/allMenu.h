@@ -11,6 +11,7 @@
 class MenuItem;
 class AdTimer;
 
+extern bool IS_RESTART;
 
 //свой таймер для рекламы -_-
 class AdTimer {

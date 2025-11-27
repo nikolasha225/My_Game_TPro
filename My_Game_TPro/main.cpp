@@ -44,8 +44,6 @@ int main(int argc, char* argv[])
 
     EnumGameState GAME_STATE = GAME;
 
-    bool TO_NEXT_LEVEL = 0;
-
     sf::Event EVENT;
     OBJStack OBJ_STACK;
     Spawner SPAWNER(&window, &OBJ_STACK);
@@ -152,11 +150,8 @@ int main(int argc, char* argv[])
         case WIN:
         SOUND.setBuffer(SOUND_BUFFER_WIN);
         SOUND.play();
-        if (!TO_NEXT_LEVEL) {
             LEVEL++;
             renderWin(&window, GAME_STATE, LEVEL-1, drawGameBackground);//TODO:переход на следующий левел !!! функция restartWithNewLevel
-            TO_NEXT_LEVEL = 1;
-        }
             break;
         case LOSE:
         SOUND.setBuffer(SOUND_BUFFER_LOSE);
@@ -164,7 +159,7 @@ int main(int argc, char* argv[])
         writeScore(&OBJ_STACK, 123);
         GAME_STATE = END_GAME;
         HEALTH = 100;
-        renderLose(&window, GAME_STATE, LEVEL, drawGameBackground);//TODO: рестарт левела на кнопуку (restartWithNewLevel) (надо перед рестартом установить LEVEL = 0)
+        renderLose(&window, GAME_STATE, LEVEL, drawGameBackground);
             break;
         case AD:
             renderAd(GAME_STATE, adTimer, VIDEO_PLAYER);
@@ -179,6 +174,9 @@ int main(int argc, char* argv[])
         default:
             break;
         }
+
+        if (IS_RESTART)
+            restartWithNewLevel();
 
         window.display();
     }
