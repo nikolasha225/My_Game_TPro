@@ -1168,7 +1168,15 @@ void drawGraph(sf::RenderWindow& window) {
 	// ќбновление данных каждые 500ms
 	if (graphClock.getElapsedTime().asMilliseconds() >= 500) {
 		float normalizedValue = ((HEALTH < 0.0f ? 0.0f : HEALTH) > 100.0f ? 100.0f : HEALTH);
-		float yPos = startY + graphHeight - (normalizedValue / 100.0f * graphHeight);
+
+		// ƒобавл€ем случайную погрешность 2% от значени€
+		float noise = RAND_FLOAT(-2.0f, 2.0f);
+		float valueWithNoise = normalizedValue + noise;
+
+		// ќграничиваем значение с погрешностью
+		valueWithNoise = std::max(0.0f, std::min(100.0f, valueWithNoise));
+
+		float yPos = startY + graphHeight - (valueWithNoise / 100.0f * graphHeight);
 
 		points.push_back(sf::Vector2f(startX + graphWidth, yPos));
 
