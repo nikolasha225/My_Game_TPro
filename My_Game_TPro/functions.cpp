@@ -1183,4 +1183,39 @@ void drawGraph(sf::RenderWindow& window) {
 
 		graphClock.restart();
 	}
+
+	// Отрисовка рамки графика
+	sf::RectangleShape graphBorder(getNewCoordinate(sf::Vector2f(graphWidth * 0.9f, graphHeight)));
+	graphBorder.setPosition(getNewCoordinate(sf::Vector2f(startX + graphWidth * 0.05f, startY)));
+	graphBorder.setFillColor(sf::Color::Transparent);
+	graphBorder.setOutlineColor(sf::Color(0, 95, 0, 100));
+	graphBorder.setOutlineThickness(3);
+	window.draw(graphBorder);
+
+	// Отрисовка заполненной области под графиком
+	if (points.size() >= 2) {
+		sf::VertexArray area(sf::TriangleStrip);
+
+		for (size_t i = 0; i < points.size(); ++i) {
+			// Верхняя точка (линия графика)
+			area.append(sf::Vertex(
+				getNewCoordinate(points[i]),
+				sf::Color(0, 190, 0, 100)
+			));
+			// Нижняя точка (основание)
+			area.append(sf::Vertex(
+				getNewCoordinate(sf::Vector2f(points[i].x, startY + graphHeight)),
+				sf::Color(0, 190, 0, 100)
+			));
+		}
+		window.draw(area);
+	
+		// Отрисовка линии графика (Толщина = 1 пиксель)
+		sf::VertexArray line(sf::LineStrip);
+		for (const auto& point : points) {
+			line.append(sf::Vertex(getNewCoordinate(point), sf::Color(0, 190, 0, 100)
+			));
+		}
+		window.draw(line);
+	}
 }
