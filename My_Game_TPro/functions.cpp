@@ -1149,3 +1149,38 @@ float getWayLength(std::vector<sf::Vector2f> pathPoints)
 
 	return totalLength;
 }
+
+
+sf::Clock graphClock;
+
+void drawGraph(sf::RenderWindow& window) {
+	static std::deque<sf::Vector2f> points;
+
+	// Базовые параметры в координатах 1920x1080, потом масштабируем
+	const float graphWidth = 1920 * 0.3f;
+	const float graphHeight = 1080 * 0.2f;
+	const float startX = 1920 - graphWidth;
+	const float startY = 20;
+
+	// Обновление данных каждые 500ms
+	if (graphClock.getElapsedTime().asMilliseconds() >= 500) {
+		float normalizedValue = ((HEALTH < 0.0f ? 0.0f : HEALTH) > 100.0f ? 100.0f : HEALTH);
+		float yPos = startY + graphHeight - (normalizedValue / 100.0f * graphHeight);
+
+		points.push_back(sf::Vector2f(startX + graphWidth, yPos));
+
+		// Сдвигаем все точки на 5% ширины за обновление
+		float shiftAmount = graphWidth * 0.05f;
+		for (auto& point : points) {
+			point.x -= shiftAmount;
+		}
+
+		// Удаляем точки, которые ушли за левый край
+		points.erase(std::remove_if(points.begin(), points.end(),
+			[startX](const sf::Vector2f& p) {
+				return p.x < startX;
+			}), points.end());
+
+		graphClock.restart();
+	}
+}

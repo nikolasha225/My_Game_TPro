@@ -18,6 +18,11 @@
 #include <random>
 #include <chrono>
 
+// Очередь значений для графика
+#include <deque>
+
+extern sf::Clock graphClock;   // Таймер для обновления графика
+
 #define M_PI 3.1416
 
 using json = nlohmann::json;
@@ -498,3 +503,5 @@ bool isPointIntoShape(sf::Vector2f point, sf::RectangleShape obj);
 float getWayCoeficent(uint8_t level = LEVEL);
 
 float getWayLength(std::vector<sf::Vector2f> pathPoints);
+
+void drawGraph(sf::RenderWindow& window);

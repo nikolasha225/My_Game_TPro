@@ -121,6 +121,8 @@ int main(int argc, char* argv[])
 
             OBJ_STACK.draw(&window);
 
+            drawGraph(window);
+
             (TIME<=0) ? (0) : (TIME--);
 
             GAME_STATE = ((TIME > 0) || OBJ_STACK.getStackOfType(enemy).size()) ? (GAME_STATE) : (NEXT_LEVEL);
