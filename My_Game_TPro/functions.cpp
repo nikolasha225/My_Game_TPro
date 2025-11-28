@@ -1162,6 +1162,9 @@ void drawGraph(sf::RenderWindow& window) {
 	const float startX = 1920 - graphWidth;
 	const float startY = 20;
 
+	const float graphAreaX = startX + graphWidth * 0.05f;
+	const float graphAreaWidth = graphWidth * 0.9f;
+
 	// Обновление данных каждые 500ms
 	if (graphClock.getElapsedTime().asMilliseconds() >= 500) {
 		float normalizedValue = ((HEALTH < 0.0f ? 0.0f : HEALTH) > 100.0f ? 100.0f : HEALTH);
@@ -1184,15 +1187,37 @@ void drawGraph(sf::RenderWindow& window) {
 		graphClock.restart();
 	}
 
-	// Отрисовка рамки графика
-	sf::RectangleShape graphBorder(getNewCoordinate(sf::Vector2f(graphWidth * 0.9f, graphHeight)));
-	graphBorder.setPosition(getNewCoordinate(sf::Vector2f(startX + graphWidth * 0.05f, startY)));
-	graphBorder.setFillColor(sf::Color::Transparent);
-	graphBorder.setOutlineColor(sf::Color(0, 95, 0, 100));
-	graphBorder.setOutlineThickness(3);
-	window.draw(graphBorder);
+	// Сначала рисуем чёрный непрозрачный прямоугольник под сетку (можно убрать, получим полупрозрачный график)
+	sf::RectangleShape background(getNewCoordinate(sf::Vector2f(graphAreaWidth, graphHeight)));
+	background.setPosition(getNewCoordinate(sf::Vector2f(graphAreaX, startY)));
+	background.setFillColor(sf::Color::Black);
+	window.draw(background);
 
-	// Отрисовка заполненной области под графиком
+
+	// Отрисовка сетки графика
+	sf::Color gridColor(0, 190, 0, 100);
+	float lineThickness = 3.0f;
+
+	// Горизонтальные линии
+	for (int i = 0; i <= 10; i++) {
+		float y = startY + (graphHeight / 10.0f) * i;
+
+		sf::RectangleShape hLine(sf::Vector2f(graphAreaWidth, lineThickness));
+		hLine.setPosition(getNewCoordinate(sf::Vector2f(graphAreaX, y - lineThickness)));
+		hLine.setFillColor(gridColor);
+		window.draw(hLine);
+
+		// Вертикальные линии 
+		float x = graphAreaX + (graphAreaWidth / 10.0f) * i;
+
+		sf::RectangleShape vLine(sf::Vector2f(lineThickness, graphHeight));
+		vLine.setPosition(getNewCoordinate(sf::Vector2f(x - lineThickness, startY)));
+		vLine.setFillColor(gridColor);
+		window.draw(vLine);
+	}
+
+
+	// Отрисовка линии графика и заполненной области под графиком
 	if (points.size() >= 2) {
 		sf::VertexArray area(sf::TriangleStrip);
 
@@ -1210,7 +1235,6 @@ void drawGraph(sf::RenderWindow& window) {
 		}
 		window.draw(area);
 	
-		// Отрисовка линии графика (Толщина = 1 пиксель)
 		sf::VertexArray line(sf::LineStrip);
 		for (const auto& point : points) {
 			line.append(sf::Vertex(getNewCoordinate(point), sf::Color(0, 190, 0, 100)
