@@ -1159,11 +1159,32 @@ void drawGraph(sf::RenderWindow& window) {
 	// Базовые параметры в координатах 1920x1080, потом масштабируем
 	const float graphWidth = 1920 * 0.3f;
 	const float graphHeight = 1080 * 0.2f;
-	const float startX = 1920 - graphWidth;
+	const float startX = 1720 - graphWidth;
 	const float startY = 20;
 
 	const float graphAreaX = startX + graphWidth * 0.05f;
 	const float graphAreaWidth = graphWidth * 0.9f;
+
+
+	// Загрузка фоновой текстуры (один раз при первом вызове)
+	static sf::Texture backgroundTexture;
+
+	backgroundTexture.loadFromFile(JSONSettings["CORE"]["graphBackground"]);
+
+	// Отрисовка фона графика
+	sf::Sprite backgroundSprite(backgroundTexture);
+	backgroundSprite.setPosition(getNewCoordinate(sf::Vector2f(graphAreaX * 0.95f, 0)));
+	backgroundSprite.setScale(
+		getNewCoordinate(sf::Vector2f(graphAreaWidth, graphHeight)).x / backgroundTexture.getSize().x * 1.2f,
+		getNewCoordinate(sf::Vector2f(graphAreaWidth, graphHeight)).y / backgroundTexture.getSize().y * 1.2f
+	);
+	window.draw(backgroundSprite);
+
+	// Сначала рисуем чёрный непрозрачный прямоугольник под сетку (можно убрать, получим полупрозрачный график)
+	sf::RectangleShape background(getNewCoordinate(sf::Vector2f(graphAreaWidth, graphHeight)));
+	background.setPosition(getNewCoordinate(sf::Vector2f(graphAreaX, startY)));
+	background.setFillColor(sf::Color::Black);
+	window.draw(background);
 
 	// Обновление данных каждые 500ms
 	if (graphClock.getElapsedTime().asMilliseconds() >= 500) {
@@ -1194,13 +1215,6 @@ void drawGraph(sf::RenderWindow& window) {
 
 		graphClock.restart();
 	}
-
-	// Сначала рисуем чёрный непрозрачный прямоугольник под сетку (можно убрать, получим полупрозрачный график)
-	sf::RectangleShape background(getNewCoordinate(sf::Vector2f(graphAreaWidth, graphHeight)));
-	background.setPosition(getNewCoordinate(sf::Vector2f(graphAreaX, startY)));
-	background.setFillColor(sf::Color::Black);
-	window.draw(background);
-
 
 	// Отрисовка сетки графика
 	sf::Color gridColor(0, 190, 0, 100);

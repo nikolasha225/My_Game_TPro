@@ -168,7 +168,8 @@
     "coreMove": 30,
     "caveSize": [ 150, 250 ],
     "caveTexture": "./textures/img/elbrus.png",
-    "sevenSegmentFont": "./textures/font/font2.ttf"
+    "sevenSegmentFont": "./textures/font/font2.ttf",
+    "graphBackground": "./textures/img/graph_background.png"
   },
   "GUI": {
     "money": {
