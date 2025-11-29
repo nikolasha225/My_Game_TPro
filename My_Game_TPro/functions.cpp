@@ -1157,28 +1157,20 @@ void drawGraph(sf::RenderWindow& window) {
 	static std::deque<sf::Vector2f> points;
 
 	// Базовые параметры в координатах 1920x1080, потом масштабируем
-	const float graphWidth = 1920 * 0.3f;
-	const float graphHeight = 1080 * 0.2f;
-	const float startX = 1720 - graphWidth;
-	const float startY = 20;
+	const float graphWidth = 1920 * 0.26f;
+	const float graphHeight = 1080 * 0.16f;
+	const float startX = 1620 - graphWidth;
+	const float startY = 40;
 
 	const float graphAreaX = startX + graphWidth * 0.05f;
 	const float graphAreaWidth = graphWidth * 0.9f;
 
 
 	// Загрузка фоновой текстуры (один раз при первом вызове)
-	static sf::Texture backgroundTexture;
+	static sf::Texture frameTexture;
 
-	backgroundTexture.loadFromFile(JSONSettings["CORE"]["graphBackground"]);
+	frameTexture.loadFromFile(JSONSettings["CORE"]["graphFrame"]);
 
-	// Отрисовка фона графика
-	sf::Sprite backgroundSprite(backgroundTexture);
-	backgroundSprite.setPosition(getNewCoordinate(sf::Vector2f(graphAreaX * 0.95f, 0)));
-	backgroundSprite.setScale(
-		getNewCoordinate(sf::Vector2f(graphAreaWidth, graphHeight)).x / backgroundTexture.getSize().x * 1.2f,
-		getNewCoordinate(sf::Vector2f(graphAreaWidth, graphHeight)).y / backgroundTexture.getSize().y * 1.2f
-	);
-	window.draw(backgroundSprite);
 
 	// Сначала рисуем чёрный непрозрачный прямоугольник под сетку (можно убрать, получим полупрозрачный график)
 	sf::RectangleShape background(getNewCoordinate(sf::Vector2f(graphAreaWidth, graphHeight)));
@@ -1188,7 +1180,7 @@ void drawGraph(sf::RenderWindow& window) {
 
 	// Обновление данных каждые 500ms
 	if (graphClock.getElapsedTime().asMilliseconds() >= 500) {
-		float normalizedValue = ((HEALTH < 0.0f ? 0.0f : HEALTH) > 100.0f ? 100.0f : HEALTH);
+		float normalizedValue = (100.0f - HEALTH);
 
 		// Добавляем случайную погрешность 2% от значения
 		float noise = RAND_FLOAT(-2.0f, 2.0f);
@@ -1264,4 +1256,13 @@ void drawGraph(sf::RenderWindow& window) {
 		}
 		window.draw(line);
 	}
+
+	// Отрисовка рамки графика
+	sf::Sprite frameSprite(frameTexture);
+	frameSprite.setPosition(getNewCoordinate(sf::Vector2f(graphAreaX * 0.95f, -110)));
+	frameSprite.setScale(
+		getNewCoordinate(sf::Vector2f(graphAreaWidth, graphHeight)).x / frameTexture.getSize().x * 1.25f,
+		getNewCoordinate(sf::Vector2f(graphAreaWidth, graphHeight)).y / frameTexture.getSize().y * 2.75f
+	);
+	window.draw(frameSprite);
 }
