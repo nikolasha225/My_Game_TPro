@@ -285,6 +285,9 @@
     <Image Include="textures\img\third.png">
       <Filter>Textures\img\map</Filter>
     </Image>
+    <Image Include="textures\img\graph_frame.png">
+      <Filter>Textures\img</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="sound\source\(поражение) ist oficial, you suck.mp3">
