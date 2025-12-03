@@ -347,7 +347,7 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
     }
 
     sf::String player = L"Unknown";
-    sf::String Killed = L"0";
+    int totalKilled = 0;
 
     //#######################jSON#######################
     try {
@@ -357,19 +357,70 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
             scoreFile >> scoreData;
             scoreFile.close();
 
-            if (scoreData.contains("players") && !scoreData["players"].empty()) {//---------------------------------------не фирст а наш ирок (есть переменная __id)------------------------------------------------
+            if (scoreData.contains("players") && !scoreData["players"].empty()) {
                 auto players = scoreData["players"];
-                auto firstPlayer = players.begin();
 
-                std::string nameStr = firstPlayer.key();
-                player = sf::String::fromUtf8(nameStr.begin(), nameStr.end());
+                // Ищем текущего игрока (предположим, что это последний добавленный)
+                std::string currentPlayerId;
 
-                if (!firstPlayer.value().empty()) {
-                    auto firstSession = firstPlayer.value().begin();
-                    if (firstSession.value().contains("enemies") &&
-                        firstSession.value()["enemies"].contains("total_killed")) {
-                        int killed = firstSession.value()["enemies"]["total_killed"];
-                        Killed = std::to_wstring(killed);
+                // Если есть текущая сессия (timestamp), ищем по ней
+#ifdef TIME_STAMP_SCORE
+                std::string currentTimestamp = TIME_STAMP_SCORE;
+
+                for (auto& playerEntry : players.items()) {
+                    std::string playerId = playerEntry.key();
+                    auto& sessions = playerEntry.value();
+
+                    // Проверяем, есть ли у этого игрока сессия с текущим timestamp
+                    if (sessions.contains(currentTimestamp)) {
+                        currentPlayerId = playerId;
+                        auto& currentSession = sessions[currentTimestamp];
+
+                        player = sf::String::fromUtf8(playerId.begin(), playerId.end());
+
+                        // Берем убитых из текущей сессии
+                        if (currentSession.contains("enemies") &&
+                            currentSession["enemies"].contains("total_killed")) {
+                            totalKilled = currentSession["enemies"]["total_killed"];
+                        }
+                        break;
+                    }
+                }
+#endif
+
+                // Если не нашли по timestamp, ищем последнюю завершенную игру с game_result
+                if (currentPlayerId.empty()) {
+                    std::string lastPlayerId;
+                    long long maxTimestamp = 0;
+
+                    for (auto& playerEntry : players.items()) {
+                        std::string playerId = playerEntry.key();
+                        auto& sessions = playerEntry.value();
+
+                        for (auto& session : sessions.items()) {
+                            std::string timestampStr = session.key();
+                            try {
+                                long long timestamp = std::stoll(timestampStr);
+
+                                // Проверяем, что это завершенная игра (есть game_result)
+                                if (session.value().contains("game_result") &&
+                                    timestamp > maxTimestamp) {
+                                    maxTimestamp = timestamp;
+                                    lastPlayerId = playerId;
+
+                                    auto& lastSession = session.value();
+                                    player = sf::String::fromUtf8(playerId.begin(), playerId.end());
+
+                                    if (lastSession.contains("enemies") &&
+                                        lastSession["enemies"].contains("total_killed")) {
+                                        totalKilled = lastSession["enemies"]["total_killed"];
+                                    }
+                                }
+                            }
+                            catch (...) {
+                                continue;
+                            }
+                        }
                     }
                 }
             }
@@ -378,8 +429,10 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
     catch (const std::exception& e) {
         std::cerr << "Ошибка загрузки score.json: " << e.what() << std::endl;
         player = L"Ошибка";
-        Killed = L"0";
+        totalKilled = 0;
     }
+
+    sf::String Killed = std::to_wstring(totalKilled);
 
     // zatmenie
     sf::RectangleShape overlay(sf::Vector2f(window->getSize()));
@@ -411,8 +464,8 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
         MenuItem(levelMessage, font, 24, {centerX, startY + itemSpacing}, []() {}, true,
         sf::Color(255, 200, 100), sf::Color(255, 200, 100)),
 
-        MenuItem(L"Попробовать снова", font, 32, {centerX, startY + 3 * itemSpacing}, [&gameState]() { gameState = GAME; }, false,
-        sf::Color(255, 255, 100), sf::Color(255, 255, 0)),
+        //MenuItem(L"Попробовать снова", font, 32, {centerX, startY + 3 * itemSpacing}, [&gameState]() { gameState = GAME; }, false,
+        //sf::Color(255, 255, 100), sf::Color(255, 255, 0)),
 
         MenuItem(L"Техническая информация:", font, 16, {centerX, startY + 6 * itemSpacing}, []() {}, true,
         sf::Color(200, 200, 200), sf::Color(200, 200, 200)),
