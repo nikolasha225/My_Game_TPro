@@ -259,22 +259,13 @@ void renderWin(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level
     sf::String nextAttack;
     sf::String tryAgain;
 
-    if (Level < 3) {
-        nextButtonText = L"Следующий рубеж";
-        currentAttack = L"Вы успешно отразили " + std::to_wstring(Level) + L" атаку!";
-        nextAttack = L"Теперь враг рвётся с другого направления";
-        tryAgain = L"Попробовать снова";
-        nextAction = []() {
-            IS_RESTART = 1;
-            };
-    }
-    else {
-        nextButtonText = L"Завершить игру";
-        currentAttack = L"Вы успешно отразили все атаки!";
-        nextAttack = L"Враг полностью повержен";
-        tryAgain = L"Начать заново";
-        nextAction = []() { IS_RESTART = 1; };
-    }
+    nextButtonText = L"Следующий рубеж";
+    currentAttack = L"Вы успешно отразили " + std::to_wstring(Level) + L" атаку!";
+    nextAttack = L"Теперь враг рвётся с другого направления";
+    tryAgain = L"Попробовать снова";
+    nextAction = []() {
+        IS_RESTART = 1;
+    };
 
     std::vector<MenuItem> winMenu = {
         MenuItem(currentAttack, font, 24, {centerX, startY - 50.f}, []() {}, true,
@@ -286,14 +277,14 @@ void renderWin(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level
         MenuItem(nextButtonText, font, 32, {centerX, startY + 3 * itemSpacing}, nextAction, false,
         sf::Color(100, 255, 100), sf::Color(0, 255, 0)),
 
-        MenuItem(tryAgain, font, 32, {centerX, startY + 4 * itemSpacing}, [&gameState]() { LEVEL--; IS_RESTART = 1; }, false,
+        MenuItem(tryAgain, font, 32, {centerX, startY + 5 * itemSpacing}, [&gameState]() { LEVEL--; IS_RESTART = 1; }, false,
         sf::Color(255, 255, 100), sf::Color(255, 255, 0)),
 
-        MenuItem(L"Техническая информация:", font, 16, {centerX, startY + 5 * itemSpacing}, []() {}, true,
-        sf::Color(200, 200, 200), sf::Color(200, 200, 200)),
+        //MenuItem(L"Техническая информация:", font, 16, {centerX, startY + 5 * itemSpacing}, []() {}, true,
+        //sf::Color(200, 200, 200), sf::Color(200, 200, 200)),
 
-        MenuItem(L"Оператор: Alex, Убито мобов: 42", font, 14, {centerX, startY + 6 * itemSpacing}, []() {}, true,//-------------------------------------------------------ЧЗНХ + добавь вместо имени ID оператора
-        sf::Color(150, 150, 150), sf::Color(150, 150, 150)),//специально для тебя чтоб правильно подсасывал externОМ обьявил TIME_STAMP_SCORE в game.h (ключ к текущим статам нашего игрока)
+        //MenuItem(L"Оператор: Alex, Убито мобов: 42", font, 14, {centerX, startY + 6 * itemSpacing}, []() {}, true,//-------------------------------------------------------ЧЗНХ + добавь вместо имени ID оператора
+        //sf::Color(150, 150, 150), sf::Color(150, 150, 150)),//специально для тебя чтоб правильно подсасывал externОМ обьявил TIME_STAMP_SCORE в game.h (ключ к текущим статам нашего игрока)
 
         MenuItem(L"Оставить на произвол судьбы", font, 24, {centerX, startY + 8 * itemSpacing}, [&window]() { window->close(); }, false,
         sf::Color(255, 100, 100), sf::Color(255, 0, 0))
@@ -310,9 +301,6 @@ void renderWin(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level
             if (event.type == sf::Event::Closed) {
                 window->close();
                 menuActive = false;
-            }
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-                //menuActive = false;//ТЫ ДАУН и тут это нах не надо
             }
             if (event.type == sf::Event::MouseButtonPressed &&
                 event.mouseButton.button == sf::Mouse::Left) {

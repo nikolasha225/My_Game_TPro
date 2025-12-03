@@ -119,7 +119,7 @@ int main(int argc, char* argv[])
                     GAME_STATE = WIN;
                 break;
             }
-            if (HEALTH <= 0)
+            if (HEALTH <= 0 || (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::L))
                 GAME_STATE = LOSE;
         }
 
