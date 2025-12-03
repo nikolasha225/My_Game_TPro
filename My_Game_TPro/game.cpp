@@ -870,8 +870,8 @@ void sendAltTab() {
 
 void writeScore(OBJStack* stack, long int id)
 {
-    bool isLose = id < 0;
-    id = abs(id);
+    bool isWin = id%10;
+    id /= 10;
     float totalDamage = 0;
     unsigned totalMobs[6] = { 0,0,0,0,0,0 };
     unsigned totalTime = 0;
@@ -956,7 +956,7 @@ void writeScore(OBJStack* stack, long int id)
     }
 
     // Результат игры
-    if (isLose) {
+    if (!isWin) {
         scoreData["game_result"] = "lose";
     }
     else {

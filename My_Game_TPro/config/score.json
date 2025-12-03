@@ -324,6 +324,33 @@
                     "dr_web": 0,
                     "kaspersky": 0
                 }
+            },
+            "17647922063974911": {
+                "difficulty": 1,
+                "enemies": {
+                    "basic": 8,
+                    "boss": 0,
+                    "fast": 29,
+                    "mini_boss": 0,
+                    "tank": 0,
+                    "total_killed": 37
+                },
+                "game_result": "lose",
+                "game_stats": {
+                    "remaining_health": 100.0,
+                    "remaining_money": 210,
+                    "total_damage_dealt": 4100.0,
+                    "total_time_seconds": 5
+                },
+                "level": 1,
+                "resolution_x": 1920.0,
+                "resolution_y": 1080.0,
+                "towers": {
+                    "avast": 0,
+                    "defender": 0,
+                    "dr_web": 0,
+                    "kaspersky": 1
+                }
             }
         },
         "123": {

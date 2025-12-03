@@ -156,7 +156,7 @@ int main(int argc, char* argv[])
         case LOSE:
             SOUND.setBuffer(SOUND_BUFFER_LOSE);
             SOUND.play();
-            writeScore(&OBJ_STACK, (- 1)* __id);
+            writeScore(&OBJ_STACK, __id * 10 + 0);
             GAME_STATE = END_GAME;
             HEALTH = 100;
             renderLose(&window, GAME_STATE, LEVEL, drawGameBackground);
@@ -175,7 +175,7 @@ int main(int argc, char* argv[])
         }
 
         if (IS_RESTART) {
-            writeScore(&OBJ_STACK, __id);
+            writeScore(&OBJ_STACK, __id*10 + 1);
             restartWithNewLevel();
         }
 
