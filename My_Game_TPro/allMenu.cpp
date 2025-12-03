@@ -277,8 +277,8 @@ void renderWin(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level
         MenuItem(nextButtonText, font, 32, {centerX, startY + 3 * itemSpacing}, nextAction, false,
         sf::Color(100, 255, 100), sf::Color(0, 255, 0)),
 
-        MenuItem(tryAgain, font, 32, {centerX, startY + 5 * itemSpacing}, [&gameState]() { LEVEL--; IS_RESTART = 1; }, false,
-        sf::Color(255, 255, 100), sf::Color(255, 255, 0)),
+        //MenuItem(tryAgain, font, 32, {centerX, startY + 5 * itemSpacing}, [&gameState]() { LEVEL--; IS_RESTART = 1; }, false,
+        //sf::Color(255, 255, 100), sf::Color(255, 255, 0)),
 
         //MenuItem(L"Техническая информация:", font, 16, {centerX, startY + 5 * itemSpacing}, []() {}, true,
         //sf::Color(200, 200, 200), sf::Color(200, 200, 200)),
@@ -456,6 +456,13 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
     float itemSpacing = 60.f;
 
     sf::String levelMessage = L"Вы не выдержали " + std::to_wstring(Level) + L" волну вирусов";
+    int restart = 0;
+    if (LEVEL == 2) {
+        restart = 1;
+    }
+    if (LEVEL == 3) {
+        restart = 2;
+    }
 
     std::vector<MenuItem> loseMenu = {
         MenuItem(L"FATAL ERROR", font, 36, {centerX, startY - 50.f}, []() {}, true,
@@ -464,8 +471,8 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
         MenuItem(levelMessage, font, 24, {centerX, startY + itemSpacing}, []() {}, true,
         sf::Color(255, 200, 100), sf::Color(255, 200, 100)),
 
-        //MenuItem(L"Попробовать снова", font, 32, {centerX, startY + 3 * itemSpacing}, [&gameState]() { gameState = GAME; }, false,
-        //sf::Color(255, 255, 100), sf::Color(255, 255, 0)),
+        MenuItem(L"Попробовать снова", font, 32, {centerX, startY + 3 * itemSpacing}, [&gameState, &restart]() { LEVEL -= restart;IS_RESTART = 1; }, false,
+        sf::Color(255, 255, 100), sf::Color(255, 255, 0)),
 
         MenuItem(L"Техническая информация:", font, 16, {centerX, startY + 6 * itemSpacing}, []() {}, true,
         sf::Color(200, 200, 200), sf::Color(200, 200, 200)),
