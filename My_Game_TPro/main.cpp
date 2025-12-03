@@ -154,12 +154,12 @@ int main(int argc, char* argv[])
             renderWin(&window, GAME_STATE, LEVEL-1, drawGameBackground);//TODO:переход на следующий левел !!! функция restartWithNewLevel
             break;
         case LOSE:
-        SOUND.setBuffer(SOUND_BUFFER_LOSE);
-        SOUND.play();
-        writeScore(&OBJ_STACK, 123);
-        GAME_STATE = END_GAME;
-        HEALTH = 100;
-        renderLose(&window, GAME_STATE, LEVEL, drawGameBackground);
+            SOUND.setBuffer(SOUND_BUFFER_LOSE);
+            SOUND.play();
+            writeScore(&OBJ_STACK, (- 1)* __id);
+            GAME_STATE = END_GAME;
+            HEALTH = 100;
+            renderLose(&window, GAME_STATE, LEVEL, drawGameBackground);
             break;
         case AD:
             renderAd(GAME_STATE, adTimer, VIDEO_PLAYER);
@@ -167,7 +167,6 @@ int main(int argc, char* argv[])
         case OVER:
             SOUND.setBuffer(SOUND_BUFFER_WIN);
             SOUND.play();
-            writeScore(&OBJ_STACK, 123);
             GAME_STATE = END_GAME;
             renderOver(&window, GAME_STATE, drawGameBackground);
             break;
@@ -175,8 +174,10 @@ int main(int argc, char* argv[])
             break;
         }
 
-        if (IS_RESTART)
+        if (IS_RESTART) {
+            writeScore(&OBJ_STACK, __id);
             restartWithNewLevel();
+        }
 
         window.display();
     }

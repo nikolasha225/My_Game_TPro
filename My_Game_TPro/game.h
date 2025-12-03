@@ -200,4 +200,4 @@ bool vatchAD(VideoPlayer* player);
 
 void sendAltTab();
 
-void writeScore(OBJStack* stack, unsigned id);
+void writeScore(OBJStack* stack, long int id);

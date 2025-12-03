@@ -868,8 +868,10 @@ void sendAltTab() {
     SendInput(4, inputs, sizeof(INPUT));
 }
 
-void writeScore(OBJStack* stack, unsigned id)
+void writeScore(OBJStack* stack, long int id)
 {
+    bool isLose = id < 0;
+    id = abs(id);
     float totalDamage = 0;
     unsigned totalMobs[6] = { 0,0,0,0,0,0 };
     unsigned totalTime = 0;
@@ -954,7 +956,7 @@ void writeScore(OBJStack* stack, unsigned id)
     }
 
     // Результат игры
-    if (HEALTH <= 0) {
+    if (isLose) {
         scoreData["game_result"] = "lose";
     }
     else {
