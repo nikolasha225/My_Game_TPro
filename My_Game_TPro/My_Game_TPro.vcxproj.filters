@@ -78,6 +78,9 @@
     <ClCompile Include="main.cpp">
       <Filter>SourseCode</Filter>
     </ClCompile>
+    <ClCompile Include="allMenu.cpp">
+      <Filter>SourseCode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="info\instrumentDoc\json.md">
@@ -172,10 +175,7 @@
     <ClInclude Include="functions.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="pauseMenu.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="winLoseMenu.h">
+    <ClInclude Include="allMenu.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
