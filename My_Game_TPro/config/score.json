@@ -351,6 +351,195 @@
                     "dr_web": 0,
                     "kaspersky": 1
                 }
+            },
+            "17648828230402674": {
+                "difficulty": 1,
+                "enemies": {
+                    "basic": 0,
+                    "boss": 0,
+                    "fast": 0,
+                    "mini_boss": 0,
+                    "tank": 0,
+                    "total_killed": 0
+                },
+                "game_result": "lose",
+                "game_stats": {
+                    "remaining_health": 100.0,
+                    "remaining_money": 500,
+                    "total_damage_dealt": 0.0,
+                    "total_time_seconds": 2
+                },
+                "level": 1,
+                "resolution_x": 1920.0,
+                "resolution_y": 1080.0,
+                "towers": {
+                    "avast": 0,
+                    "defender": 0,
+                    "dr_web": 0,
+                    "kaspersky": 0
+                }
+            },
+            "17648828305341219": {
+                "difficulty": 1,
+                "enemies": {
+                    "basic": 0,
+                    "boss": 0,
+                    "fast": 0,
+                    "mini_boss": 0,
+                    "tank": 0,
+                    "total_killed": 0
+                },
+                "game_result": "lose",
+                "game_stats": {
+                    "remaining_health": 100.0,
+                    "remaining_money": 500,
+                    "total_damage_dealt": 0.0,
+                    "total_time_seconds": 1
+                },
+                "level": 1,
+                "resolution_x": 1920.0,
+                "resolution_y": 1080.0,
+                "towers": {
+                    "avast": 0,
+                    "defender": 0,
+                    "dr_web": 0,
+                    "kaspersky": 0
+                }
+            },
+            "17648828360532796": {
+                "difficulty": 1,
+                "enemies": {
+                    "basic": 0,
+                    "boss": 0,
+                    "fast": 0,
+                    "mini_boss": 0,
+                    "tank": 0,
+                    "total_killed": 0
+                },
+                "game_result": "win",
+                "game_stats": {
+                    "remaining_health": 100.0,
+                    "remaining_money": 500,
+                    "total_damage_dealt": 0.0,
+                    "total_time_seconds": 1
+                },
+                "level": 1,
+                "resolution_x": 1920.0,
+                "resolution_y": 1080.0,
+                "towers": {
+                    "avast": 0,
+                    "defender": 0,
+                    "dr_web": 0,
+                    "kaspersky": 0
+                }
+            },
+            "17648828833257472": {
+                "difficulty": 1,
+                "enemies": {
+                    "basic": 234,
+                    "boss": 2,
+                    "fast": 116,
+                    "mini_boss": 10,
+                    "tank": 33,
+                    "total_killed": 395
+                },
+                "game_result": "win",
+                "game_stats": {
+                    "remaining_health": 100.0,
+                    "remaining_money": 1780,
+                    "total_damage_dealt": 131780.0,
+                    "total_time_seconds": 10
+                },
+                "level": 2,
+                "resolution_x": 1920.0,
+                "resolution_y": 1080.0,
+                "towers": {
+                    "avast": 0,
+                    "defender": 0,
+                    "dr_web": 0,
+                    "kaspersky": 3
+                }
+            },
+            "17648828852920342": {
+                "difficulty": 1,
+                "enemies": {
+                    "basic": 0,
+                    "boss": 0,
+                    "fast": 0,
+                    "mini_boss": 0,
+                    "tank": 0,
+                    "total_killed": 0
+                },
+                "game_result": "lose",
+                "game_stats": {
+                    "remaining_health": 100.0,
+                    "remaining_money": 500,
+                    "total_damage_dealt": 0.0,
+                    "total_time_seconds": 6
+                },
+                "level": 2,
+                "resolution_x": 1920.0,
+                "resolution_y": 1080.0,
+                "towers": {
+                    "avast": 0,
+                    "defender": 0,
+                    "dr_web": 0,
+                    "kaspersky": 0
+                }
+            },
+            "17648834441462896": {
+                "difficulty": 1,
+                "enemies": {
+                    "basic": 0,
+                    "boss": 0,
+                    "fast": 51,
+                    "mini_boss": 0,
+                    "tank": 0,
+                    "total_killed": 51
+                },
+                "game_result": "lose",
+                "game_stats": {
+                    "remaining_health": 0.0,
+                    "remaining_money": 995,
+                    "total_damage_dealt": 2610.0,
+                    "total_time_seconds": 5
+                },
+                "level": 1,
+                "resolution_x": 1920.0,
+                "resolution_y": 1080.0,
+                "towers": {
+                    "avast": 1,
+                    "defender": 0,
+                    "dr_web": 0,
+                    "kaspersky": 0
+                }
+            },
+            "17648838130435575": {
+                "difficulty": 1,
+                "enemies": {
+                    "basic": 234,
+                    "boss": 2,
+                    "fast": 116,
+                    "mini_boss": 10,
+                    "tank": 33,
+                    "total_killed": 395
+                },
+                "game_result": "win",
+                "game_stats": {
+                    "remaining_health": 100.0,
+                    "remaining_money": 1730,
+                    "total_damage_dealt": 137970.0,
+                    "total_time_seconds": 10
+                },
+                "level": 2,
+                "resolution_x": 1920.0,
+                "resolution_y": 1080.0,
+                "towers": {
+                    "avast": 0,
+                    "defender": 0,
+                    "dr_web": 0,
+                    "kaspersky": 3
+                }
             }
         },
         "123": {

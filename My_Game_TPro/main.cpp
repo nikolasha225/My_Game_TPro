@@ -136,9 +136,9 @@ int main(int argc, char* argv[])
 
             OBJ_STACK.draw(&window);
 
-            (TIME <= 0) ? (0) : (TIME--);
+            (TIME <= 0) ? (TIME+=60) : (TIME--);
 
-            GAME_STATE = ((TIME > 0) || OBJ_STACK.getStackOfType(enemy).size()) ? (GAME_STATE) : (NEXT_LEVEL);
+            GAME_STATE = ((TIME < 10) && !OBJ_STACK.getStackOfType(enemy).size()) ? (WIN) : (GAME_STATE) ;
             GAME_STATE = (HEALTH > 0) ? (GAME_STATE) : (LOSE);
 
             break;
