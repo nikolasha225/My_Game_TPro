@@ -1,5 +1,7 @@
 #include "game.h"
 
+unsigned long long TIME_STAMP_SCORE;
+
 //==============================SPAWNER===================================
 Spawner::Spawner(sf::RenderWindow* window, OBJStack* stack)
 {
@@ -248,41 +250,50 @@ void TowerManager::checkEvents(sf::RenderWindow* window)
                 break;
             }
 
+            bool isTowerSelected = false;
             for (auto& cell : place->BUY_MENU) {
-                if (cell->NUMBER > Tower::kaspersky && mouseInButton(cell->getCellShapePtr(), window)) {
-                    if (cell->NUMBER == Tower::upgradedTower) {
-
-                        if (place->TOWER->upgrade()) {
-                            place->SOUND.setBuffer(place->SOUND_BUFF_UPGRADE);
-                            place->SOUND.play();
-                        }
-                        else {
-                            place->SOUND.setBuffer(place->SOUND_BUFF_ERROR);
-                            place->SOUND.play();
-                        }
-                    }
-                    else if (cell->NUMBER == Tower::deletedTower) {
-                        place->SOUND.setBuffer(place->SOUND_BUFF_DELETE);
-                        place->SOUND.play();
-                        MONEY += (float)JSONSettings["TOWER"][towerTypes[place->TOWER->getTowerType()]]["price"]
-                            * (float)JSONSettings["TOWER"]["removeCoef"];
-                        if (place->TOWER != nullptr) {
-                            STACK->remove(place->TOWER);
-                            //delete place->TOWER;
-                            place->TOWER = nullptr;
-                        }
-                        place->STATE = Place::placeState::empty;
-                        for (auto& menuCell : place->BUY_MENU) {
-                            menuCell->unselect();
-                        }
-                    }
-                    clickedOnSomething = true;
-                    clickedPlace = place;
-                    place->unselectPlace();
+                if (cell->STATE == DownCell::selectFatherTower) {
+                    isTowerSelected = true;
                     break;
                 }
             }
-            if (clickedOnSomething) break;
+            if (isTowerSelected) {
+                for (auto& cell : place->BUY_MENU) {
+                    if (cell->NUMBER > Tower::kaspersky && mouseInButton(cell->getCellShapePtr(), window)) {
+                        if (cell->NUMBER == Tower::upgradedTower) {
+
+                            if (place->TOWER->upgrade()) {
+                                place->SOUND.setBuffer(place->SOUND_BUFF_UPGRADE);
+                                place->SOUND.play();
+                            }
+                            else {
+                                place->SOUND.setBuffer(place->SOUND_BUFF_ERROR);
+                                place->SOUND.play();
+                            }
+                        }
+                        else if (cell->NUMBER == Tower::deletedTower) {
+                            place->SOUND.setBuffer(place->SOUND_BUFF_DELETE);
+                            place->SOUND.play();
+                            MONEY += (float)JSONSettings["TOWER"][towerTypes[place->TOWER->getTowerType()]]["price"]
+                                * (float)JSONSettings["TOWER"]["removeCoef"];
+                            if (place->TOWER != nullptr) {
+                                STACK->remove(place->TOWER);
+                                //delete place->TOWER;
+                                place->TOWER = nullptr;
+                            }
+                            place->STATE = Place::placeState::empty;
+                            for (auto& menuCell : place->BUY_MENU) {
+                                menuCell->unselect();
+                            }
+                        }
+                        clickedOnSomething = true;
+                        clickedPlace = place;
+                        place->unselectPlace();
+                        break;
+                    }
+                }
+                if (clickedOnSomething) break;
+            }
         }
     }
     if (clickedOnSomething) {
@@ -668,6 +679,8 @@ void TowerManager::DownCell::draw(sf::RenderWindow* window) {
         break;
     case TowerManager::DownCell::selectFatherTower:
         if (NUMBER > Tower::kaspersky) {
+            if (FATHER->TOWER->getLevel() == 5 && NUMBER == Tower::upgradedTower)
+                return;
             window->draw(MANAGER);
             window->draw(OBJ_PRICE);
             window->draw(TEXT_PRICE);
@@ -855,8 +868,10 @@ void sendAltTab() {
     SendInput(4, inputs, sizeof(INPUT));
 }
 
-void writeScore(OBJStack* stack, unsigned id)
+void writeScore(OBJStack* stack, long int id)
 {
+    bool isWin = id%10;
+    id /= 10;
     float totalDamage = 0;
     unsigned totalMobs[6] = { 0,0,0,0,0,0 };
     unsigned totalTime = 0;
@@ -906,6 +921,7 @@ void writeScore(OBJStack* stack, unsigned id)
 
     // Основная информация о сессии
     unsigned long long timestamp = std::chrono::system_clock::now().time_since_epoch().count();
+    TIME_STAMP_SCORE = timestamp;
     scoreData["level"] = LEVEL;
     scoreData["difficulty"] = DIFFICULT;
     scoreData["resolution_x"] = RESOLUTION.x;
@@ -940,7 +956,7 @@ void writeScore(OBJStack* stack, unsigned id)
     }
 
     // Результат игры
-    if (HEALTH <= 0) {
+    if (!isWin) {
         scoreData["game_result"] = "lose";
     }
     else {

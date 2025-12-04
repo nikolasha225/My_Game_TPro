@@ -12,7 +12,7 @@
   "GAME": {
     "startHP": [ 100, 60, 30 ],
     "startMoney": [ 500, 300, 200 ],
-    "roundTimeSec": [ 600, 700, 800 ],
+    "roundTimeSec": [ 5, 5, 5 ],
     "soundRound": [ "./sound/round1.ogg", "./sound/round2.ogg", "./sound/round3.ogg" ],
     "soundVictory": "./sound/victory.ogg",
     "soundLose": "./sound/lose.ogg",
@@ -22,7 +22,9 @@
     "soundDelete": "./sound/delete.ogg",
     "textureMap": [ "./textures/img/first.png", "./textures/img/second.png", "./textures/img/third.png" ],
     "videoAD": [ "./textures/video/ad_01.avi", "./textures/video/ad_03.avi", "./textures/video/ad_04.avi", "./textures/video/ad_05.avi", "./textures/video/ad_06.avi", "./textures/video/ad_07.avi", "./textures/video/ad_08.avi", "./textures/video/ad_09.avi" ],
-    "countOfAd": 8
+    "countOfAd": 8,
+    "adPrice": 25,
+    "adDelay": 300
   },
   "ENEMY": {
     "difficultCoeficent": [ 1, 1.2, 1.5 ],

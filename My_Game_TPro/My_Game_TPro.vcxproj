@@ -76,10 +76,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)SFML-2.6.2-windows-vc17-64-bit\SFML-2.6.2\include;$(ProjectDir)JSON_Libray\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>$(ProjectDir)SFML-2.6.2-windows-vc17-64-bit\SFML-2.6.2\lib</OutputFile>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-audio-d.lib;sfml-system-d.lib;sfml-network-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -105,7 +108,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)JSON_Libray\include;$(ProjectDir)SFML-2.6.2-windows-vc17-64-bit\SFML-2.6.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)SFML-2.6.2-windows-vc17-64-bit\SFML-2.6.2\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-audio-d.lib;sfml-system-d.lib;sfml-network-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -130,8 +133,7 @@
     <ClCompile Include="functions.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="pauseMenu.cpp" />
-    <ClCompile Include="winLoseMenu.cpp" />
+    <ClCompile Include="allMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config\score.json" />
@@ -166,8 +168,7 @@
   <ItemGroup>
     <ClInclude Include="functions.h" />
     <ClInclude Include="game.h" />
-    <ClInclude Include="pauseMenu.h" />
-    <ClInclude Include="winLoseMenu.h" />
+    <ClInclude Include="allMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\debug\base.png" />
