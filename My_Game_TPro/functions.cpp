@@ -699,7 +699,6 @@ void OBJStack::draw(sf::RenderWindow* window)
 			obj->setPos(pos);
 			obj->setSize(size);
 		}
-	drawGraph(window);
 }
 
 void OBJStack::sortByLayer()
@@ -852,10 +851,8 @@ Core::Core()
 			JSONSettings["GUI"]["money"]["position"][1]
 		)
 	);
-
-	//----------------------------HP
 }
-//----------------------------------HP
+
 void Core::tick()
 {
 	TICK_COUNTER += (TICK_COUNTER < TICK_DAMAGE);
@@ -903,7 +900,8 @@ void Core::tick()
 		)
 	);
 
-	//-----------------hp
+	// Обновляем график здоровья
+	healthGraph.update(HEALTH);
 }
 
 EnumGameObjects Core::getTypeObjet()
@@ -916,6 +914,7 @@ void Core::draw(sf::RenderWindow* window)
 	window->draw(CORE);
 	window->draw(CAVE);
 	window->draw(TEXT_MONEY);
+	healthGraph.draw(*window);
 }
 
 uint8_t Core::getLayer()
@@ -1152,47 +1151,36 @@ float getWayLength(std::vector<sf::Vector2f> pathPoints)
 }
 
 
-//sf::Clock graphClock;
+//============================GRAPH========================================
 
-void drawGraph(sf::RenderWindow* window) {
-	static std::deque<sf::Vector2f> points;
+Graph::Graph() :
+	graphWidth(1920 * 0.26f),
+	graphHeight(1080 * 0.16f),
+	startX(1620 - graphWidth),
+	startY(40),
+	graphAreaX(startX + graphWidth * 0.05f),
+	graphAreaWidth(graphWidth * 0.9f),
+	textureLoaded(false),
+	lastUpdateTime(-1)
+{
+	if (frameTexture.loadFromFile(JSONSettings["CORE"]["graphFrame"])) {
+		textureLoaded = true;
+	}
+}
 
-	// Базовые параметры в координатах 1920x1080, потом масштабируем
-	const float graphWidth = 1920 * 0.26f;
-	const float graphHeight = 1080 * 0.16f;
-	const float startX = 1620 - graphWidth;
-	const float startY = 40;
+void Graph::update(float health) {
+	// Обновляем только каждые 10 тиков и если время изменилось
+	if (TIME % 10 == 0 && TIME != lastUpdateTime) {
+		float normalizedValue = std::max(0.0f, std::min(100.0f, 100.0f - health));
 
-	const float graphAreaX = startX + graphWidth * 0.05f;
-	const float graphAreaWidth = graphWidth * 0.9f;
-
-
-	// Загрузка фоновой текстуры (один раз при первом вызове)
-	static sf::Texture frameTexture;
-
-	frameTexture.loadFromFile(JSONSettings["CORE"]["graphFrame"]);
-
-
-	// Сначала рисуем чёрный непрозрачный прямоугольник под сетку (можно убрать, получим полупрозрачный график)
-	sf::RectangleShape background(getNewCoordinate(sf::Vector2f(graphAreaWidth, graphHeight)));
-	background.setPosition(getNewCoordinate(sf::Vector2f(graphAreaX, startY)));
-	background.setFillColor(sf::Color::Black);
-	window->draw(background);
-
-	// Обновление данных каждые 500ms //тайм у нас = тотал фпс тобишь количество игровых секунд * количество кардров в секунду
-	//if (graphClock.getElapsedTime().asMilliseconds() >= 500) {
-	if (TIME%10== 0) {//оставь такую частоту обновления
-		float normalizedValue = (100.0f - HEALTH);
-
-		// Добавляем случайную погрешность 2% от значения
+		// Добавляем случайную погрешность ±2%
 		float noise = RAND_FLOAT(-2.0f, 2.0f);
 		float valueWithNoise = normalizedValue + noise;
-
-		// Ограничиваем значение с погрешностью
 		valueWithNoise = std::max(0.0f, std::min(100.0f, valueWithNoise));
 
 		float yPos = startY + graphHeight - (valueWithNoise / 100.0f * graphHeight);
 
+		// Добавляем новую точку
 		points.push_back(sf::Vector2f(startX + graphWidth, yPos));
 
 		// Сдвигаем все точки на 5% ширины за обновление
@@ -1203,14 +1191,22 @@ void drawGraph(sf::RenderWindow* window) {
 
 		// Удаляем точки, которые ушли за левый край
 		points.erase(std::remove_if(points.begin(), points.end(),
-			[startX](const sf::Vector2f& p) {
+			[this](const sf::Vector2f& p) {
 				return p.x < startX;
 			}), points.end());
 
-		//graphClock.restart();
+		lastUpdateTime = TIME;
 	}
+}
 
-	// Отрисовка сетки графика
+void Graph::draw(sf::RenderWindow& window) {
+	// Черный фон под график
+	sf::RectangleShape background(getNewCoordinate(sf::Vector2f(graphAreaWidth, graphHeight)));
+	background.setPosition(getNewCoordinate(sf::Vector2f(graphAreaX, startY)));
+	background.setFillColor(sf::Color::Black);
+	window.draw(background);
+
+	// Сетка графика
 	sf::Color gridColor(0, 190, 0, 100);
 	float lineThickness = 3.0f;
 
@@ -1219,52 +1215,56 @@ void drawGraph(sf::RenderWindow* window) {
 		float y = startY + (graphHeight / 10.0f) * i;
 
 		sf::RectangleShape hLine(sf::Vector2f(graphAreaWidth, lineThickness));
-		hLine.setPosition(/*getNewCoordinate*/(sf::Vector2f(graphAreaX, y - lineThickness)));
+		hLine.setPosition(getNewCoordinate(sf::Vector2f(graphAreaX, y - lineThickness / 2)));
 		hLine.setFillColor(gridColor);
-		window->draw(hLine);
+		window.draw(hLine);
 
-		// Вертикальные линии 
+		// Вертикальные линии
 		float x = graphAreaX + (graphAreaWidth / 10.0f) * i;
 
 		sf::RectangleShape vLine(sf::Vector2f(lineThickness, graphHeight));
-		vLine.setPosition(/*getNewCoordinate*/(sf::Vector2f(x - lineThickness, startY)));
+		vLine.setPosition(getNewCoordinate(sf::Vector2f(x - lineThickness / 2, startY)));
 		vLine.setFillColor(gridColor);
-		window->draw(vLine);
+		window.draw(vLine);
 	}
 
-
-	// Отрисовка линии графика и заполненной области под графиком
+	// Отрисовка линии графика и заполненной области
 	if (points.size() >= 2) {
 		sf::VertexArray area(sf::TriangleStrip);
 
 		for (size_t i = 0; i < points.size(); ++i) {
-			// Верхняя точка (линия графика)
+			// Верхняя точка
 			area.append(sf::Vertex(
-				/*getNewCoordinate*/(points[i]),
+				getNewCoordinate(points[i]),
 				sf::Color(0, 190, 0, 100)
 			));
-			// Нижняя точка (основание)
+			// Нижняя точка
 			area.append(sf::Vertex(
-				/*getNewCoordinate*/(sf::Vector2f(points[i].x, startY + graphHeight)),
+				getNewCoordinate(sf::Vector2f(points[i].x, startY + graphHeight)),
 				sf::Color(0, 190, 0, 100)
 			));
 		}
-		window->draw(area);
+		window.draw(area);
 
+		// Линия графика
 		sf::VertexArray line(sf::LineStrip);
 		for (const auto& point : points) {
-			line.append(sf::Vertex(/*getNewCoordinate*/(point), sf::Color(0, 190, 0, 100)
+			line.append(sf::Vertex(
+				getNewCoordinate(point),
+				sf::Color(0, 190, 0, 100)
 			));
 		}
-		window->draw(line);
+		window.draw(line);
 	}
 
-	// Отрисовка рамки графика
-	sf::Sprite frameSprite(frameTexture);
-	frameSprite.setPosition(/*getNewCoordinate*/(sf::Vector2f(graphAreaX * 0.95f, -110)));
-	frameSprite.setScale(
-		/*getNewCoordinate*/(sf::Vector2f(graphAreaWidth, graphHeight)).x / frameTexture.getSize().x * 1.25f,
-		/*getNewCoordinate*/(sf::Vector2f(graphAreaWidth, graphHeight)).y / frameTexture.getSize().y * 2.75f
-	);
-	window->draw(frameSprite);
+	// Рамка графика
+	if (textureLoaded) {
+		sf::Sprite frameSprite(frameTexture);
+		frameSprite.setPosition(getNewCoordinate(sf::Vector2f(graphAreaX * 0.95f, -110)));
+		frameSprite.setScale(
+			getNewCoordinate(sf::Vector2f(graphAreaWidth, graphHeight)).x / frameTexture.getSize().x * 1.25f,
+			getNewCoordinate(sf::Vector2f(graphAreaWidth, graphHeight)).y / frameTexture.getSize().y * 2.75f
+		);
+		window.draw(frameSprite);
+	}
 }

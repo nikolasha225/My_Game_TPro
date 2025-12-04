@@ -413,6 +413,33 @@ private:
 	std::vector<IGameObject*> deleted;
 };
 
+//==========================================GRAPH====================================
+
+class Graph {
+private:
+	std::deque<sf::Vector2f> points;
+
+	// Параметры графика (вычисляются один раз при создании)
+	const float graphWidth;
+	const float graphHeight;
+	const float startX;
+	const float startY;
+	const float graphAreaX;
+	const float graphAreaWidth;
+
+	// Ресурсы
+	sf::Texture frameTexture;
+	bool textureLoaded;
+
+	// Время последнего обновления
+	int lastUpdateTime;
+
+public:
+	Graph();
+	void update(float health);
+	void draw(sf::RenderWindow& window);
+};
+
 //==========================================CORE====================================
 
 class Core :public IGameObject
@@ -438,7 +465,6 @@ public:
 
 	bool isDamaged();
 
-	//функции для хп-----------------------------------------------------
 
 private:
 	sf::RectangleShape CORE;
@@ -457,7 +483,8 @@ private:
 
 	sf::Text TEXT_MONEY;
 	
-	//вывод хп-------------------------------------------------------------------
+	// Добавляем график
+	Graph healthGraph;
 };
 
 //=========================================MAP======================================
