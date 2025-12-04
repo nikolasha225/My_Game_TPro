@@ -147,8 +147,8 @@ int main(int argc, char* argv[])
             renderPause(&window, GAME_STATE, drawGameBackground, adTimer);
             break;
         case WIN:
-        SOUND.setBuffer(SOUND_BUFFER_WIN);
-        SOUND.play();
+            SOUND.setBuffer(SOUND_BUFFER_WIN);
+            SOUND.play();
             LEVEL++;
             renderWin(&window, GAME_STATE, LEVEL-1, drawGameBackground);//TODO:переход на следующий левел !!! функция restartWithNewLevel
             break;
