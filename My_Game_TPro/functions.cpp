@@ -11,11 +11,11 @@ json JSONSettings = json::parse(std::ifstream("./config/settings.json"));
 uint8_t LEVEL = 1;
 unsigned MONEY = 0;
 float HEALTH = 0;
-uint8_t DIFFICULT = 1; 
+uint8_t DIFFICULT = 1;
 sf::Vector2f RESOLUTION = sf::Vector2f(
 	(float)JSONSettings["GENERAL"]["resolution"][0],
 	(float)JSONSettings["GENERAL"]["resolution"][1]
-); 
+);
 
 unsigned long TIME = 0;
 unsigned long START_TIME = TIME;
@@ -78,7 +78,7 @@ void Enemy::subHP(float hp)
 				(float)JSONSettings["ENEMY"]["mobMoveDisperce"]
 			)
 		)
-	);
+		);
 }
 
 void Enemy::multVelocity(float coef)
@@ -508,7 +508,7 @@ bool Tower::getDrawStatus()
 void Tower::draw(sf::RenderWindow* window)
 {
 	window->draw(OBJ);
-	if (isPointIntoShape((sf::Vector2f)sf::Mouse::getPosition(*window), OBJ)){
+	if (isPointIntoShape((sf::Vector2f)sf::Mouse::getPosition(*window), OBJ)) {
 		window->draw(OBJ_LEVEL);
 		window->draw(TEXT_LEVEL);
 	}
@@ -555,7 +555,7 @@ void Tower::tick()
 		);
 		UPGRADE_STATE--;
 	}
-	else if(TIME % delay == 0)
+	else if (TIME % delay == 0)
 		OBJ.setFillColor(
 			sf::Color(
 				255,
@@ -563,8 +563,8 @@ void Tower::tick()
 				255
 			)
 		);
-	coefSize *= (UPGRADE_STATE > 0)?(1.2):(1);
-	OBJ.setScale(sf::Vector2f(coefSize,coefSize));
+	coefSize *= (UPGRADE_STATE > 0) ? (1.2) : (1);
+	OBJ.setScale(sf::Vector2f(coefSize, coefSize));
 }
 
 sf::RectangleShape* Tower::getShape()
@@ -576,7 +576,7 @@ Bullet* Tower::shoot(Enemy* target)
 {
 	if (!target)
 		return nullptr;
-	Bullet* newBullet = new Bullet(TYPE, target, getPos()); 
+	Bullet* newBullet = new Bullet(TYPE, target, getPos());
 	newBullet->setDamage(BULLET_DAMAGE);
 	newBullet->multVelocity(BULLET_VELOCITY_COEF);
 	STACK->add(newBullet);
@@ -601,7 +601,7 @@ Enemy* Tower::getTarget()
 			lastEnemy = ENEMY;
 		}
 	}
-	
+
 	return (getDistance(lastEnemy->getPos(), this->getPos()) <= RANGE)
 		? (lastEnemy)
 		: nullptr;
@@ -611,7 +611,7 @@ bool Tower::upgrade(uint8_t level)
 {
 	float coef = JSONSettings["TOWER"]["upgrade"][TOWER_LEVEL];
 	float price = coef * (float)JSONSettings["TOWER"][towerTypes[TYPE]]["price"];
-	if (TOWER_LEVEL + level > 5 || price> MONEY)
+	if (TOWER_LEVEL + level > 5 || price > MONEY)
 		return 0;
 	UPGRADE_STATE = 3;
 	float lastCoef = JSONSettings["TOWER"]["upgrade"][(TOWER_LEVEL > 0) ? (TOWER_LEVEL - 1) : (0)];
@@ -619,7 +619,7 @@ bool Tower::upgrade(uint8_t level)
 	TOWER_LEVEL += level;
 	BULLET_DAMAGE *= coef / lastCoef;
 	BULLET_VELOCITY_COEF *= coef / lastCoef;
-	TOWER_VELOCITY = (float) TOWER_VELOCITY / ( coef / lastCoef);
+	TOWER_VELOCITY = (float)TOWER_VELOCITY / (coef / lastCoef);
 	TEXT_LEVEL.setString(std::to_string(TOWER_LEVEL));
 	return 1;
 }
@@ -816,8 +816,8 @@ Core::Core()
 	LAST_HEALTH = HEALTH;
 	CORE.setOrigin(CORE.getSize().x / 2, CORE.getSize().y / 2);
 	CORE.setPosition(
-		wayToCoordinate(100.f) 
-		+ sf::Vector2f(0, CORE.getSize().y/2)
+		wayToCoordinate(100.f)
+		+ sf::Vector2f(0, CORE.getSize().y / 2)
 	);
 	DRAW_STATUS = 1;
 	MOVE = JSONSettings["CORE"]["coreMove"];
@@ -829,12 +829,12 @@ Core::Core()
 		)
 	);
 	CAVE.setOrigin(CAVE.getSize().x / 2, CAVE.getSize().y / 2);
-	CAVE.setPosition(wayPoints[LEVEL - 1][0] + 0.45f*sf::Vector2f(0, CAVE.getSize().y));
+	CAVE.setPosition(wayPoints[LEVEL - 1][0] + 0.45f * sf::Vector2f(0, CAVE.getSize().y));
 	TEXTURE_CAVE.loadFromFile(JSONSettings["CORE"]["caveTexture"]);
 	CAVE.setTexture(&TEXTURE_CAVE);
 
 	FONT_SEGMENT.loadFromFile(JSONSettings["CORE"]["sevenSegmentFont"]);
-	
+
 	TEXT_MONEY.setFont(FONT_SEGMENT);
 	TEXT_MONEY.setString("00000");
 	TEXT_MONEY.setCharacterSize(JSONSettings["GUI"]["money"]["fontSize"]);
@@ -851,11 +851,9 @@ Core::Core()
 			JSONSettings["GUI"]["money"]["position"][1]
 		)
 	);
-
-	//----------------------------HP
 }
-//----------------------------------HP
-void Core::tick() 
+
+void Core::tick()
 {
 	TICK_COUNTER += (TICK_COUNTER < TICK_DAMAGE);
 	TICK_COUNTER *= !isDamaged();
@@ -880,7 +878,7 @@ void Core::tick()
 		);
 	}
 
-	if(TICK_DAMAGE == TICK_COUNTER + 1)
+	if (TICK_DAMAGE == TICK_COUNTER + 1)
 		CORE.setPosition(
 			wayToCoordinate(100.f)
 			+ sf::Vector2f(0, CORE.getSize().y / 2)
@@ -898,14 +896,15 @@ void Core::tick()
 			255,
 			0,
 			0,
-			255 - abs((int)((float)TIME*1.6f) % ledCoeficent - ledCoeficent/2)
+			255 - abs((int)((float)TIME * 1.6f) % ledCoeficent - ledCoeficent / 2)
 		)
 	);
 
-	//-----------------hp
+	// Обновляем график здоровья
+	healthGraph.update(HEALTH);
 }
 
-EnumGameObjects Core::getTypeObjet() 
+EnumGameObjects Core::getTypeObjet()
 {
 	return core;
 }
@@ -915,6 +914,7 @@ void Core::draw(sf::RenderWindow* window)
 	window->draw(CORE);
 	window->draw(CAVE);
 	window->draw(TEXT_MONEY);
+	healthGraph.draw(*window);
 }
 
 uint8_t Core::getLayer()
@@ -962,7 +962,7 @@ bool Core::getDrawStatus()
 	return DRAW_STATUS;
 }
 
-IGameObject* Core::getPtr() 
+IGameObject* Core::getPtr()
 {
 	return this;
 }
@@ -983,7 +983,7 @@ bool Core::isDamaged()
 
 //============================MAP========================================
 
-Map::Map() 
+Map::Map()
 {
 	MAP.setPosition(sf::Vector2f(0, 0));
 	MAP.setSize(sf::Vector2f(1920, 1080));
@@ -1058,7 +1058,7 @@ sf::Vector2f getPositionOnPathByDistance(float pos, const std::vector<sf::Vector
 
 sf::Vector2f getNewCoordinate(sf::Vector2f pos)
 {
-	if (RESOLUTION == sf::Vector2f(1920,1080))
+	if (RESOLUTION == sf::Vector2f(1920, 1080))
 		return pos;
 	pos.x *= (float)RESOLUTION.x / 1920.f;
 	pos.y *= (float)RESOLUTION.y / 1080.f;
@@ -1125,8 +1125,8 @@ bool isPointIntoShape(sf::Vector2f point, sf::RectangleShape obj)
 {
 	sf::Vector2f pos = obj.getPosition();
 	sf::Vector2f size = obj.getSize();
-	return ((point.x > pos.x - size.x/2 && point.x < pos.x + size.x/2)
-		&& (point.y > pos.y - size.y/2 && point.y < pos.y + size.y/2));
+	return ((point.x > pos.x - size.x / 2 && point.x < pos.x + size.x / 2)
+		&& (point.y > pos.y - size.y / 2 && point.y < pos.y + size.y / 2));
 }
 
 float getWayCoeficent(uint8_t level)
@@ -1148,4 +1148,123 @@ float getWayLength(std::vector<sf::Vector2f> pathPoints)
 	}
 
 	return totalLength;
+}
+
+
+//============================GRAPH========================================
+
+Graph::Graph() :
+	graphWidth(1920 * 0.26f),
+	graphHeight(1080 * 0.16f),
+	startX(1620 - graphWidth),
+	startY(40),
+	graphAreaX(startX + graphWidth * 0.05f),
+	graphAreaWidth(graphWidth * 0.9f),
+	textureLoaded(false),
+	lastUpdateTime(-1)
+{
+	if (frameTexture.loadFromFile(JSONSettings["CORE"]["graphFrame"])) {
+		textureLoaded = true;
+	}
+}
+
+void Graph::update(float health) {
+	// Обновляем только каждые 10 тиков и если время изменилось
+	if (TIME % 10 == 0 && TIME != lastUpdateTime) {
+		float normalizedValue = std::max(0.0f, std::min(100.0f, 100.0f - health));
+
+		// Добавляем случайную погрешность ±2%
+		float noise = RAND_FLOAT(-2.0f, 2.0f);
+		float valueWithNoise = normalizedValue + noise;
+		valueWithNoise = std::max(0.0f, std::min(100.0f, valueWithNoise));
+
+		float yPos = startY + graphHeight - (valueWithNoise / 100.0f * graphHeight);
+
+		// Добавляем новую точку
+		points.push_back(sf::Vector2f(startX + graphWidth, yPos));
+
+		// Сдвигаем все точки на 5% ширины за обновление
+		float shiftAmount = graphWidth * 0.05f;
+		for (auto& point : points) {
+			point.x -= shiftAmount;
+		}
+
+		// Удаляем точки, которые ушли за левый край
+		points.erase(std::remove_if(points.begin(), points.end(),
+			[this](const sf::Vector2f& p) {
+				return p.x < startX;
+			}), points.end());
+
+		lastUpdateTime = TIME;
+	}
+}
+
+void Graph::draw(sf::RenderWindow& window) {
+	// Черный фон под график
+	sf::RectangleShape background(getNewCoordinate(sf::Vector2f(graphAreaWidth, graphHeight)));
+	background.setPosition(getNewCoordinate(sf::Vector2f(graphAreaX, startY)));
+	background.setFillColor(sf::Color::Black);
+	window.draw(background);
+
+	// Сетка графика
+	sf::Color gridColor(0, 190, 0, 100);
+	float lineThickness = 3.0f;
+
+	// Горизонтальные линии
+	for (int i = 0; i <= 10; i++) {
+		float y = startY + (graphHeight / 10.0f) * i;
+
+		sf::RectangleShape hLine(sf::Vector2f(graphAreaWidth, lineThickness));
+		hLine.setPosition(getNewCoordinate(sf::Vector2f(graphAreaX, y - lineThickness / 2)));
+		hLine.setFillColor(gridColor);
+		window.draw(hLine);
+
+		// Вертикальные линии
+		float x = graphAreaX + (graphAreaWidth / 10.0f) * i;
+
+		sf::RectangleShape vLine(sf::Vector2f(lineThickness, graphHeight));
+		vLine.setPosition(getNewCoordinate(sf::Vector2f(x - lineThickness / 2, startY)));
+		vLine.setFillColor(gridColor);
+		window.draw(vLine);
+	}
+
+	// Отрисовка линии графика и заполненной области
+	if (points.size() >= 2) {
+		sf::VertexArray area(sf::TriangleStrip);
+
+		for (size_t i = 0; i < points.size(); ++i) {
+			// Верхняя точка
+			area.append(sf::Vertex(
+				getNewCoordinate(points[i]),
+				sf::Color(0, 190, 0, 100)
+			));
+			// Нижняя точка
+			area.append(sf::Vertex(
+				getNewCoordinate(sf::Vector2f(points[i].x, startY + graphHeight)),
+				sf::Color(0, 190, 0, 100)
+			));
+		}
+		window.draw(area);
+
+		// Линия графика
+		sf::VertexArray line(sf::LineStrip);
+		for (const auto& point : points) {
+			line.append(sf::Vertex(
+				getNewCoordinate(point),
+				sf::Color(0, 190, 0, 100)
+			));
+		}
+		window.draw(line);
+	}
+
+	// Рамка графика
+	if (textureLoaded) {
+		sf::Sprite frameSprite(frameTexture);
+		frameSprite.setPosition(getNewCoordinate(sf::Vector2f(graphAreaX * 0.95f, -110)));
+		frameSprite.setScale(
+			getNewCoordinate(sf::Vector2f(graphAreaWidth, graphHeight)).x / frameTexture.getSize().x * 1.25f,
+			getNewCoordinate(sf::Vector2f(graphAreaWidth, graphHeight)).y / frameTexture.getSize().y * 2.75f
+		);
+		window.draw(frameSprite);
+	}
 }

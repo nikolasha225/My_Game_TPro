@@ -63,13 +63,19 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>SourseCode</Filter>
-    </ClCompile>
     <ClCompile Include="game.cpp">
       <Filter>SourseCode</Filter>
     </ClCompile>
+    <ClCompile Include="pauseMenu.cpp">
+      <Filter>SourseCode</Filter>
+    </ClCompile>
+    <ClCompile Include="winLoseMenu.cpp">
+      <Filter>SourseCode</Filter>
+    </ClCompile>
     <ClCompile Include="functions.cpp">
+      <Filter>SourseCode</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>SourseCode</Filter>
     </ClCompile>
     <ClCompile Include="allMenu.cpp">
@@ -278,6 +284,9 @@
     </Image>
     <Image Include="textures\img\third.png">
       <Filter>Textures\img\map</Filter>
+    </Image>
+    <Image Include="textures\img\graph_frame.png">
+      <Filter>Textures\img</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>

@@ -18,6 +18,11 @@
 #include <random>
 #include <chrono>
 
+// Очередь значений для графика
+#include <deque>
+
+//extern sf::Clock graphClock;   // Таймер для обновления графика
+
 #define M_PI 3.1416
 
 using json = nlohmann::json;
@@ -408,6 +413,33 @@ private:
 	std::vector<IGameObject*> deleted;
 };
 
+//==========================================GRAPH====================================
+
+class Graph {
+private:
+	std::deque<sf::Vector2f> points;
+
+	// Параметры графика (вычисляются один раз при создании)
+	const float graphWidth;
+	const float graphHeight;
+	const float startX;
+	const float startY;
+	const float graphAreaX;
+	const float graphAreaWidth;
+
+	// Ресурсы
+	sf::Texture frameTexture;
+	bool textureLoaded;
+
+	// Время последнего обновления
+	int lastUpdateTime;
+
+public:
+	Graph();
+	void update(float health);
+	void draw(sf::RenderWindow& window);
+};
+
 //==========================================CORE====================================
 
 class Core :public IGameObject
@@ -433,6 +465,7 @@ public:
 
 	bool isDamaged();
 
+
 private:
 	sf::RectangleShape CORE;
 	sf::Texture TEXTURE;
@@ -450,7 +483,8 @@ private:
 
 	sf::Text TEXT_MONEY;
 	
-	//вывод денег и хп
+	// Добавляем график
+	Graph healthGraph;
 };
 
 //=========================================MAP======================================
@@ -496,3 +530,5 @@ bool isPointIntoShape(sf::Vector2f point, sf::RectangleShape obj);
 float getWayCoeficent(uint8_t level = LEVEL);
 
 float getWayLength(std::vector<sf::Vector2f> pathPoints);
+
+void drawGraph(sf::RenderWindow* window);

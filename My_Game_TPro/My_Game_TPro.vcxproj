@@ -193,6 +193,7 @@
     <Image Include="textures\img\first.png" />
     <Image Include="textures\img\firstone.png" />
     <Image Include="textures\img\firsttwo.png" />
+    <Image Include="textures\img\graph_frame.png" />
     <Image Include="textures\img\icongame.png" />
     <Image Include="textures\img\kaspersky.png" />
     <Image Include="textures\img\kasperskyCell.png" />

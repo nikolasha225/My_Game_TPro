@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
     );
     window.setVerticalSyncEnabled(JSONSettings["GENERAL"]["vsync"]);
     window.setFramerateLimit(JSONSettings["GENERAL"]["framerate"]);
-    
+
     sf::Image icon;
     if (icon.loadFromFile(JSONSettings["GENERAL"]["iconPath"])) {
         window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
     SOUND_BUFFER_WIN.loadFromFile(JSONSettings["GAME"]["soundVictory"]);
     SOUND_BUFFER_LOSE.loadFromFile(JSONSettings["GAME"]["soundLose"]);
     SOUND_BUFFER_ROUND.loadFromFile(JSONSettings["GAME"]["soundRound"][LEVEL - 1]);
-    
+
     SOUND.setBuffer(SOUND_BUFFER_ROUND);
     Sleep(100);
     SOUND.play();
@@ -86,7 +86,6 @@ int main(int argc, char* argv[])
         system(command.c_str());
         exit(0); // ��������� ������� �������
         };
-
     //===========================================
     while (window.isOpen())
     {
@@ -137,7 +136,7 @@ int main(int argc, char* argv[])
 
             OBJ_STACK.draw(&window);
 
-            (TIME<=0) ? (0) : (TIME--);
+            (TIME <= 0) ? (0) : (TIME--);
 
             GAME_STATE = ((TIME > 0) || OBJ_STACK.getStackOfType(enemy).size()) ? (GAME_STATE) : (NEXT_LEVEL);
             GAME_STATE = (HEALTH > 0) ? (GAME_STATE) : (LOSE);
