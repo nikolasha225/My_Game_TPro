@@ -1201,8 +1201,8 @@ void Graph::update(float health) {
 
 void Graph::draw(sf::RenderWindow& window) {
 	// Черный фон под график
-	sf::RectangleShape background(getNewCoordinate(sf::Vector2f(graphAreaWidth, graphHeight)));
-	background.setPosition(getNewCoordinate(sf::Vector2f(graphAreaX, startY)));
+	sf::RectangleShape background(sf::Vector2f(graphAreaWidth, graphHeight));
+	background.setPosition(sf::Vector2f(graphAreaX, startY));
 	background.setFillColor(sf::Color::Black);
 	window.draw(background);
 
@@ -1215,7 +1215,7 @@ void Graph::draw(sf::RenderWindow& window) {
 		float y = startY + (graphHeight / 10.0f) * i;
 
 		sf::RectangleShape hLine(sf::Vector2f(graphAreaWidth, lineThickness));
-		hLine.setPosition(getNewCoordinate(sf::Vector2f(graphAreaX, y - lineThickness / 2)));
+		hLine.setPosition(sf::Vector2f(graphAreaX, y - lineThickness / 2));
 		hLine.setFillColor(gridColor);
 		window.draw(hLine);
 
@@ -1223,7 +1223,7 @@ void Graph::draw(sf::RenderWindow& window) {
 		float x = graphAreaX + (graphAreaWidth / 10.0f) * i;
 
 		sf::RectangleShape vLine(sf::Vector2f(lineThickness, graphHeight));
-		vLine.setPosition(getNewCoordinate(sf::Vector2f(x - lineThickness / 2, startY)));
+		vLine.setPosition(sf::Vector2f(x - lineThickness / 2, startY));
 		vLine.setFillColor(gridColor);
 		window.draw(vLine);
 	}
@@ -1235,12 +1235,12 @@ void Graph::draw(sf::RenderWindow& window) {
 		for (size_t i = 0; i < points.size(); ++i) {
 			// Верхняя точка
 			area.append(sf::Vertex(
-				getNewCoordinate(points[i]),
+				points[i],
 				sf::Color(0, 190, 0, 100)
 			));
 			// Нижняя точка
 			area.append(sf::Vertex(
-				getNewCoordinate(sf::Vector2f(points[i].x, startY + graphHeight)),
+				sf::Vector2f(points[i].x, startY + graphHeight),
 				sf::Color(0, 190, 0, 100)
 			));
 		}
@@ -1250,7 +1250,7 @@ void Graph::draw(sf::RenderWindow& window) {
 		sf::VertexArray line(sf::LineStrip);
 		for (const auto& point : points) {
 			line.append(sf::Vertex(
-				getNewCoordinate(point),
+				point,
 				sf::Color(0, 190, 0, 100)
 			));
 		}
@@ -1260,10 +1260,10 @@ void Graph::draw(sf::RenderWindow& window) {
 	// Рамка графика
 	if (textureLoaded) {
 		sf::Sprite frameSprite(frameTexture);
-		frameSprite.setPosition(getNewCoordinate(sf::Vector2f(graphAreaX * 0.95f, -110)));
+		frameSprite.setPosition(sf::Vector2f(graphAreaX * 0.95f, -110));
 		frameSprite.setScale(
-			getNewCoordinate(sf::Vector2f(graphAreaWidth, graphHeight)).x / frameTexture.getSize().x * 1.25f,
-			getNewCoordinate(sf::Vector2f(graphAreaWidth, graphHeight)).y / frameTexture.getSize().y * 2.75f
+			sf::Vector2f(graphAreaWidth, graphHeight).x / frameTexture.getSize().x * 1.25f,
+			sf::Vector2f(graphAreaWidth, graphHeight).y / frameTexture.getSize().y * 2.75f
 		);
 		window.draw(frameSprite);
 	}
