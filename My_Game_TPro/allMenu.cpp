@@ -122,7 +122,7 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::functi
     // Создаем элементы меню
     sf::String adText = L"";
     std::vector<MenuItem> pauseMenu = {
-        MenuItem(L"-->Продолжить<--", font, 36, {centerX, startY}, [&gameState]() {gameState = GAME;}, false,
+        MenuItem(L"Продолжить", font, 36, {centerX, startY}, [&gameState]() {gameState = GAME;}, false,
                 sf::Color(100, 255, 100), sf::Color(0, 255, 0)),
 
         MenuItem(L"Реклама(50 монет)", font, 36, {centerX, startY + itemSpacing}, [&gameState]() {gameState = AD;}, false,
@@ -477,7 +477,7 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
         MenuItem(L"Техническая информация:", font, 16, {centerX, startY + 6 * itemSpacing}, []() {}, true,
         sf::Color(200, 200, 200), sf::Color(200, 200, 200)),
 
-        MenuItem(L"Оператор:", font, 14, {centerX - 250.f, startY + 7 * itemSpacing - 30.f}, []() {}, true,
+        MenuItem(L"ID Оператора:", font, 14, {centerX - 250.f, startY + 7 * itemSpacing - 30.f}, []() {}, true,
         sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
 
         MenuItem(player, font, 14, {centerX + 250.f, startY + 7 * itemSpacing - 30.f}, []() {}, true,
@@ -496,7 +496,7 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
     //#######################ДЛЯ ТЕХ ИНФЫ#######################
     for (auto& item : loseMenu) {
         sf::FloatRect textBounds = item.text.getLocalBounds();
-        if (item.text.getString() == L"Оператор:" || item.text.getString() == L"Убито мобов:") {
+        if (item.text.getString() == L"ID Оператора:" || item.text.getString() == L"Убито мобов:") {
             item.text.setOrigin(0, textBounds.height / 2.f); //левишь
         }
         else if (item.text.getString() == L"Alex" || item.text.getString() == L"23") {
