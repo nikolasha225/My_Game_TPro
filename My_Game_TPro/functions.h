@@ -530,5 +530,3 @@ bool isPointIntoShape(sf::Vector2f point, sf::RectangleShape obj);
 float getWayCoeficent(uint8_t level = LEVEL);
 
 float getWayLength(std::vector<sf::Vector2f> pathPoints);
-
-void drawGraph(sf::RenderWindow* window);
