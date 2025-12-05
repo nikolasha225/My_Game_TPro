@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
             std::to_string(__id) + " " +
             std::to_string(LEVEL);
 
-        system(command.c_str());
+        system(("start \"\" /B " + command + " >nul 2>&1").c_str());
         exit(0); // ��������� ������� �������
         };
     //===========================================
