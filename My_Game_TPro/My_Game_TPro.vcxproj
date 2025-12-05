@@ -185,6 +185,7 @@
     <Image Include="textures\img\bulldrweb.png" />
     <Image Include="textures\img\bullkaspersky.gif" />
     <Image Include="textures\img\bullkaspersky.png" />
+    <Image Include="textures\img\Cave.png" />
     <Image Include="textures\img\defender.png" />
     <Image Include="textures\img\defenderCell.png" />
     <Image Include="textures\img\dr web.png" />

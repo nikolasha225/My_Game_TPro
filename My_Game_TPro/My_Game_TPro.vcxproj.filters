@@ -66,12 +66,6 @@
     <ClCompile Include="game.cpp">
       <Filter>SourseCode</Filter>
     </ClCompile>
-    <ClCompile Include="pauseMenu.cpp">
-      <Filter>SourseCode</Filter>
-    </ClCompile>
-    <ClCompile Include="winLoseMenu.cpp">
-      <Filter>SourseCode</Filter>
-    </ClCompile>
     <ClCompile Include="functions.cpp">
       <Filter>SourseCode</Filter>
     </ClCompile>
@@ -286,6 +280,9 @@
       <Filter>Textures\img\map</Filter>
     </Image>
     <Image Include="textures\img\graph_frame.png">
+      <Filter>Textures\img</Filter>
+    </Image>
+    <Image Include="textures\img\Cave.png">
       <Filter>Textures\img</Filter>
     </Image>
   </ItemGroup>

@@ -829,9 +829,19 @@ Core::Core()
 		)
 	);
 	CAVE.setOrigin(CAVE.getSize().x / 2, CAVE.getSize().y / 2);
-	CAVE.setPosition(wayPoints[LEVEL - 1][0] + 0.45f * sf::Vector2f(0, CAVE.getSize().y));
+	CAVE.setPosition(wayPoints[LEVEL - 1][0] - 0.10f * sf::Vector2f(-35, CAVE.getSize().y));
 	TEXTURE_CAVE.loadFromFile(JSONSettings["CORE"]["caveTexture"]);
 	CAVE.setTexture(&TEXTURE_CAVE);
+
+	// Поворот пещеры на 30 градусов только на втором уровне
+	if (LEVEL == 2) {
+		CAVE.setPosition(wayPoints[LEVEL - 1][0] - 0.10f * sf::Vector2f(-170, CAVE.getSize().y));
+		CAVE.setRotation(30.f);
+	}
+
+	if (LEVEL == 3) {
+		CAVE.setPosition(wayPoints[LEVEL - 1][0] - 0.10f * sf::Vector2f(-15, CAVE.getSize().y));
+	}
 
 	FONT_SEGMENT.loadFromFile(JSONSettings["CORE"]["sevenSegmentFont"]);
 
