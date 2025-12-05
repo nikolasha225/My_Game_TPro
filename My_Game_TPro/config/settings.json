@@ -89,19 +89,19 @@
     "layer": 31,
     "shootSound": "./sound/shoot01.ogg",
     "defender": {
-      "damage": 1,
+      "damage": 3,
       "velocity": 5,
       "texture": "./textures/img/bulldefender.png",
       "size": [ 10, 10 ]
     },
     "avast": {
-      "damage": 3,
+      "damage": 4,
       "velocity": 5,
       "texture": "./textures/img/bullavast.png",
       "size": [ 12, 12 ]
     },
     "drWeb": {
-      "damage": 5,
+      "damage": 8,
       "velocity": 2,
       "texture": "./textures/img/bulldrweb.png",
       "size": [ 20, 20 ]
@@ -149,7 +149,7 @@
       "texture": "./textures/img/dr web.png",
       "cellTexture": "./textures/img/dr webCell.png",
       "size": [ 90, 90 ],
-      "price": 200,
+      "price": 250,
       "range": 1.3,
       "descTexture": "./textures/img/dr webCell.png"
     },
