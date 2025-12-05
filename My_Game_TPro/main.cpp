@@ -1,4 +1,5 @@
-﻿#include "game.h"
+﻿#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+#include "game.h"
 #include "allMenu.h"
 
 int main(int argc, char* argv[])
