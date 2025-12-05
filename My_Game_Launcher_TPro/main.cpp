@@ -35,7 +35,7 @@ int main() {
 	}
 	sf::Sound soundhello;
 	soundhello.setBuffer(bufferhello);
-	soundhello.setVolume(5);
+	soundhello.setVolume(25);
 	Sleep(100);//надо чтоб прогрузилась
 	soundhello.play();
 	Sleep(100);//надо чтоб прогрузилась
@@ -55,7 +55,8 @@ int main() {
 	auto startGame = [&soundstart, &window]() {
 		Sleep(100);//надо чтоб прогрузилась
 		soundstart.play();
-		system("My_Game_TPro.exe 1 0 1");//тут надо добавить параметры (глянь как они у меня идут, там id и уровень сложности) (просто через пробел как стринг добавить)
+		system(("start \"\" /B " + std::string("My_Game_TPro.exe 1 7 1") + " >nul 2>&1").c_str());
+		//system("My_Game_TPro.exe 1 7 1");//тут надо добавить параметры (глянь как они у меня идут, там id и уровень сложности) (просто через пробел как стринг добавить)
 		window.close();
 		exit(0);
 		};
