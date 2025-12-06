@@ -8,11 +8,25 @@
 #include <functional>
 #include <cmath> // для sin
 #include <nlohmann/json.hpp>
+#include "Windows.h"
 
 using json = nlohmann::json;
 
 class MenuItem;
 class AdvancedMatrixBackground;
+
+struct GameRes {
+	sf::Font font;
+	sf::Sound soundclick;
+	sf::Sound soundhello;
+	sf::Sound soundstart;
+
+	sf::SoundBuffer bufferclick;
+	sf::SoundBuffer bufferhello;
+	sf::SoundBuffer bufferstart;
+};
+
+bool loadAssets(sf::RenderWindow& window, GameRes& assets);
 
 class MenuItem {
 public:

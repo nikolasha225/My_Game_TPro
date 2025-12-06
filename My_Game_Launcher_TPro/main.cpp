@@ -1,52 +1,18 @@
 ﻿#include "mainMenu.h"
-#include "Windows.h"
 
 int main() {
 
 	sf::RenderWindow window(sf::VideoMode(1020, 640), "LauncherMenu", sf::Style::None);
-	sf::Image icon;
-	if (icon.loadFromFile("assets/img/icon.png")) {
-		window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-	}
 
 	window.setFramerateLimit(60);
 	window.setVerticalSyncEnabled(true);
-
 	AdvancedMatrixBackground matrixBackground;
 
-	sf::Font font;
-	if (!font.loadFromFile("assets/fonts/PressStart2P-Regular.ttf")) {
-		std::cerr << "Не удалось загрузить шрифт!\n";
+	//подгрузили звуки, шрифт
+	GameRes res;
+	if (!loadAssets(window, res)) {
 		return 1;
 	}
-
-	sf::SoundBuffer bufferclick;
-	if (!bufferclick.loadFromFile("assets/sound/click.wav")) {
-		std::cerr << "Не удалось загрузить аудиофайл!" << std::endl;
-		return -1;
-	}
-	sf::Sound soundclick;
-	soundclick.setBuffer(bufferclick);
-
-	sf::SoundBuffer bufferhello;
-	if (!bufferhello.loadFromFile("assets/sound/hello.wav")) {
-		std::cerr << "No";
-		return 1;
-	}
-	sf::Sound soundhello;
-	soundhello.setBuffer(bufferhello);
-	soundhello.setVolume(25);
-	Sleep(100);//надо чтоб прогрузилась
-	soundhello.play();
-	Sleep(100);//надо чтоб прогрузилась
-
-	sf::SoundBuffer bufferstart;
-	if (!bufferstart.loadFromFile("assets/sound/startgame.wav")) {
-		std::cerr << "No";
-		return -1;
-	}
-	sf::Sound soundstart;
-	soundstart.setBuffer(bufferstart);
 
 	std::string screen = "main";
 	bool needsRedraw = true;
@@ -55,21 +21,21 @@ int main() {
 	bool isSoundOn = true;
 	MenuItem* soundToggle = nullptr;
 
-	auto audio = [&isSoundOn, &soundToggle, &soundclick, &soundstart] {
+	auto audio = [&isSoundOn, &soundToggle, &res] {
 		isSoundOn = !isSoundOn;
 		if (soundToggle) {
 			soundToggle->text.setString(isSoundOn ? L"Вкл" : L"Выкл");
 		}
-		soundclick.setVolume(isSoundOn ? 100.f : 0.f);
-		soundstart.setVolume(isSoundOn ? 100.f : 0.f);
+		res.soundclick.setVolume(isSoundOn ? 100.f : 0.f);
+		res.soundstart.setVolume(isSoundOn ? 100.f : 0.f);
 		};
-	auto startGame = [&soundstart, &window, &isSoundOn](int difficulty) {
+	auto startGame = [&res, &window, &isSoundOn](int difficulty) {
 		Sleep(100);//надо чтоб прогрузилась
-		soundstart.play();
+		res.soundstart.play();
 
 		std::string soundParam = isSoundOn ? "1" : "0"; // передавать 1 - вкл  0 - выкл
 		std::string diffParam = std::to_string(difficulty); // тоже надо передать как то
-		system(("start \"\" /B " + std::string("My_Game_TPro.exe 1 7 1") + " >nul 2>&1").c_str());
+		system(("start \"\" /B " + std::string("My_Game_TPro.exe") + diffParam + " " +		+ " " + soundParam + " >nul 2>&1").c_str());
 
 		//system("My_Game_TPro.exe 1 7 1");//тут надо добавить параметры (глянь как они у меня идут, там id и уровень сложности) (просто через пробел как стринг добавить)
 		window.close();
@@ -91,8 +57,8 @@ int main() {
 	auto openSettings = [&screen]() {
 		screen = "settings";
 		};
-	auto records = [&screen, &recordsmenu, &font]() {
-		updateRecords(recordsmenu, font);
+	auto records = [&screen, &recordsmenu, &res]() {
+		updateRecords(recordsmenu, res.font);
 		screen = "records";
 		};
 	auto owners = [&screen]() {
@@ -109,49 +75,49 @@ int main() {
 	
 	
 	std::vector<MenuItem> difficultyMenu = {
-		MenuItem(L"Выберите сложность", font, 36, {200.f, 70.f}, []() {}, true),
-		MenuItem(L"Легко", font, 30, {150.f, 180.f}, easy, false),
-		MenuItem(L"Больше денег, меньше врагов", font, 18, {150.f, 220.f}, []() {}, true),
+		MenuItem(L"Выберите сложность", res.font, 36, {200.f, 70.f}, []() {}, true),
+		MenuItem(L"Легко", res.font, 30, {150.f, 180.f}, easy, false),
+		MenuItem(L"Больше денег, меньше врагов", res.font, 18, {150.f, 220.f}, []() {}, true),
 
-		MenuItem(L"Средне", font, 30, {150.f, 280.f}, medium, false),
-		MenuItem(L"Стандартная сложность", font, 18, {150.f, 320.f}, []() {}, true),
+		MenuItem(L"Средне", res.font, 30, {150.f, 280.f}, medium, false),
+		MenuItem(L"Стандартная сложность", res.font, 18, {150.f, 320.f}, []() {}, true),
 
-		MenuItem(L"Сложно", font, 30, {150.f, 380.f}, hard, false),
-		MenuItem(L"Мало денег, много сильных врагов", font, 18, {150.f, 420.f}, []() {}, true),
+		MenuItem(L"Сложно", res.font, 30, {150.f, 380.f}, hard, false),
+		MenuItem(L"Мало денег, много сильных врагов", res.font, 18, {150.f, 420.f}, []() {}, true),
 
-		MenuItem(L"Назад", font, 36, {100.f, 550.f}, back, false)
+		MenuItem(L"Назад", res.font, 36, {100.f, 550.f}, back, false)
 	};
 	std::vector<MenuItem> mainmenu = {
-		MenuItem(L"Guards of ELBRUS", font, 50, {100.f, 50.f}, []() {}, true),
-		MenuItem(L"Старт", font, 36, { 100.f, 200.f }, difficulties, false),
-		MenuItem(L"Настройки", font, 36, { 100.f, 270.f }, openSettings, false),
-		MenuItem(L"Таблица лидеров", font, 36, { 100.f, 340.f }, records, false),
-		MenuItem(L"О создателях", font, 36, { 100.f, 410.f }, owners, false),
-		MenuItem(L"Выход", font, 36, { 100.f, 480.f }, exitGame, false)
+		MenuItem(L"Guards of ELBRUS", res.font, 50, {100.f, 50.f}, []() {}, true),
+		MenuItem(L"Старт", res.font, 36, { 100.f, 200.f }, difficulties, false),
+		MenuItem(L"Настройки", res.font, 36, { 100.f, 270.f }, openSettings, false),
+		MenuItem(L"Таблица лидеров", res.font, 36, { 100.f, 340.f }, records, false),
+		MenuItem(L"О создателях", res.font, 36, { 100.f, 410.f }, owners, false),
+		MenuItem(L"Выход", res.font, 36, { 100.f, 480.f }, exitGame, false)
 	};
 
 	std::vector<MenuItem> settingsmenu = {
-		MenuItem(L"Настройки", font, 50, {300.f, 50.f}, []() {}, true),
-		MenuItem(L"Громкость", font, 30, {100.f, 200.f}, []() {}, true),
-		MenuItem(L"Вкл", font, 24, {800.f, 200.f}, audio, false),
-		MenuItem(L"Сохранить", font, 36, {350.f, 500.f}, back, false)
+		MenuItem(L"Настройки", res.font, 50, {300.f, 50.f}, []() {}, true),
+		MenuItem(L"Громкость", res.font, 30, {100.f, 200.f}, []() {}, true),
+		MenuItem(L"Вкл", res.font, 24, {800.f, 200.f}, audio, false),
+		MenuItem(L"Сохранить", res.font, 36, {350.f, 500.f}, back, false)
 	};
 	soundToggle = &settingsmenu[2];
 
 	recordsmenu = {
-		MenuItem(L"Таблица рекордов", font, 50, {140.f, 50.f}, []() {}, true),
-		MenuItem(L"Назад", font, 36, {100.f, 550.f}, back, false)
+		MenuItem(L"Таблица рекордов", res.font, 50, {140.f, 50.f}, []() {}, true),
+		MenuItem(L"Назад", res.font, 36, {100.f, 550.f}, back, false)
 	};
 
 	std::vector<MenuItem> ownersmenu = {
-		MenuItem(L"О создателях", font, 50, {200.f, 50.f}, []() {}, true),
-		MenuItem(L"Ducktor74", font, 28, {100.f, 150.f}, []() {}, true),
-		MenuItem(L"Owner/Dev", font, 22, {650.f, 150.f}, []() {}, true),
-		MenuItem(L"Bucktor74", font, 28, {100.f, 200.f}, []() {}, true),
-		MenuItem(L"Designer/Dev", font, 22, {650.f, 200.f}, []() {}, true),
-		MenuItem(L"Broguss", font, 28, {100.f, 250.f}, []() {}, true),
-		MenuItem(L"Developer", font, 22, {650.f, 250.f}, []() {}, true),
-		MenuItem(L"Назад", font, 36, {100.f, 550.f}, back, false)
+		MenuItem(L"О создателях", res.font, 50, {200.f, 50.f}, []() {}, true),
+		MenuItem(L"Ducktor74", res.font, 28, {100.f, 150.f}, []() {}, true),
+		MenuItem(L"Owner/Dev", res.font, 22, {650.f, 150.f}, []() {}, true),
+		MenuItem(L"Bucktor74", res.font, 28, {100.f, 200.f}, []() {}, true),
+		MenuItem(L"Designer/Dev", res.font, 22, {650.f, 200.f}, []() {}, true),
+		MenuItem(L"Broguss", res.font, 28, {100.f, 250.f}, []() {}, true),
+		MenuItem(L"Developer", res.font, 22, {650.f, 250.f}, []() {}, true),
+		MenuItem(L"Назад", res.font, 36, {100.f, 550.f}, back, false)
 	};
 
 
@@ -174,7 +140,7 @@ int main() {
 							item.onClick();
 							needsRedraw = true;
 							if (!item.gettitle()) {
-								soundclick.play();
+								res.soundclick.play();
 							}
 						}
 					}
@@ -185,7 +151,7 @@ int main() {
 							item.onClick();
 							needsRedraw = true;
 							if (!item.gettitle()) {
-								soundclick.play();
+								res.soundclick.play();
 							}
 						}
 					}
@@ -196,7 +162,7 @@ int main() {
 							item.onClick();
 							needsRedraw = true;
 							if (!item.gettitle()) {
-								soundclick.play();
+								res.soundclick.play();
 							}
 						}
 					}
@@ -207,7 +173,7 @@ int main() {
 							item.onClick();
 							needsRedraw = true;
 							if (!item.gettitle()) {
-								soundclick.play();
+								res.soundclick.play();
 							}
 						}
 					}
@@ -218,7 +184,7 @@ int main() {
 							item.onClick();
 							needsRedraw = true;
 							if (!item.gettitle()) {
-								soundclick.play();
+								res.soundclick.play();
 							}
 						}
 					}

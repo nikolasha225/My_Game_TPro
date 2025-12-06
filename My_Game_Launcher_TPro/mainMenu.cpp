@@ -1,5 +1,42 @@
 ﻿#include "mainMenu.h"
 
+	bool loadAssets(sf::RenderWindow& window, GameRes& assets) {
+		sf::Image icon;
+		if (icon.loadFromFile("assets/img/icon.png")) {
+			window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+		}
+
+		if (!assets.font.loadFromFile("assets/fonts/PressStart2P-Regular.ttf")) {
+			std::cerr << "Шрифт не загружен\n";
+			return false;
+		}
+
+		if (!assets.bufferclick.loadFromFile("assets/sound/click.wav")) {
+			std::cerr << "Звук клика не загружен\n";
+			return false;
+		}
+		if (!assets.bufferhello.loadFromFile("assets/sound/hello.wav")) {
+			std::cerr << "Приветственный звук не загружен\n";
+			return false;
+		}
+		if (!assets.bufferstart.loadFromFile("assets/sound/startgame.wav")) {
+			std::cerr << "Звук запуска не загружен\n";
+			return false;
+		}
+
+		assets.soundclick.setBuffer(assets.bufferclick);
+		assets.soundhello.setBuffer(assets.bufferhello);
+		assets.soundstart.setBuffer(assets.bufferstart);
+
+		assets.soundhello.setVolume(25);
+		Sleep(100);
+		assets.soundhello.play();
+		Sleep(100);
+
+		return true;
+	}
+
+
     MenuItem::MenuItem(const sf::String& label, sf::Font& font, unsigned int size, const sf::Vector2f& pos, std::function<void()> callback, bool title)
         : onClick(callback), title(title)
     {
