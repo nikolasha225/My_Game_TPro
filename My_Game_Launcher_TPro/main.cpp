@@ -71,56 +71,13 @@ int main() {
 	auto back = [&screen]() {
 		screen = "main";
 		};
-
 	
-	
-	std::vector<MenuItem> difficultyMenu = {
-		MenuItem(L"Выберите сложность", res.font, 36, {200.f, 70.f}, []() {}, true),
-		MenuItem(L"Легко", res.font, 30, {150.f, 180.f}, easy, false),
-		MenuItem(L"Больше денег, меньше врагов", res.font, 18, {150.f, 220.f}, []() {}, true),
-
-		MenuItem(L"Средне", res.font, 30, {150.f, 280.f}, medium, false),
-		MenuItem(L"Стандартная сложность", res.font, 18, {150.f, 320.f}, []() {}, true),
-
-		MenuItem(L"Сложно", res.font, 30, {150.f, 380.f}, hard, false),
-		MenuItem(L"Мало денег, много сильных врагов", res.font, 18, {150.f, 420.f}, []() {}, true),
-
-		MenuItem(L"Назад", res.font, 36, {100.f, 550.f}, back, false)
-	};
-	std::vector<MenuItem> mainmenu = {
-		MenuItem(L"Guards of ELBRUS", res.font, 50, {100.f, 50.f}, []() {}, true),
-		MenuItem(L"Старт", res.font, 36, { 100.f, 200.f }, difficulties, false),
-		MenuItem(L"Настройки", res.font, 36, { 100.f, 270.f }, openSettings, false),
-		MenuItem(L"Таблица лидеров", res.font, 36, { 100.f, 340.f }, records, false),
-		MenuItem(L"О создателях", res.font, 36, { 100.f, 410.f }, owners, false),
-		MenuItem(L"Выход", res.font, 36, { 100.f, 480.f }, exitGame, false)
-	};
-
-	std::vector<MenuItem> settingsmenu = {
-		MenuItem(L"Настройки", res.font, 50, {300.f, 50.f}, []() {}, true),
-		MenuItem(L"Громкость", res.font, 30, {100.f, 200.f}, []() {}, true),
-		MenuItem(L"Вкл", res.font, 24, {800.f, 200.f}, audio, false),
-		MenuItem(L"Сохранить", res.font, 36, {350.f, 500.f}, back, false)
-	};
-	soundToggle = &settingsmenu[2];
-
-	recordsmenu = {
-		MenuItem(L"Таблица рекордов", res.font, 50, {140.f, 50.f}, []() {}, true),
-		MenuItem(L"Назад", res.font, 36, {100.f, 550.f}, back, false)
-	};
-
-	std::vector<MenuItem> ownersmenu = {
-		MenuItem(L"О создателях", res.font, 50, {200.f, 50.f}, []() {}, true),
-		MenuItem(L"Ducktor74", res.font, 28, {100.f, 150.f}, []() {}, true),
-		MenuItem(L"Owner/Dev", res.font, 22, {650.f, 150.f}, []() {}, true),
-		MenuItem(L"Bucktor74", res.font, 28, {100.f, 200.f}, []() {}, true),
-		MenuItem(L"Designer/Dev", res.font, 22, {650.f, 200.f}, []() {}, true),
-		MenuItem(L"Broguss", res.font, 28, {100.f, 250.f}, []() {}, true),
-		MenuItem(L"Developer", res.font, 22, {650.f, 250.f}, []() {}, true),
-		MenuItem(L"Назад", res.font, 36, {100.f, 550.f}, back, false)
-	};
-
-
+	//==================MENU==================
+	std::vector<MenuItem> mainmenu = createMain(res, difficulties, openSettings, records, owners, exitGame);
+	std::vector<MenuItem> difficultyMenu = createDiff(res, easy, medium, hard, back);
+	std::vector<MenuItem> settingsmenu = createSettings(res, soundToggle, audio, back);
+	recordsmenu = createRecords(res, back);
+	std::vector<MenuItem> ownersmenu = createOwners(res, back);
 
 	sf::Clock clock;
 

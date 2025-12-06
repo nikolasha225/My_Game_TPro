@@ -30,6 +30,11 @@ bool loadAssets(sf::RenderWindow& window, GameRes& assets);
 void clickMenu(sf::RenderWindow& window, std::string& screen, bool& needsRedraw, GameRes& res, std::vector<MenuItem>& mainmenu, std::vector<MenuItem>& settingsmenu, std::vector<MenuItem>& recordsmenu, std::vector<MenuItem>& ownersmenu, std::vector<MenuItem>& difficultyMenu);
 void updateMenu(sf::RenderWindow& window, std::string& screen, float time, std::vector<MenuItem>& mainmenu, std::vector<MenuItem>& settingsmenu, std::vector<MenuItem>& recordsmenu, std::vector<MenuItem>& ownersmenu, std::vector<MenuItem>& difficultyMenu);
 void drawMenu(sf::RenderWindow& window, std::string& screen, std::vector<MenuItem>& mainmenu, std::vector<MenuItem>& settingsmenu, std::vector<MenuItem>& recordsmenu, std::vector<MenuItem>& ownersmenu, std::vector<MenuItem>& difficultyMenu);
+std::vector<MenuItem> createMain(GameRes& res, std::function<void()> difficultiesFunc, std::function<void()> settingsFunc, std::function<void()> recordsFunc, std::function<void()> ownersFunc, std::function<void()> exitFunc);
+std::vector<MenuItem> createDiff(GameRes& res, std::function<void()> easy, std::function<void()> medium, std::function<void()> hard, std::function<void()> back);
+std::vector<MenuItem> createSettings(GameRes& res, MenuItem*& soundToggle, std::function<void()> audio, std::function<void()> back);
+std::vector<MenuItem> createRecords(GameRes& res, std::function<void()> back);
+std::vector<MenuItem> createOwners(GameRes& res, std::function<void()> back);
 class MenuItem {
 public:
     sf::Text text;

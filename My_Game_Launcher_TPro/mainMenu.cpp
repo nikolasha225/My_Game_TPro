@@ -177,6 +177,81 @@
 		}
 	}
 
+	std::vector<MenuItem> createMain(GameRes& res,
+		std::function<void()> difficultiesFunc,
+		std::function<void()> settingsFunc,
+		std::function<void()> recordsFunc,
+		std::function<void()> ownersFunc,
+		std::function<void()> exitFunc) {
+		return {
+			MenuItem(L"Guards of ELBRUS", res.font, 50, {100.f, 50.f}, []() {}, true),
+			MenuItem(L"Старт", res.font, 36, {100.f, 200.f}, difficultiesFunc, false),
+			MenuItem(L"Настройки", res.font, 36, {100.f, 270.f}, settingsFunc, false),
+			MenuItem(L"Таблица лидеров", res.font, 36, {100.f, 340.f}, recordsFunc, false),
+			MenuItem(L"О создателях", res.font, 36, {100.f, 410.f}, ownersFunc, false),
+			MenuItem(L"Выход", res.font, 36, {100.f, 480.f}, exitFunc, false)
+		};
+	}
+
+
+	std::vector<MenuItem> createDiff(GameRes& res,
+		std::function<void()> easy,
+		std::function<void()> medium,
+		std::function<void()> hard,
+		std::function<void()> back) {
+		return {
+			MenuItem(L"Выберите сложность", res.font, 36, {200.f, 70.f}, []() {}, true),
+		MenuItem(L"Легко", res.font, 30, {150.f, 180.f}, easy, false),
+		MenuItem(L"Больше денег, меньше врагов", res.font, 18, {150.f, 220.f}, []() {}, true),
+
+		MenuItem(L"Средне", res.font, 30, {150.f, 280.f}, medium, false),
+		MenuItem(L"Стандартная сложность", res.font, 18, {150.f, 320.f}, []() {}, true),
+
+		MenuItem(L"Сложно", res.font, 30, {150.f, 380.f}, hard, false),
+		MenuItem(L"Мало денег, много сильных врагов", res.font, 18, {150.f, 420.f}, []() {}, true),
+
+		MenuItem(L"Назад", res.font, 36, {100.f, 550.f}, back, false)
+		};
+	}
+	
+	std::vector<MenuItem> createSettings(GameRes& res,
+		MenuItem*& soundToggle,
+		std::function<void()> audio,
+		std::function<void()> back) {
+
+		std::vector<MenuItem> menu = {
+		MenuItem(L"Настройки", res.font, 50, {300.f, 50.f}, []() {}, true),
+		MenuItem(L"Громкость", res.font, 30, {100.f, 200.f}, []() {}, true),
+		MenuItem(L"Вкл", res.font, 24, {800.f, 200.f}, audio, false),
+		MenuItem(L"Сохранить", res.font, 36, {350.f, 500.f}, back, false)
+		};
+		soundToggle = &menu[2];
+		return menu;
+	}
+	std::vector<MenuItem> createRecords(GameRes& res,
+		std::function<void()> back) {
+
+		return {
+		MenuItem(L"Таблица рекордов", res.font, 50, { 140.f, 50.f }, []() {}, true),
+		MenuItem(L"Назад", res.font, 36, { 100.f, 550.f }, back, false) 
+		};
+	}
+
+	std::vector<MenuItem> createOwners(GameRes& res,
+		std::function<void()> back) {
+		return {
+			MenuItem(L"О создателях", res.font, 50, { 200.f, 50.f }, []() {}, true),
+		MenuItem(L"Ducktor74", res.font, 28, { 100.f, 150.f }, []() {}, true),
+		MenuItem(L"Owner/Dev", res.font, 22, { 650.f, 150.f }, []() {}, true),
+		MenuItem(L"Bucktor74", res.font, 28, { 100.f, 200.f }, []() {}, true),
+		MenuItem(L"Designer/Dev", res.font, 22, { 650.f, 200.f }, []() {}, true),
+		MenuItem(L"Broguss", res.font, 28, { 100.f, 250.f }, []() {}, true),
+		MenuItem(L"Developer", res.font, 22, { 650.f, 250.f }, []() {}, true),
+		MenuItem(L"Назад", res.font, 36, { 100.f, 550.f }, back, false)
+		};
+	}
+	
+
     MenuItem::MenuItem(const sf::String& label, sf::Font& font, unsigned int size, const sf::Vector2f& pos, std::function<void()> callback, bool title)
         : onClick(callback), title(title)
     {
@@ -408,7 +483,7 @@
 			// Добавляем новые записи
 			float y = 150.f;
 			for (int i = 0; i < topRecords.size(); i++) {
-				std::string text = std::to_string(i + 1) + ". Player " + topRecords[i].playerId +
+				std::string text = std::to_string(i + 1) + ". ID: " + topRecords[i].playerId +
 					" - " + std::to_string(topRecords[i].total_kills) + " kills";
 				std::wstring wtext(text.begin(), text.end());
 
