@@ -52,13 +52,23 @@ int main() {
 	bool needsRedraw = true;
 	std::vector<MenuItem> recordsmenu;
 	// ============= Функции пунктов меню =============
-	auto startGame = [&soundstart, &window](int difficulty) {
+	bool isSoundOn = true;
+	MenuItem* soundToggle = nullptr;
 
-		// меню выбора сложности функция
-
-
+	auto audio = [&isSoundOn, &soundToggle, &soundclick, &soundstart] {
+		isSoundOn = !isSoundOn;
+		if (soundToggle) {
+			soundToggle->text.setString(isSoundOn ? L"Вкл" : L"Выкл");
+		}
+		soundclick.setVolume(isSoundOn ? 100.f : 0.f);
+		soundstart.setVolume(isSoundOn ? 100.f : 0.f);
+		};
+	auto startGame = [&soundstart, &window, &isSoundOn](int difficulty) {
 		Sleep(100);//надо чтоб прогрузилась
 		soundstart.play();
+
+		std::string soundParam = isSoundOn ? "1" : "0"; // передавать 1 - вкл  0 - выкл
+		std::string diffParam = std::to_string(difficulty); // тоже надо передать как то
 		system(("start \"\" /B " + std::string("My_Game_TPro.exe 1 7 1") + " >nul 2>&1").c_str());
 
 		//system("My_Game_TPro.exe 1 7 1");//тут надо добавить параметры (глянь как они у меня идут, там id и уровень сложности) (просто через пробел как стринг добавить)
@@ -96,21 +106,8 @@ int main() {
 		screen = "main";
 		};
 
-	bool isSoundOn = true;
-	MenuItem* soundToggle = nullptr;
-
-	auto audio = [&isSoundOn, &soundToggle, &soundclick, &soundstart] {
-		isSoundOn = !isSoundOn;
-		if (soundToggle) {
-			soundToggle->text.setString(isSoundOn ? L"Вкл" : L"Выкл");
-		}
-		soundclick.setVolume(isSoundOn ? 100.f : 0.f);
-		soundstart.setVolume(isSoundOn ? 100.f : 0.f);
-		};
 	
-	auto resolution = [] {
-
-		};
+	
 	std::vector<MenuItem> difficultyMenu = {
 		MenuItem(L"Выберите сложность", font, 36, {200.f, 70.f}, []() {}, true),
 		MenuItem(L"Легко", font, 30, {150.f, 180.f}, easy, false),
