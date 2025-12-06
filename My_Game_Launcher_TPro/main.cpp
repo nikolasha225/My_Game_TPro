@@ -81,29 +81,18 @@ int main() {
 		screen = "settings";
 		};
 
-	int soundVolume = 100;
-	MenuItem* soundVolumeItem = nullptr;
+	bool isSoundOn = true;
+	MenuItem* soundToggle = nullptr;
 
-	auto increaseVolume = [&soundVolume, &soundVolumeItem, &soundclick, &soundstart] {
-		if (soundVolume < 100) {
-			soundVolume += 10;
-			if (soundVolumeItem) {
-				soundVolumeItem->text.setString(std::to_string(soundVolume));
-			}
-			soundclick.setVolume(static_cast<float>(soundVolume));
-			soundstart.setVolume(static_cast<float>(soundVolume));
+	auto audio = [&isSoundOn, &soundToggle, &soundclick, &soundstart] {
+		isSoundOn = !isSoundOn;
+		if (soundToggle) {
+			soundToggle->text.setString(isSoundOn ? L"Вкл" : L"Выкл");
 		}
-	};
-	auto decreaseVolume = [&soundVolume, &soundVolumeItem, &soundclick, &soundstart] {
-		if (soundVolume > 0) {
-			soundVolume -= 10;
-			if (soundVolumeItem) {
-				soundVolumeItem->text.setString(std::to_string(soundVolume));
-			}
-			soundclick.setVolume(static_cast<float>(soundVolume));
-			soundstart.setVolume(static_cast<float>(soundVolume));
-		}
+		soundclick.setVolume(isSoundOn ? 100.f : 0.f);
+		soundstart.setVolume(isSoundOn ? 100.f : 0.f);
 		};
+	
 
 	auto resolution = [] {
 
@@ -122,15 +111,13 @@ int main() {
 		MenuItem(L"Настройки", font, 50, {300.f, 50.f}, []() {}, true),
 
 		MenuItem(L"Громкость", font, 30, {100.f, 200.f}, []() {}, true),
-		MenuItem(L"-", font, 24, {700.f, 200.f}, decreaseVolume, false),
-		MenuItem(L"100", font, 24, {750.f, 200.f}, []() {}, true),
-		MenuItem(L"+", font, 24, {850.f, 200.f}, increaseVolume, false),
+		MenuItem(L"Вкл", font, 24, {750.f, 200.f}, audio, false),
 
 		MenuItem(L"Таблица лидеров", font, 30, {300.f, 300.f}, records, false),
 
 		MenuItem(L"Сохранить", font, 36, {350.f, 440.f}, back, false)
 	};
-	soundVolumeItem = &settingsmenu[3];
+	soundToggle = &settingsmenu[2];
 
 	recordsmenu = {
 		MenuItem(L"Таблица рекордов", font, 50, {140.f, 50.f}, []() {}, true),
