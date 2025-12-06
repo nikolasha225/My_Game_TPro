@@ -27,7 +27,9 @@ struct GameRes {
 };
 
 bool loadAssets(sf::RenderWindow& window, GameRes& assets);
-
+void clickMenu(sf::RenderWindow& window, std::string& screen, bool& needsRedraw, GameRes& res, std::vector<MenuItem>& mainmenu, std::vector<MenuItem>& settingsmenu, std::vector<MenuItem>& recordsmenu, std::vector<MenuItem>& ownersmenu, std::vector<MenuItem>& difficultyMenu);
+void updateMenu(sf::RenderWindow& window, std::string& screen, float time, std::vector<MenuItem>& mainmenu, std::vector<MenuItem>& settingsmenu, std::vector<MenuItem>& recordsmenu, std::vector<MenuItem>& ownersmenu, std::vector<MenuItem>& difficultyMenu);
+void drawMenu(sf::RenderWindow& window, std::string& screen, std::vector<MenuItem>& mainmenu, std::vector<MenuItem>& settingsmenu, std::vector<MenuItem>& recordsmenu, std::vector<MenuItem>& ownersmenu, std::vector<MenuItem>& difficultyMenu);
 class MenuItem {
 public:
     sf::Text text;

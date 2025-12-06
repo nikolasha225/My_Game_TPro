@@ -121,6 +121,7 @@ int main() {
 	};
 
 
+
 	sf::Clock clock;
 
 	screen = "main";//на всякий
@@ -134,102 +135,14 @@ int main() {
 				window.close();
 			
 			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-				if (screen == "main") {
-					for (auto& item : mainmenu) {
-						if (item.isMouseOver(window)) {
-							item.onClick();
-							needsRedraw = true;
-							if (!item.gettitle()) {
-								res.soundclick.play();
-							}
-						}
-					}
-				}
-				else if (screen == "settings") {
-					for (auto& item : settingsmenu) {
-						if (item.isMouseOver(window)) {
-							item.onClick();
-							needsRedraw = true;
-							if (!item.gettitle()) {
-								res.soundclick.play();
-							}
-						}
-					}
-				}
-				else if (screen == "records") {
-					for (auto& item : recordsmenu) {
-						if (item.isMouseOver(window)) {
-							item.onClick();
-							needsRedraw = true;
-							if (!item.gettitle()) {
-								res.soundclick.play();
-							}
-						}
-					}
-				}
-				else if (screen == "owners") {
-					for (auto& item : ownersmenu) {
-						if (item.isMouseOver(window)) {
-							item.onClick();
-							needsRedraw = true;
-							if (!item.gettitle()) {
-								res.soundclick.play();
-							}
-						}
-					}
-				}
-				else if (screen == "difficulty") {
-					for (auto& item : difficultyMenu) {
-						if (item.isMouseOver(window)) {
-							item.onClick();
-							needsRedraw = true;
-							if (!item.gettitle()) {
-								res.soundclick.play();
-							}
-						}
-					}
-				}
+				clickMenu(window, screen, needsRedraw, res, mainmenu, settingsmenu, recordsmenu, ownersmenu, difficultyMenu);
 			}
 		}
 
 		matrixBackground.updating(deltaTime);
 		// Проверяем наведение
 
-		if (screen == "main") {
-			for (auto& item : mainmenu) {
-				item.hovered = item.isMouseOver(window);
-				if (item.isMouseOver(window) != item.hovered);
-				item.update(time);
-			}
-		}
-		else if (screen == "settings") {
-			for (auto& item : settingsmenu) {
-				item.hovered = item.isMouseOver(window);
-				if (item.isMouseOver(window) != item.hovered);
-				item.update(time);
-			}
-		}
-		else if (screen == "records") {
-			for (auto& item : recordsmenu) {
-				item.hovered = item.isMouseOver(window);
-				if (item.isMouseOver(window) != item.hovered);
-				item.update(time);
-			}
-		}
-		else if (screen == "owners") {
-			for (auto& item : ownersmenu) {
-				item.hovered = item.isMouseOver(window);
-				if (item.isMouseOver(window) != item.hovered);
-				item.update(time);
-			}
-		}
-		else if (screen == "difficulty") {
-			for (auto& item : difficultyMenu) {
-				item.hovered = item.isMouseOver(window);
-				if (item.isMouseOver(window) != item.hovered);
-				item.update(time);
-			}
-		}
+		updateMenu(window, screen, time, mainmenu, settingsmenu, recordsmenu, ownersmenu, difficultyMenu);
 
 		// ============= Рендер =============
 		window.clear(sf::Color(30, 30, 30)); //изначальный фон
@@ -238,26 +151,7 @@ int main() {
 		overlay.setFillColor(sf::Color(0, 0, 0, 128)); // Полупрозрачный черный
 		window.draw(overlay);
 
-		if (screen == "main") {
-			for (auto& item : mainmenu)
-				window.draw(item.text);
-		}
-		else if (screen == "settings") {
-			for (auto& item : settingsmenu)
-				window.draw(item.text);
-		}
-		else if (screen == "records") {
-			for (auto& item : recordsmenu)
-				window.draw(item.text);
-		}
-		else if (screen == "owners") {
-			for (auto& item : ownersmenu)
-				window.draw(item.text);
-		}
-		else if (screen == "difficulty") {
-			for (auto& item : difficultyMenu)
-				window.draw(item.text);
-		}
+		drawMenu(window, screen, mainmenu, settingsmenu, recordsmenu, ownersmenu, difficultyMenu);
 
 		window.display();
 	}

@@ -35,7 +35,147 @@
 
 		return true;
 	}
+	
+	void clickMenu(sf::RenderWindow& window,
+		std::string& screen,
+		bool& needsRedraw,
+		GameRes& res,
+		std::vector<MenuItem>& mainmenu,
+		std::vector<MenuItem>& settingsmenu,
+		std::vector<MenuItem>& recordsmenu,
+		std::vector<MenuItem>& ownersmenu,
+		std::vector<MenuItem>& difficultyMenu) {
+		if (screen == "main") {
+			for (auto& item : mainmenu) {
+				if (item.isMouseOver(window)) {
+					item.onClick();
+					needsRedraw = true;
+					if (!item.gettitle()) {
+						res.soundclick.play();
+					}
+				}
+			}
+		}
+		else if (screen == "settings") {
+			for (auto& item : settingsmenu) {
+				if (item.isMouseOver(window)) {
+					item.onClick();
+					needsRedraw = true;
+					if (!item.gettitle()) {
+						res.soundclick.play();
+					}
+				}
+			}
+		}
+		else if (screen == "records") {
+			for (auto& item : recordsmenu) {
+				if (item.isMouseOver(window)) {
+					item.onClick();
+					needsRedraw = true;
+					if (!item.gettitle()) {
+						res.soundclick.play();
+					}
+				}
+			}
+		}
+		else if (screen == "owners") {
+			for (auto& item : ownersmenu) {
+				if (item.isMouseOver(window)) {
+					item.onClick();
+					needsRedraw = true;
+					if (!item.gettitle()) {
+						res.soundclick.play();
+					}
+				}
+			}
+		}
+		else if (screen == "difficulty") {
+			for (auto& item : difficultyMenu) {
+				if (item.isMouseOver(window)) {
+					item.onClick();
+					needsRedraw = true;
+					if (!item.gettitle()) {
+						res.soundclick.play();
+					}
+				}
+			}
+		}
+	}
 
+	void updateMenu(sf::RenderWindow& window,
+		std::string& screen,
+		float time,
+		std::vector<MenuItem>& mainmenu,
+		std::vector<MenuItem>& settingsmenu,
+		std::vector<MenuItem>& recordsmenu,
+		std::vector<MenuItem>& ownersmenu,
+		std::vector<MenuItem>& difficultyMenu) {
+
+		if (screen == "main") {
+			for (auto& item : mainmenu) {
+				item.hovered = item.isMouseOver(window);
+				if (item.isMouseOver(window) != item.hovered);
+				item.update(time);
+			}
+		}
+		else if (screen == "settings") {
+			for (auto& item : settingsmenu) {
+				item.hovered = item.isMouseOver(window);
+				if (item.isMouseOver(window) != item.hovered);
+				item.update(time);
+			}
+		}
+		else if (screen == "records") {
+			for (auto& item : recordsmenu) {
+				item.hovered = item.isMouseOver(window);
+				if (item.isMouseOver(window) != item.hovered);
+				item.update(time);
+			}
+		}
+		else if (screen == "owners") {
+			for (auto& item : ownersmenu) {
+				item.hovered = item.isMouseOver(window);
+				if (item.isMouseOver(window) != item.hovered);
+				item.update(time);
+			}
+		}
+		else if (screen == "difficulty") {
+			for (auto& item : difficultyMenu) {
+				item.hovered = item.isMouseOver(window);
+				if (item.isMouseOver(window) != item.hovered);
+				item.update(time);
+			}
+		}
+	}
+
+	void drawMenu(sf::RenderWindow& window,
+		std::string& screen,
+		std::vector<MenuItem>& mainmenu,
+		std::vector<MenuItem>& settingsmenu,
+		std::vector<MenuItem>& recordsmenu,
+		std::vector<MenuItem>& ownersmenu,
+		std::vector<MenuItem>& difficultyMenu) {
+		if (screen == "main") {
+			for (auto& item : mainmenu)
+				window.draw(item.text);
+		}
+		else if (screen == "settings") {
+			for (auto& item : settingsmenu)
+				window.draw(item.text);
+		}
+		else if (screen == "records") {
+			for (auto& item : recordsmenu)
+				window.draw(item.text);
+		}
+		else if (screen == "owners") {
+			for (auto& item : ownersmenu)
+				window.draw(item.text);
+		}
+		else if (screen == "difficulty") {
+			for (auto& item : difficultyMenu)
+				window.draw(item.text);
+		}
+	}
 
     MenuItem::MenuItem(const sf::String& label, sf::Font& font, unsigned int size, const sf::Vector2f& pos, std::function<void()> callback, bool title)
         : onClick(callback), title(title)
