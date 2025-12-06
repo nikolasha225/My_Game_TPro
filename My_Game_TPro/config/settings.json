@@ -11,7 +11,7 @@
   },
   "GAME": {
     "startHP": [ 100, 60, 30 ],
-    "startMoney": [ 500, 300, 200 ],
+    "startMoney": [ 400, 300, 200 ],
     "roundTimeSec": [ 5, 5, 5 ],
     "soundRound": [ "./sound/round1.ogg", "./sound/round2.ogg", "./sound/round3.ogg" ],
     "soundVictory": "./sound/victory.ogg",
@@ -60,7 +60,7 @@
       "velocity": 5,
       "size": [ 65, 65 ],
       "texture": "./textures/img/tank.png",
-      "money": 7,
+      "money": 6,
       "mobCount": 30
     },
     "miniBoss": {
@@ -75,7 +75,7 @@
     "boss": {
       "damage": 33,
       "hp": 8000,
-      "velocity": 1,
+      "velocity": 2,
       "size": [ 90, 120 ],
       "texture": "./textures/img/BOSS_lowPixel.png",
       "money": 30,
@@ -101,7 +101,7 @@
       "size": [ 12, 12 ]
     },
     "drWeb": {
-      "damage": 8,
+      "damage": 12,
       "velocity": 2,
       "texture": "./textures/img/bulldrweb.png",
       "size": [ 20, 20 ]
@@ -141,7 +141,7 @@
       "cellTexture": "./textures/img/avastCell.png",
       "size": [ 90, 90 ],
       "price": 150,
-      "range": 1.1,
+      "range": 1.6,
       "descTexture": "./textures/img/avastCell.png"
     },
     "drWeb": {
@@ -158,7 +158,7 @@
       "texture": "./textures/img/kaspersky.png",
       "cellTexture": "./textures/img/kasperskyCell.png",
       "size": [ 90, 90 ],
-      "price": 300,
+      "price": 350,
       "range": 1.5,
       "descTexture": "./textures/img/kasperskyCell.png"
     }
