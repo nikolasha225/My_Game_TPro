@@ -154,38 +154,67 @@
 
 		std::vector<Record> loadRecords() {
 			std::vector<Record> records;
-			std::ifstream file("records.json");
-
-			if (!file.is_open()) {
-				std::cerr << "Не удалось открыть records.json" << std::endl;
-				return records;
-			}
 
 			try {
-				json data = json::parse(file);
+				// Чтение JSON файла с результатами игр
+				std::ifstream file("records.json"); // или ваш файл со статистикой
+				if (!file.is_open()) {
+					std::cerr << "Не удалось открыть файл со статистикой" << std::endl;
+					return records;
+				}
 
-				// player.key() - это и есть имя игрока (например "123")
-				for (auto& player : data["players"].items()) {
-					std::string playerName = player.key();  //эт имя игрока
+				nlohmann::json jsonData;
+				file >> jsonData;
+				file.close();
 
-					for (auto& game : player.value().items()) {
-						int total_kills = game.value()["enemies"]["total_killed"];
-						records.push_back({ playerName, total_kills });
+				// Проверяем, есть ли данные о игроках
+				if (!jsonData.contains("players") || jsonData["players"].is_null()) {
+					std::cerr << "Нет данных о игроках" << std::endl;
+					return records;
+				}
+
+				// Проходим по всем игрокам
+				for (const auto& playerEntry : jsonData["players"].items()) {
+					std::string playerId = playerEntry.key();
+					const auto& playerData = playerEntry.value();
+					int maxKills = 0;
+
+					// Проходим по всем играм данного игрока
+					for (const auto& gameEntry : playerData.items()) {
+						const auto& gameData = gameEntry.value();
+
+						// Проверяем наличие данных об убийствах
+						if (gameData.contains("enemies") &&
+							gameData["enemies"].is_object() &&
+							gameData["enemies"].contains("total_killed")) {
+
+							int kills = gameData["enemies"]["total_killed"];
+							if (kills > maxKills) {
+								maxKills = kills;
+							}
+						}
+					}
+
+					// Добавляем запись только если есть результаты
+					if (maxKills > 0) {
+						records.push_back({ playerId, maxKills });
 					}
 				}
-				file.close();
-				std::sort(records.begin(), records.end(), [](const Record& a, const Record& b) {
-					return a.total_kills > b.total_kills;
+
+				// Сортируем записи по количеству убийств (по убыванию)
+				std::sort(records.begin(), records.end(),
+					[](const Record& a, const Record& b) {
+						return a.total_kills > b.total_kills;
 					});
-				if (records.size() > 5) {
+
+				// Ограничиваем количество отображаемых записей (например, топ-10)
+				if (records.size() > 10) {
 					records.resize(10);
 				}
 
-				std::cout << "Загружено " << records.size() << " рекордов" << std::endl;
-
 			}
 			catch (const std::exception& e) {
-				std::cerr << "Ошибка парсинга JSON: " << e.what() << std::endl;
+				std::cerr << "Ошибка при загрузке рекордов: " << e.what() << std::endl;
 			}
 
 			return records;
@@ -194,13 +223,15 @@
 		void updateRecords(std::vector<MenuItem>& recordsmenu, sf::Font& font) {
 			auto topRecords = loadRecords();
 
+			// Очищаем старые записи (кроме заголовка и кнопки "Назад")
 			if (recordsmenu.size() > 2) {
 				recordsmenu.erase(recordsmenu.begin() + 1, recordsmenu.end() - 1);
 			}
+
+			// Добавляем новые записи
 			float y = 150.f;
 			for (int i = 0; i < topRecords.size(); i++) {
-				//playerId как имя игрока !!!!!!!!!!!!!
-				std::string text = std::to_string(i + 1) + ". " + topRecords[i].playerId +
+				std::string text = std::to_string(i + 1) + ". Player " + topRecords[i].playerId +
 					" - " + std::to_string(topRecords[i].total_kills) + " kills";
 				std::wstring wtext(text.begin(), text.end());
 
@@ -209,6 +240,7 @@
 				y += 40.f;
 			}
 
+			// Если нет рекордов
 			if (topRecords.empty()) {
 				recordsmenu.insert(recordsmenu.end() - 1,
 					MenuItem(L"Пока нет рекордов", font, 24, { 150.f, 150.f }, []() {}, true));

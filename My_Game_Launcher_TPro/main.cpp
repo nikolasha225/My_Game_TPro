@@ -52,13 +52,31 @@ int main() {
 	bool needsRedraw = true;
 	std::vector<MenuItem> recordsmenu;
 	// ============= Функции пунктов меню =============
-	auto startGame = [&soundstart, &window]() {
+	auto startGame = [&soundstart, &window](int difficulty) {
+
+		// меню выбора сложности функция
+
+
 		Sleep(100);//надо чтоб прогрузилась
 		soundstart.play();
 		system(("start \"\" /B " + std::string("My_Game_TPro.exe 1 7 1") + " >nul 2>&1").c_str());
+
 		//system("My_Game_TPro.exe 1 7 1");//тут надо добавить параметры (глянь как они у меня идут, там id и уровень сложности) (просто через пробел как стринг добавить)
 		window.close();
 		exit(0);
+		};
+
+	auto easy = [&startGame]() {
+		startGame(1);
+		};
+	auto medium = [&startGame]() {
+		startGame(2);
+		};
+	auto hard = [&startGame]() {
+		startGame(3);
+		};
+	auto difficulties = [&screen]() {
+		screen = "difficulty";
 		};
 	auto openSettings = [&screen]() {
 		screen = "settings";
@@ -76,7 +94,7 @@ int main() {
 		};
 	auto back = [&screen]() {
 		screen = "main";
-		};;
+		};
 
 	bool isSoundOn = true;
 	MenuItem* soundToggle = nullptr;
@@ -90,14 +108,25 @@ int main() {
 		soundstart.setVolume(isSoundOn ? 100.f : 0.f);
 		};
 	
-
 	auto resolution = [] {
 
 		};
+	std::vector<MenuItem> difficultyMenu = {
+		MenuItem(L"Выберите сложность", font, 36, {200.f, 70.f}, []() {}, true),
+		MenuItem(L"Легко", font, 30, {150.f, 180.f}, easy, false),
+		MenuItem(L"Больше денег, меньше врагов", font, 18, {150.f, 220.f}, []() {}, true),
 
+		MenuItem(L"Средне", font, 30, {150.f, 280.f}, medium, false),
+		MenuItem(L"Стандартная сложность", font, 18, {150.f, 320.f}, []() {}, true),
+
+		MenuItem(L"Сложно", font, 30, {150.f, 380.f}, hard, false),
+		MenuItem(L"Мало денег, много сильных врагов", font, 18, {150.f, 420.f}, []() {}, true),
+
+		MenuItem(L"Назад", font, 36, {100.f, 550.f}, back, false)
+	};
 	std::vector<MenuItem> mainmenu = {
 		MenuItem(L"Guards of ELBRUS", font, 50, {100.f, 50.f}, []() {}, true),
-		MenuItem(L"Старт", font, 36, { 100.f, 200.f }, startGame, false),
+		MenuItem(L"Старт", font, 36, { 100.f, 200.f }, difficulties, false),
 		MenuItem(L"Настройки", font, 36, { 100.f, 270.f }, openSettings, false),
 		MenuItem(L"Таблица лидеров", font, 36, { 100.f, 340.f }, records, false),
 		MenuItem(L"О создателях", font, 36, { 100.f, 410.f }, owners, false),
@@ -106,18 +135,15 @@ int main() {
 
 	std::vector<MenuItem> settingsmenu = {
 		MenuItem(L"Настройки", font, 50, {300.f, 50.f}, []() {}, true),
-
 		MenuItem(L"Громкость", font, 30, {100.f, 200.f}, []() {}, true),
 		MenuItem(L"Вкл", font, 24, {800.f, 200.f}, audio, false),
-
-		MenuItem(L"Сохранить", font, 36, {350.f, 440.f}, back, false)
+		MenuItem(L"Сохранить", font, 36, {350.f, 500.f}, back, false)
 	};
 	soundToggle = &settingsmenu[2];
 
 	recordsmenu = {
 		MenuItem(L"Таблица рекордов", font, 50, {140.f, 50.f}, []() {}, true),
 		MenuItem(L"Назад", font, 36, {100.f, 550.f}, back, false)
-
 	};
 
 	std::vector<MenuItem> ownersmenu = {
@@ -126,7 +152,7 @@ int main() {
 		MenuItem(L"Owner/Dev", font, 22, {650.f, 150.f}, []() {}, true),
 		MenuItem(L"Bucktor74", font, 28, {100.f, 200.f}, []() {}, true),
 		MenuItem(L"Designer/Dev", font, 22, {650.f, 200.f}, []() {}, true),
-		MenuItem(L"Kirill", font, 28, {100.f, 250.f}, []() {}, true),
+		MenuItem(L"Broguss", font, 28, {100.f, 250.f}, []() {}, true),
 		MenuItem(L"Developer", font, 22, {650.f, 250.f}, []() {}, true),
 		MenuItem(L"Назад", font, 36, {100.f, 550.f}, back, false)
 	};
@@ -189,6 +215,17 @@ int main() {
 						}
 					}
 				}
+				else if (screen == "difficulty") {
+					for (auto& item : difficultyMenu) {
+						if (item.isMouseOver(window)) {
+							item.onClick();
+							needsRedraw = true;
+							if (!item.gettitle()) {
+								soundclick.play();
+							}
+						}
+					}
+				}
 			}
 		}
 
@@ -223,6 +260,13 @@ int main() {
 				item.update(time);
 			}
 		}
+		else if (screen == "difficulty") {
+			for (auto& item : difficultyMenu) {
+				item.hovered = item.isMouseOver(window);
+				if (item.isMouseOver(window) != item.hovered);
+				item.update(time);
+			}
+		}
 
 		// ============= Рендер =============
 		window.clear(sf::Color(30, 30, 30)); //изначальный фон
@@ -245,6 +289,10 @@ int main() {
 		}
 		else if (screen == "owners") {
 			for (auto& item : ownersmenu)
+				window.draw(item.text);
+		}
+		else if (screen == "difficulty") {
+			for (auto& item : difficultyMenu)
 				window.draw(item.text);
 		}
 
