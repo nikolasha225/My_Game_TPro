@@ -22,7 +22,7 @@ int main() {
 	MenuItem* soundToggle = nullptr;
 
 	// ============= SIMPLE ID =============
-	std::string playerId = "Player";
+	std::string playerId = "1";
 	bool editingId = false;
 	sf::Clock cursorClock;
 	bool showCursor = true;
@@ -44,7 +44,8 @@ int main() {
 	auto startGame = [&res, &window, &isSoundOn, &playerId](int difficulty) {
 		Sleep(100);//for progryz
 		res.soundstart.play();
-
+		
+		if (playerId.empty()) playerId = "1";
 		std::string soundParam = isSoundOn ? "1" : "0"; // 1 - vkl  0 - vikl
 		std::string diffParam = std::to_string(difficulty);
 		system(("start \"\" /B " + std::string("My_Game_TPro.exe") + diffParam + " " + playerId + " " + soundParam + " >nul 2>&1").c_str());

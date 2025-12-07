@@ -273,8 +273,9 @@
 			std::vector<MenuItem>& recordsmenu,
 			std::vector<MenuItem>& ownersmenu,
 			std::vector<MenuItem>& difficultyMenu,
-			std::string& playerId, bool& editingId, sf::Text& idText,                 
+			std::string& playerId, bool& editingId, sf::Text& idText,
 			sf::Clock& cursorClock, bool& showCursor) {
+
 			if (event.type == sf::Event::MouseButtonPressed &&
 				event.mouseButton.button == sf::Mouse::Left) {
 
@@ -291,24 +292,48 @@
 						idText.setFillColor(sf::Color::Yellow);
 					}
 					else {
-						//save when editeed
 						std::string text = idText.getString();
 						size_t cursorPos = text.find('|');
 						if (cursorPos != std::string::npos) {
 							text.erase(cursorPos, 1);
 						}
-						//take id (without id)
 						if (text.length() > 4) {
-							playerId = text.substr(4);
+							std::string newId = text.substr(4);
+
+							bool allDigits = !newId.empty();
+							for (char c : newId) {
+								if (!std::isdigit(c)) {
+									allDigits = false;
+									break;
+								}
+							}
+
+							if (allDigits) {
+								// max (4294967295)
+								try {
+									unsigned long long idNum = std::stoull(newId);
+									if (idNum > 4294967295ULL) {
+										idNum = 4294967295ULL;
+										newId = "4294967295";
+									}
+								}
+								catch (...) {
+									newId = "1";
+								}
+
+								playerId = newId;
+							}
+							else {
+								playerId = "1"; //1111
+							}
 						}
-						if (playerId.empty()) playerId = "Player";
+						if (playerId.empty()) playerId = "1";
 
 						idText.setString("ID: " + playerId);
 						idText.setFillColor(sf::Color::White);
 					}
 				}
 				else if (editingId) {
-					//click not an near ID
 					editingId = false;
 					std::string text = idText.getString();
 					size_t cursorPos = text.find('|');
@@ -316,15 +341,43 @@
 						text.erase(cursorPos, 1);
 					}
 					if (text.length() > 4) {
-						playerId = text.substr(4);
+						std::string newId = text.substr(4);
+
+						//only numbers
+						bool allDigits = !newId.empty();
+						for (char c : newId) {
+							if (!std::isdigit(c)) {
+								allDigits = false;
+								break;
+							}
+						}
+
+						if (allDigits) {
+							//check max
+							try {
+								unsigned long long idNum = std::stoull(newId);
+								if (idNum > 4294967295ULL) {
+									idNum = 4294967295ULL;
+									newId = "4294967295";
+								}
+							}
+							catch (...) {
+								newId = "1";
+							}
+
+							playerId = newId;
+						}
+						else {
+							playerId = "1";
+						}
 					}
-					if (playerId.empty()) playerId = "Player";
+					if (playerId.empty()) playerId = "1";
 
 					idText.setString("ID: " + playerId);
 					idText.setFillColor(sf::Color::White);
 				}
 
-				//obrabotka when no editing
+				//menu without id
 				if (!editingId || !idText.getGlobalBounds().contains(mousePos)) {
 					clickMenu(window, screen, needsRedraw, res,
 						mainmenu, settingsmenu, recordsmenu,
@@ -332,7 +385,7 @@
 				}
 			}
 
-			//enter text
+			// text with editing
 			if (editingId) {
 				if (event.type == sf::Event::KeyPressed) {
 					if (event.key.code == sf::Keyboard::Enter) {
@@ -343,9 +396,37 @@
 							text.erase(cursorPos, 1);
 						}
 						if (text.length() > 4) {
-							playerId = text.substr(4);
+							std::string newId = text.substr(4);
+
+							//check numbers
+							bool allDigits = !newId.empty();
+							for (char c : newId) {
+								if (!std::isdigit(c)) {
+									allDigits = false;
+									break;
+								}
+							}
+
+							if (allDigits) {
+								//check max
+								try {
+									unsigned long long idNum = std::stoull(newId);
+									if (idNum > 4294967295ULL) {
+										idNum = 4294967295ULL;
+										newId = "4294967295";
+									}
+								}
+								catch (...) {
+									newId = "1";
+								}
+
+								playerId = newId;
+							}
+							else {
+								playerId = "1";
+							}
 						}
-						if (playerId.empty()) playerId = "Player";
+						if (playerId.empty()) playerId = "1";
 
 						idText.setString("ID: " + playerId);
 						idText.setFillColor(sf::Color::White);
@@ -363,20 +444,20 @@
 						std::string currentText = idText.getString();
 						size_t cursorPos = currentText.find('|');
 
-						if (c == '\b') { //backspace DELETE
+						if (c == '\b') { //Backspace - delete
 							if (cursorPos != std::string::npos && cursorPos > 4) {
 								currentText.erase(cursorPos - 1, 1);
 								idText.setString(currentText);
 							}
 						}
-						else if (std::isalnum(c) || c == '-' || c == '_' || c == ' ') {
+						else if (std::isdigit(c)) { //Only NUMBERS
 							if (cursorPos != std::string::npos) {
 								currentText.erase(cursorPos, 1);
 							}
 
-							//check lengh (10 symbols)
+							//lengh = 9 max
 							std::string idOnly = currentText.substr(4);
-							if (idOnly.length() < 10) {
+							if (idOnly.length() < 9) {
 								if (cursorPos != std::string::npos) {
 									currentText.insert(cursorPos, 1, c);
 									currentText.insert(cursorPos + 1, "|");
@@ -554,8 +635,8 @@
 					hintText.setFont(res.font);
 					hintText.setCharacterSize(14);
 					hintText.setFillColor(sf::Color(150, 200, 100));
-					hintText.setPosition(600.f, 540.f);
-					hintText.setString(L"Введите ID (до 10 символов)");
+					hintText.setPosition(700.f, 540.f);
+					hintText.setString(L"Введите ID (до 9 цифр)");
 					window.draw(hintText);
 				}
 			}
