@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
             if (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::Escape) {
                 if (GAME_STATE == GAME)
                     GAME_STATE = PAUSE;
-                else if(GAME_STATE == PAUSE)
+                else if (GAME_STATE == PAUSE)
                     GAME_STATE = GAME;
                 break;
             }
@@ -109,6 +109,7 @@ int main(int argc, char* argv[])
             {
                 TOWER_MANAGER.checkEvents(&window);
             }
+        }
 
             if (OBJ_STACK.getCountOf(enemy) == 0 && TIME == 0) {// || (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::W)) {
                 if(LEVEL == 3)

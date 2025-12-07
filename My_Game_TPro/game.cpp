@@ -9,7 +9,7 @@ Spawner::Spawner(sf::RenderWindow* window, OBJStack* stack)
 	STACK = stack;
 	for (uint8_t i = Enemy::basicVirus; i <= Enemy::bossVirus ; i++) {
         COUNT_MOBS[i] = (float)JSONSettings["ENEMY"][enemyTypes[i]]["mobCount"]
-			* (float)JSONSettings["ENEMY"]["difficultCoeficent"][DIFFICULT]
+			* (float)JSONSettings["ENEMY"]["difficultCoeficent"][DIFFICULT-1]
 			* (float)RAND_FLOAT(1 - JSONSettings["ENEMY"]["mobCountDisperce"], 1 + JSONSettings["ENEMY"]["mobCountDisperce"]);
         START_COUNT_MOBS[i] = COUNT_MOBS[i];
 		TICK_OF_ENEMY[i] = 0;
