@@ -110,14 +110,14 @@ int main(int argc, char* argv[])
                 TOWER_MANAGER.checkEvents(&window);
             }
 
-            if (OBJ_STACK.getCountOf(enemy) == 0 && TIME == 0 || (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::W)) {
+            if (OBJ_STACK.getCountOf(enemy) == 0 && TIME == 0) {// || (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::W)) {
                 if(LEVEL == 3)
                     GAME_STATE = OVER;
                 else
                     GAME_STATE = WIN;
                 break;
             }
-            if (HEALTH <= 0 || (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::L))
+            if (HEALTH <= 0){// || (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::L))
                 GAME_STATE = LOSE;
         }
 
