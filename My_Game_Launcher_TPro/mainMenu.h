@@ -26,15 +26,21 @@ struct GameRes {
 	sf::SoundBuffer bufferstart;
 };
 
+//working?)
 bool loadAssets(sf::RenderWindow& window, GameRes& assets);
 void clickMenu(sf::RenderWindow& window, std::string& screen, bool& needsRedraw, GameRes& res, std::vector<MenuItem>& mainmenu, std::vector<MenuItem>& settingsmenu, std::vector<MenuItem>& recordsmenu, std::vector<MenuItem>& ownersmenu, std::vector<MenuItem>& difficultyMenu);
 void updateMenu(sf::RenderWindow& window, std::string& screen, float time, std::vector<MenuItem>& mainmenu, std::vector<MenuItem>& settingsmenu, std::vector<MenuItem>& recordsmenu, std::vector<MenuItem>& ownersmenu, std::vector<MenuItem>& difficultyMenu);
 void drawMenu(sf::RenderWindow& window, std::string& screen, std::vector<MenuItem>& mainmenu, std::vector<MenuItem>& settingsmenu, std::vector<MenuItem>& recordsmenu, std::vector<MenuItem>& ownersmenu, std::vector<MenuItem>& difficultyMenu);
+void updateRecords(std::vector<MenuItem>& recordsmenu, sf::Font& font);
+
+//all punkts of menus
 std::vector<MenuItem> createMain(GameRes& res, std::function<void()> difficultiesFunc, std::function<void()> settingsFunc, std::function<void()> recordsFunc, std::function<void()> ownersFunc, std::function<void()> exitFunc);
 std::vector<MenuItem> createDiff(GameRes& res, std::function<void()> easy, std::function<void()> medium, std::function<void()> hard, std::function<void()> back);
 std::vector<MenuItem> createSettings(GameRes& res, MenuItem*& soundToggle, std::function<void()> audio, std::function<void()> back);
 std::vector<MenuItem> createRecords(GameRes& res, std::function<void()> back);
 std::vector<MenuItem> createOwners(GameRes& res, std::function<void()> back);
+
+//for Items
 class MenuItem {
 public:
     sf::Text text;
@@ -47,12 +53,13 @@ public:
 	bool gettitle() const;
 };
 
+//for RECORDS
 struct Record {
 	std::string playerId;
 	int total_kills;
 };
 
-
+//for matrix ;D
 struct SymbolChain {
 	std::vector<sf::Text> symbols;
 	std::vector<int> switchCounters;
@@ -62,6 +69,7 @@ struct SymbolChain {
 	bool active;
 };
 
+//sama matrix
 class AdvancedMatrixBackground {
 private:
 	struct SymbolChain {
@@ -72,19 +80,15 @@ private:
 		float speed;
 		bool active;
 	};
-
 	std::vector<SymbolChain> chains;
 	sf::Font font;
 	float spawnTimer;
 	float spawnInterval;
 	int columns;
 	std::vector<float> columnPositions;
-
 public:
 	AdvancedMatrixBackground();
 	void createNewChain(int column);
 	void updating(float deltaTime);
 	void draw(sf::RenderWindow& window);
 };
-
-void updateRecords(std::vector<MenuItem>& recordsmenu, sf::Font& font);
