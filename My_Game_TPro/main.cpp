@@ -8,11 +8,10 @@ int main(int argc, char* argv[])
     //������� ��������� 
     uint8_t __difficult = 1;
     unsigned __id = 0;
-    uint8_t __level = 1;
 
     if (argc > 1) __difficult = static_cast<uint8_t>(std::stoi(argv[1]));
     if (argc > 2) __id = static_cast<unsigned>(std::stoi(argv[2]));
-    if (argc > 3) __level = static_cast<uint8_t>(std::stoi(argv[3]));
+    if (argc > 3) VOLUMEI = static_cast<bool>(std::stoi(argv[3]));
 
 
     // SF ������� �����������
@@ -31,7 +30,6 @@ int main(int argc, char* argv[])
     }
     FONT.loadFromFile(JSONSettings["GENERAL"]["font"]);
 
-    LEVEL = __level;
     DIFFICULT = __difficult;
     HEALTH = JSONSettings["GAME"]["startHP"][DIFFICULT - 1];
     MONEY = JSONSettings["GAME"]["startMoney"][DIFFICULT - 1];
@@ -68,7 +66,7 @@ int main(int argc, char* argv[])
 
     SOUND.setBuffer(SOUND_BUFFER_ROUND);
     Sleep(100);
-    SOUND.play();
+    if(VOLUMEI)SOUND.play();
     Sleep(100);
 
     auto restartWithNewLevel = [&]() {//Добафь кнопочкам функционал---------------------------------------------------------
@@ -149,13 +147,13 @@ int main(int argc, char* argv[])
             break;
         case WIN:
             SOUND.setBuffer(SOUND_BUFFER_WIN);
-            SOUND.play();
+            if (VOLUMEI)SOUND.play();
             LEVEL++;
             renderWin(&window, GAME_STATE, LEVEL-1, drawGameBackground);//TODO:переход на следующий левел !!! функция restartWithNewLevel
             break;
         case LOSE:
             SOUND.setBuffer(SOUND_BUFFER_LOSE);
-            SOUND.play();
+            if (VOLUMEI)SOUND.play();
             writeScore(&OBJ_STACK, __id * 10 + 0);
             GAME_STATE = END_GAME;
             HEALTH = 100;
@@ -166,7 +164,7 @@ int main(int argc, char* argv[])
             break;
         case OVER:
             SOUND.setBuffer(SOUND_BUFFER_WIN);
-            SOUND.play();
+            if (VOLUMEI)SOUND.play();
             GAME_STATE = END_GAME;
             renderOver(&window, GAME_STATE, drawGameBackground);
             break;

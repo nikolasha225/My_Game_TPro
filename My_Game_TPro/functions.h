@@ -39,6 +39,8 @@ extern unsigned long START_TIME;
 
 extern sf::Font FONT;
 
+extern bool VOLUMEI;
+
 //рандом функции
 static std::mt19937 generator([]() {
 	return std::mt19937(

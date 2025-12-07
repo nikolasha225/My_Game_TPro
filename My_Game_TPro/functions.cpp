@@ -22,6 +22,7 @@ unsigned long START_TIME = TIME;
 
 sf::Font FONT;
 
+bool VOLUMEI = 1;
 
 //==================================ENEMY==============================================
 
@@ -202,7 +203,7 @@ void Enemy::sound()
 {
 	SOUND.setBuffer(SOUND_BUFF);
 	//sound.setVolume(99);
-	SOUND.play();
+	if (VOLUMEI)SOUND.play();
 }
 
 bool Enemy::checkBullet(Bullet* bullet)
@@ -527,7 +528,7 @@ IGameObject* Tower::getPtr()
 void Tower::sound()
 {
 	SOUND.setBuffer(SOUND_BUFF);
-	SOUND.play();
+	if (VOLUMEI)SOUND.play();
 }
 
 uint8_t Tower::getLevel()

@@ -30,7 +30,7 @@ void Spawner::tick() {
     }
     if (allowSpawn[4]) {
         SOUND.setBuffer(SOUND_BUFF);
-        SOUND.play();
+        if (VOLUMEI)SOUND.play();
     }
 }
 
@@ -264,16 +264,16 @@ void TowerManager::checkEvents(sf::RenderWindow* window)
 
                             if (place->TOWER->upgrade()) {
                                 place->SOUND.setBuffer(place->SOUND_BUFF_UPGRADE);
-                                place->SOUND.play();
+                                if (VOLUMEI)place->SOUND.play();
                             }
                             else {
                                 place->SOUND.setBuffer(place->SOUND_BUFF_ERROR);
-                                place->SOUND.play();
+                                if (VOLUMEI)place->SOUND.play();
                             }
                         }
                         else if (cell->NUMBER == Tower::deletedTower) {
                             place->SOUND.setBuffer(place->SOUND_BUFF_DELETE);
-                            place->SOUND.play();
+                            if (VOLUMEI)place->SOUND.play();
                             MONEY += (float)JSONSettings["TOWER"][towerTypes[place->TOWER->getTowerType()]]["price"]
                                 * (float)JSONSettings["TOWER"]["removeCoef"];
                             if (place->TOWER != nullptr) {
@@ -339,7 +339,7 @@ void TowerManager::checkEvents(sf::RenderWindow* window)
                     else {
                         // Не хватило денег
                         place->SOUND.setBuffer(place->SOUND_BUFF_ERROR);
-                        place->SOUND.play();
+                        if (VOLUMEI)place->SOUND.play();
                         // Место остается выделенным для повторной попытки
                     }
                     clickedOnSomething = true;
@@ -476,7 +476,7 @@ void TowerManager::Place::addTower(Tower* tower)
     TOWER = tower;
     STATE = placeState::tower;
     SOUND.setBuffer(SOUND_BUFF_SPAWN);
-    SOUND.play();
+    if (VOLUMEI)SOUND.play();
 }
 
 Tower* TowerManager::Place::getTower()
