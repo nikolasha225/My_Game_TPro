@@ -51,7 +51,7 @@ MenuItem::MenuItem(const sf::String& label, sf::Font& font, unsigned int size,
     text.setOutlineThickness(2.f);
     text.setOutlineColor(sf::Color(0, 60, 0));
 
-    // Автоматическое центрирование
+    //auto center
     sf::FloatRect textBounds = text.getLocalBounds();
     text.setOrigin(textBounds.left + textBounds.width / 2.0f,
         textBounds.top + textBounds.height / 2.0f);
@@ -65,22 +65,21 @@ bool MenuItem::isMouseOver(const sf::RenderWindow& window) const {
 
 void MenuItem::update(float time) {
     if (hovered && !title) {
-        float pulse = (std::sin(time * 6.0f) + 1.f) / 2.f; // Быстрая пульсация
+        float pulse = (std::sin(time * 6.0f) + 1.f) / 2.f; //quick pulse
 
-        // Яркое переливание между цветами
         sf::Uint8 r = static_cast<sf::Uint8>(normalColor.r + (hoverColor.r - normalColor.r) * pulse);
         sf::Uint8 g = static_cast<sf::Uint8>(normalColor.g + (hoverColor.g - normalColor.g) * pulse);
         sf::Uint8 b = static_cast<sf::Uint8>(normalColor.b + (hoverColor.b - normalColor.b) * pulse);
 
         text.setFillColor(sf::Color(r, g, b));
 
-        // Пульсирующая обводка
+        //pulse
         sf::Uint8 glow = static_cast<sf::Uint8>(100 + 155 * pulse);
-        text.setOutlineColor(sf::Color(0, glow, 0)); // Зеленая пульсирующая обводка
+        text.setOutlineColor(sf::Color(0, glow, 0)); //green pulse
 
     }
     else {
-        // Возвращаем к нормальному состоянию
+        //normal seession
         text.setFillColor(normalColor);
         text.setOutlineColor(sf::Color(0, 60, 0));
     }
@@ -119,7 +118,7 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::functi
     float startY = menuY + 100.f;
     float itemSpacing = 80.f;
 
-    // Создаем элементы меню
+    //create elements
     sf::String adText = L"";
     std::vector<MenuItem> pauseMenu = {
         MenuItem(L"Продолжить", font, 36, {centerX, startY}, [&gameState]() {gameState = GAME;}, false,
@@ -135,7 +134,7 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::functi
                 sf::Color(255, 100, 100), sf::Color(255, 0, 0))
     };
 
-    // Центрируем весь текст
+    //center text
     for (auto& item : pauseMenu) {
         sf::FloatRect textBounds = item.text.getLocalBounds();
         item.text.setOrigin(textBounds.width / 2.f, textBounds.height / 2.f);
@@ -162,9 +161,9 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::functi
                 event.mouseButton.button == sf::Mouse::Left) {
                 for (auto& item : pauseMenu) {
                     if (item.isMouseOver(*window)) {
-                        // Проверка для кнопки рекламы
+                        //check ad
                         if (item.text.getString() == L"Реклама(50 монет)" && !adTimer.canShowAd()) {
-                            // Не переходим в AD, если реклама недоступна
+                            //if no dostup - not go
                             continue;
                         }
                         item.onClick();
@@ -183,12 +182,12 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::functi
             }
         }
 
-        // Обновляем анимации
+        //anim
         for (auto& item : pauseMenu) {
             item.update(time);
         }
 
-        // Обновляем текст рекламы каждые 0.5 секунды
+        //update every 0.5 sec text
         if (adUpdateClock.getElapsedTime().asSeconds() > 0.5f) {
             if (adTimer.canShowAd()) {
                 pauseMenu[2].text.setString(L"Доступно сейчас!");
@@ -198,14 +197,14 @@ void renderPause(sf::RenderWindow* window, EnumGameState& gameState, std::functi
                 pauseMenu[2].text.setString(L"Доступно через: " + std::to_wstring(remaining) + L" сек.");
             }
 
-            // Пере-центрируем текст после изменения
+            //center text
             sf::FloatRect textBounds = pauseMenu[2].text.getLocalBounds();
             pauseMenu[2].text.setOrigin(textBounds.width / 2.f, textBounds.height / 2.f);
 
             adUpdateClock.restart();
         }
 
-        // Отрисовка
+        //DRAWING
         drawStack(window);
         window->draw(overlay);
         window->draw(menuBorder);
@@ -245,14 +244,14 @@ void renderWin(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Level
     menuBorder.setPosition(menuX, menuY);
 
     float centerX = menuX + menuWidth / 2.f;
-    float startY = menuY + 100.f;  // Начинаем ниже от верха
+    float startY = menuY + 100.f;
     float itemSpacing = 60.f;
 
-    // Создаем текст с номером уровня
+    //create text
     sf::String levelText = L"Поздравляем, вы прошли Level " + std::to_wstring(Level) + L"!";
     sf::String currentLevel = L"Уровень " + std::to_wstring(Level) + L" из 3 пройден!";
 
-    // Определяем следующие действия в зависимости от уровня
+    //next deistviya
     std::function<void()> nextAction;
     sf::String nextButtonText;
     sf::String currentAttack;
@@ -360,10 +359,10 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
             if (scoreData.contains("players") && !scoreData["players"].empty()) {
                 auto players = scoreData["players"];
 
-                // Ищем текущего игрока (предположим, что это последний добавленный)
+                //find current
                 std::string currentPlayerId;
 
-                // Если есть текущая сессия (timestamp), ищем по ней
+                //if timestamp
 #ifdef TIME_STAMP_SCORE
                 std::string currentTimestamp = TIME_STAMP_SCORE;
 
@@ -371,14 +370,14 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
                     std::string playerId = playerEntry.key();
                     auto& sessions = playerEntry.value();
 
-                    // Проверяем, есть ли у этого игрока сессия с текущим timestamp
+                    //check timestamp
                     if (sessions.contains(currentTimestamp)) {
                         currentPlayerId = playerId;
                         auto& currentSession = sessions[currentTimestamp];
 
                         player = sf::String::fromUtf8(playerId.begin(), playerId.end());
 
-                        // Берем убитых из текущей сессии
+                        //take killed
                         if (currentSession.contains("enemies") &&
                             currentSession["enemies"].contains("total_killed")) {
                             totalKilled = currentSession["enemies"]["total_killed"];
@@ -388,7 +387,7 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
                 }
 #endif
 
-                // Если не нашли по timestamp, ищем последнюю завершенную игру с game_result
+                //if no found timestamp
                 if (currentPlayerId.empty()) {
                     std::string lastPlayerId;
                     long long maxTimestamp = 0;
@@ -402,7 +401,7 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
                             try {
                                 long long timestamp = std::stoll(timestampStr);
 
-                                // Проверяем, что это завершенная игра (есть game_result)
+                                //exist game
                                 if (session.value().contains("game_result") &&
                                     timestamp > maxTimestamp) {
                                     maxTimestamp = timestamp;
@@ -493,17 +492,17 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
         sf::Color(255, 100, 100), sf::Color(255, 0, 0))
     };
 
-    //#######################ДЛЯ ТЕХ ИНФЫ#######################
+    //#######################TEX INFO#######################
     for (auto& item : loseMenu) {
         sf::FloatRect textBounds = item.text.getLocalBounds();
         if (item.text.getString() == L"ID Оператора:" || item.text.getString() == L"Убито мобов:") {
-            item.text.setOrigin(0, textBounds.height / 2.f); //левишь
+            item.text.setOrigin(0, textBounds.height / 2.f); //levish
         }
         else if (item.text.getString() == L"Alex" || item.text.getString() == L"23") {
-            item.text.setOrigin(textBounds.width, textBounds.height / 2.f); //правишь
+            item.text.setOrigin(textBounds.width, textBounds.height / 2.f); //pravish
         }
         else {
-            //по базе
+            //po baze
             item.text.setOrigin(textBounds.width / 2.f, textBounds.height / 2.f);
         }
     }
@@ -589,10 +588,7 @@ void renderOver(sf::RenderWindow* window, EnumGameState& gameState, std::functio
     float startY = menuY + 100.f;
     float itemSpacing = 60.f;
 
-    // Создаем текст с номером уровня
     sf::String levelText = L"Поздравляем, вы отразили все атаки!";
-
-    // Определяем следующие действия в зависимости от уровня
 
     std::vector<MenuItem> winMenu = {
         MenuItem(L"GAME WIN", font, 32, {centerX, startY - 50.f}, []() {}, true,

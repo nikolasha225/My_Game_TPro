@@ -30,8 +30,7 @@ const std::vector<sf::Vector2f> wayPoints[3] =
     }
 };
 
-int main()
-{
+int main(){
     // Создаем окно
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "WayPoints Visualization - Press 1,2,3 to switch paths");
     window.setFramerateLimit(60);
