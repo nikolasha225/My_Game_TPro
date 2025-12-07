@@ -291,13 +291,13 @@
 						idText.setFillColor(sf::Color::Yellow);
 					}
 					else {
-						// Сохраняем изменения при завершении редактирования
+						//save when editeed
 						std::string text = idText.getString();
 						size_t cursorPos = text.find('|');
 						if (cursorPos != std::string::npos) {
 							text.erase(cursorPos, 1);
 						}
-						// Извлекаем только ID (без "ID: ")
+						//take id (without id)
 						if (text.length() > 4) {
 							playerId = text.substr(4);
 						}
@@ -308,7 +308,7 @@
 					}
 				}
 				else if (editingId) {
-					// Клик вне ID - завершаем редактирование
+					//click not an near ID
 					editingId = false;
 					std::string text = idText.getString();
 					size_t cursorPos = text.find('|');
@@ -324,7 +324,7 @@
 					idText.setFillColor(sf::Color::White);
 				}
 
-				// Обработка меню (кроме ID)
+				//obrabotka when no editing
 				if (!editingId || !idText.getGlobalBounds().contains(mousePos)) {
 					clickMenu(window, screen, needsRedraw, res,
 						mainmenu, settingsmenu, recordsmenu,
@@ -332,7 +332,7 @@
 				}
 			}
 
-			// Ввод текста при редактировании
+			//enter text
 			if (editingId) {
 				if (event.type == sf::Event::KeyPressed) {
 					if (event.key.code == sf::Keyboard::Enter) {
@@ -363,7 +363,7 @@
 						std::string currentText = idText.getString();
 						size_t cursorPos = currentText.find('|');
 
-						if (c == '\b') { // Backspace
+						if (c == '\b') { //backspace DELETE
 							if (cursorPos != std::string::npos && cursorPos > 4) {
 								currentText.erase(cursorPos - 1, 1);
 								idText.setString(currentText);
@@ -374,7 +374,7 @@
 								currentText.erase(cursorPos, 1);
 							}
 
-							// Проверяем длину ID (макс 10 символов)
+							//check lengh (10 symbols)
 							std::string idOnly = currentText.substr(4);
 							if (idOnly.length() < 10) {
 								if (cursorPos != std::string::npos) {
