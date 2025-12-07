@@ -28,9 +28,10 @@ struct GameRes {
 
 //working?)
 bool loadAssets(sf::RenderWindow& window, GameRes& assets);
+void handleMenu(sf::Event& event, sf::RenderWindow& window, std::string& screen, bool& needsRedraw, GameRes& res, std::vector<MenuItem>& mainmenu, std::vector<MenuItem>& settingsmenu, std::vector<MenuItem>& recordsmenu, std::vector<MenuItem>& ownersmenu, std::vector<MenuItem>& difficultyMenu, std::string& playerId, bool& editingId, sf::Text& idText, sf::Clock& cursorClock, bool& showCursor);
 void clickMenu(sf::RenderWindow& window, std::string& screen, bool& needsRedraw, GameRes& res, std::vector<MenuItem>& mainmenu, std::vector<MenuItem>& settingsmenu, std::vector<MenuItem>& recordsmenu, std::vector<MenuItem>& ownersmenu, std::vector<MenuItem>& difficultyMenu);
-void updateMenu(sf::RenderWindow& window, std::string& screen, float time, std::vector<MenuItem>& mainmenu, std::vector<MenuItem>& settingsmenu, std::vector<MenuItem>& recordsmenu, std::vector<MenuItem>& ownersmenu, std::vector<MenuItem>& difficultyMenu);
-void drawMenu(sf::RenderWindow& window, std::string& screen, std::vector<MenuItem>& mainmenu, std::vector<MenuItem>& settingsmenu, std::vector<MenuItem>& recordsmenu, std::vector<MenuItem>& ownersmenu, std::vector<MenuItem>& difficultyMenu);
+void updateMenu(sf::RenderWindow& window, std::string& screen, float time, std::vector<MenuItem>& mainmenu, std::vector<MenuItem>& settingsmenu, std::vector<MenuItem>& recordsmenu, std::vector<MenuItem>& ownersmenu, std::vector<MenuItem>& difficultyMenu, std::string& playerId, bool& editingId, sf::Text& idText, sf::Clock& cursorClock, bool& showCursor);
+void drawMenu(sf::RenderWindow& window, std::string& screen, std::vector<MenuItem>& mainmenu, std::vector<MenuItem>& settingsmenu, std::vector<MenuItem>& recordsmenu, std::vector<MenuItem>& ownersmenu, std::vector<MenuItem>& difficultyMenu, sf::Text idText, bool editingId, GameRes& res);
 void updateRecords(std::vector<MenuItem>& recordsmenu, sf::Font& font);
 
 //all punkts of menus

@@ -8,7 +8,7 @@ int main() {
 	window.setVerticalSyncEnabled(true);
 	AdvancedMatrixBackground matrixBackground;
 
-	//подгрузили звуки, шрифт
+	//sound, font
 	GameRes res;
 	if (!loadAssets(window, res)) {
 		return 1;
@@ -17,9 +17,21 @@ int main() {
 	std::string screen = "main";
 	bool needsRedraw = true;
 	std::vector<MenuItem> recordsmenu;
-	// ============= Функции пунктов меню =============
+	//============= function point menu =============
 	bool isSoundOn = true;
 	MenuItem* soundToggle = nullptr;
+
+	// ============= SIMPLE ID =============
+	std::string playerId = "Player";
+	bool editingId = false;
+	sf::Clock cursorClock;
+	bool showCursor = true;
+	sf::Text idText;
+	idText.setFont(res.font);
+	idText.setCharacterSize(18);
+	idText.setFillColor(sf::Color::White);
+	idText.setString("ID: " + playerId);
+	idText.setPosition(700.f, 570.f);
 
 	auto audio = [&isSoundOn, &soundToggle, &res] {
 		isSoundOn = !isSoundOn;
@@ -29,13 +41,13 @@ int main() {
 		res.soundclick.setVolume(isSoundOn ? 100.f : 0.f);
 		res.soundstart.setVolume(isSoundOn ? 100.f : 0.f);
 		};
-	auto startGame = [&res, &window, &isSoundOn](int difficulty) {
-		Sleep(100);//надо чтоб прогрузилась
+	auto startGame = [&res, &window, &isSoundOn, &playerId](int difficulty) {
+		Sleep(100);//for progryz
 		res.soundstart.play();
 
-		std::string soundParam = isSoundOn ? "1" : "0"; // передавать 1 - вкл  0 - выкл
-		std::string diffParam = std::to_string(difficulty); // тоже надо передать как то
-		system(("start \"\" /B " + std::string("My_Game_TPro.exe") + diffParam + " " +		+ " " + soundParam + " >nul 2>&1").c_str());
+		std::string soundParam = isSoundOn ? "1" : "0"; // 1 - vkl  0 - vikl
+		std::string diffParam = std::to_string(difficulty);
+		system(("start \"\" /B " + std::string("My_Game_TPro.exe") + diffParam + " " + playerId + " " + soundParam + " >nul 2>&1").c_str());
 
 		//system("My_Game_TPro.exe 1 7 1");//тут надо добавить параметры (глянь как они у меня идут, там id и уровень сложности) (просто через пробел как стринг добавить)
 		window.close();
@@ -81,34 +93,42 @@ int main() {
 
 	sf::Clock clock;
 
-	screen = "main";//на всякий
+	screen = "main";//na vsyakiy
 
 	while (window.isOpen()) {
 		float time = clock.getElapsedTime().asSeconds();
 		float deltaTime = clock.restart().asSeconds();
 		sf::Event event;
-		while (window.pollEvent(event)) {
-			if (event.type == sf::Event::Closed)
-				window.close();
-			
-			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-				clickMenu(window, screen, needsRedraw, res, mainmenu, settingsmenu, recordsmenu, ownersmenu, difficultyMenu);
-			}
-		}
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
+            //for id
+            if (screen == "main") {
+				handleMenu(event, window, screen, needsRedraw, res, mainmenu, settingsmenu, recordsmenu, ownersmenu, difficultyMenu, playerId, editingId, idText, cursorClock, showCursor);
+            }
+            else {
+                //for other
+                if (event.type == sf::Event::MouseButtonPressed &&
+                    event.mouseButton.button == sf::Mouse::Left) {
+                    clickMenu(window, screen, needsRedraw, res,
+                        mainmenu, settingsmenu, recordsmenu,
+                        ownersmenu, difficultyMenu);
+                }
+            }
+        }
 
 		matrixBackground.updating(deltaTime);
-		// Проверяем наведение
+		//when naveli
+		updateMenu(window, screen, time, mainmenu, settingsmenu, recordsmenu, ownersmenu, difficultyMenu, playerId, editingId, idText, cursorClock, showCursor);
 
-		updateMenu(window, screen, time, mainmenu, settingsmenu, recordsmenu, ownersmenu, difficultyMenu);
-
-		// ============= Рендер =============
-		window.clear(sf::Color(30, 30, 30)); //изначальный фон
+		// ============= RENDER =============
+		window.clear(sf::Color(30, 30, 30)); //fon navsyakiy
 		matrixBackground.draw(window);
 		sf::RectangleShape overlay(sf::Vector2f(1020, 640));
-		overlay.setFillColor(sf::Color(0, 0, 0, 128)); // Полупрозрачный черный
+		overlay.setFillColor(sf::Color(0, 0, 0, 128)); //dark
 		window.draw(overlay);
 
-		drawMenu(window, screen, mainmenu, settingsmenu, recordsmenu, ownersmenu, difficultyMenu);
+		drawMenu(window, screen, mainmenu, settingsmenu, recordsmenu, ownersmenu, difficultyMenu, idText, editingId, res);
 
 		window.display();
 	}

@@ -266,6 +266,134 @@
 			return true;
 		}
 
+		void handleMenu(
+			sf::Event& event, sf::RenderWindow& window, std::string& screen, bool& needsRedraw, GameRes& res,
+			std::vector<MenuItem>& mainmenu,
+			std::vector<MenuItem>& settingsmenu,
+			std::vector<MenuItem>& recordsmenu,
+			std::vector<MenuItem>& ownersmenu,
+			std::vector<MenuItem>& difficultyMenu,
+			std::string& playerId, bool& editingId, sf::Text& idText,                 
+			sf::Clock& cursorClock, bool& showCursor) {
+			if (event.type == sf::Event::MouseButtonPressed &&
+				event.mouseButton.button == sf::Mouse::Left) {
+
+				sf::Vector2f mousePos = window.mapPixelToCoords(
+					sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
+
+				if (idText.getGlobalBounds().contains(mousePos)) {
+					editingId = !editingId;
+					cursorClock.restart();
+					showCursor = true;
+					res.soundclick.play();
+
+					if (editingId) {
+						idText.setFillColor(sf::Color::Yellow);
+					}
+					else {
+						// Сохраняем изменения при завершении редактирования
+						std::string text = idText.getString();
+						size_t cursorPos = text.find('|');
+						if (cursorPos != std::string::npos) {
+							text.erase(cursorPos, 1);
+						}
+						// Извлекаем только ID (без "ID: ")
+						if (text.length() > 4) {
+							playerId = text.substr(4);
+						}
+						if (playerId.empty()) playerId = "Player";
+
+						idText.setString("ID: " + playerId);
+						idText.setFillColor(sf::Color::White);
+					}
+				}
+				else if (editingId) {
+					// Клик вне ID - завершаем редактирование
+					editingId = false;
+					std::string text = idText.getString();
+					size_t cursorPos = text.find('|');
+					if (cursorPos != std::string::npos) {
+						text.erase(cursorPos, 1);
+					}
+					if (text.length() > 4) {
+						playerId = text.substr(4);
+					}
+					if (playerId.empty()) playerId = "Player";
+
+					idText.setString("ID: " + playerId);
+					idText.setFillColor(sf::Color::White);
+				}
+
+				// Обработка меню (кроме ID)
+				if (!editingId || !idText.getGlobalBounds().contains(mousePos)) {
+					clickMenu(window, screen, needsRedraw, res,
+						mainmenu, settingsmenu, recordsmenu,
+						ownersmenu, difficultyMenu);
+				}
+			}
+
+			// Ввод текста при редактировании
+			if (editingId) {
+				if (event.type == sf::Event::KeyPressed) {
+					if (event.key.code == sf::Keyboard::Enter) {
+						editingId = false;
+						std::string text = idText.getString();
+						size_t cursorPos = text.find('|');
+						if (cursorPos != std::string::npos) {
+							text.erase(cursorPos, 1);
+						}
+						if (text.length() > 4) {
+							playerId = text.substr(4);
+						}
+						if (playerId.empty()) playerId = "Player";
+
+						idText.setString("ID: " + playerId);
+						idText.setFillColor(sf::Color::White);
+					}
+					else if (event.key.code == sf::Keyboard::Escape) {
+						editingId = false;
+						idText.setString("ID: " + playerId);
+						idText.setFillColor(sf::Color::White);
+					}
+				}
+				else if (event.type == sf::Event::TextEntered) {
+					if (event.text.unicode < 128 && event.text.unicode != 13 && event.text.unicode != 27) {
+						char c = static_cast<char>(event.text.unicode);
+
+						std::string currentText = idText.getString();
+						size_t cursorPos = currentText.find('|');
+
+						if (c == '\b') { // Backspace
+							if (cursorPos != std::string::npos && cursorPos > 4) {
+								currentText.erase(cursorPos - 1, 1);
+								idText.setString(currentText);
+							}
+						}
+						else if (std::isalnum(c) || c == '-' || c == '_' || c == ' ') {
+							if (cursorPos != std::string::npos) {
+								currentText.erase(cursorPos, 1);
+							}
+
+							// Проверяем длину ID (макс 10 символов)
+							std::string idOnly = currentText.substr(4);
+							if (idOnly.length() < 10) {
+								if (cursorPos != std::string::npos) {
+									currentText.insert(cursorPos, 1, c);
+									currentText.insert(cursorPos + 1, "|");
+								}
+								else {
+									currentText += c;
+									currentText += "|";
+								}
+								idText.setString(currentText);
+							}
+						}
+					}
+				}
+			}
+		}
+
+
 		void clickMenu(sf::RenderWindow& window,
 			std::string& screen,
 			bool& needsRedraw,
@@ -341,7 +469,9 @@
 			std::vector<MenuItem>& settingsmenu,
 			std::vector<MenuItem>& recordsmenu,
 			std::vector<MenuItem>& ownersmenu,
-			std::vector<MenuItem>& difficultyMenu) {
+			std::vector<MenuItem>& difficultyMenu,
+			std::string& playerId, bool& editingId, sf::Text& idText,
+			sf::Clock& cursorClock, bool& showCursor) {
 
 			//when hovered
 			if (screen == "main") {
@@ -349,6 +479,29 @@
 					item.hovered = item.isMouseOver(window);
 					if (item.isMouseOver(window) != item.hovered);
 					item.update(time);
+				}
+				//miganie
+				if (editingId && screen == "main") {
+					if (cursorClock.getElapsedTime().asSeconds() > 0.5f) {
+						showCursor = !showCursor;
+						cursorClock.restart();
+
+						std::string currentText = idText.getString();
+						size_t cursorPos = currentText.find('|');
+
+						if (showCursor) {
+							if (cursorPos == std::string::npos) {
+								currentText += "|";
+								idText.setString(currentText);
+							}
+						}
+						else {
+							if (cursorPos != std::string::npos) {
+								currentText.erase(cursorPos, 1);
+								idText.setString(currentText);
+							}
+						}
+					}
 				}
 			}
 			else if (screen == "settings") {
@@ -387,12 +540,24 @@
 			std::vector<MenuItem>& settingsmenu,
 			std::vector<MenuItem>& recordsmenu,
 			std::vector<MenuItem>& ownersmenu,
-			std::vector<MenuItem>& difficultyMenu) {
-
+			std::vector<MenuItem>& difficultyMenu,
+			sf::Text idText, bool editingId, GameRes& res) {
 			//otobrajenie
 			if (screen == "main") {
 				for (auto& item : mainmenu)
 					window.draw(item.text);
+				//id in right ygol
+				window.draw(idText);
+				//if edit = hint!
+				if (editingId) {
+					sf::Text hintText;
+					hintText.setFont(res.font);
+					hintText.setCharacterSize(14);
+					hintText.setFillColor(sf::Color(150, 200, 100));
+					hintText.setPosition(600.f, 540.f);
+					hintText.setString(L"Введите ID (до 10 символов)");
+					window.draw(hintText);
+				}
 			}
 			else if (screen == "settings") {
 				for (auto& item : settingsmenu)
