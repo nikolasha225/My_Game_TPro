@@ -2,40 +2,185 @@
   "GENERAL": {
     "title": "Guards of ELBRUS",
     "vsync": true,
-    "framerate": 60
+    "framerate": 60,
+    "resolution": [ 1920, 1080 ],
+    "iconPath": "./textures/img/icongame.png",
+    "volume": 50,
+    "font": "./textures/font/font.ttf",
+    "scoreJSON": "./config/score.json"
+  },
+  "GAME": {
+    "startHP": [ 100, 60, 30 ],
+    "startMoney": [ 400, 300, 200 ],
+    "roundTimeSec": [ 420, 360, 360 ],
+    "soundRound": [ "./sound/round1.ogg", "./sound/round2.ogg", "./sound/round3.ogg" ],
+    "soundVictory": "./sound/victory.ogg",
+    "soundLose": "./sound/lose.ogg",
+    "soundError": "./sound/error.ogg",
+    "soundTowerSpawn": "./sound/towerSpawn.ogg",
+    "soundUpgrade": "./sound/upgrade.ogg",
+    "soundDelete": "./sound/delete.ogg",
+    "textureMap": [ "./textures/img/first.png", "./textures/img/second.png", "./textures/img/third.png" ],
+    "videoAD": [ "./textures/video/ad_01.avi", "./textures/video/ad_03.avi", "./textures/video/ad_04.avi", "./textures/video/ad_05.avi", "./textures/video/ad_06.avi", "./textures/video/ad_07.avi", "./textures/video/ad_08.avi", "./textures/video/ad_09.avi" ],
+    "countOfAd": 8,
+    "adPrice": 25,
+    "adDelay": 300
   },
   "ENEMY": {
+    "difficultCoeficent": [ 1, 1.2, 1.5 ],
     "velocityCoeficent": 0.01,
+    "damageCoeficent": 1,
     "layer": 20,
+    "moneyCoeficent": 10,
+    "dieSound": "./sound/die.ogg",
+    "damageSound": "./sound/procDamage.ogg",
+    "mobCountDisperce": 0.2,
+    "mobMoveDisperce": 5,
     "basic": {
+      "damage": 5,
       "hp": 100,
       "velocity": 7,
       "size": [ 50, 50 ],
-      "texture": "./textures/img/basic.png"
+      "texture": "./textures/img/basic.png",
+      "money": 1,
+      "mobCount": 200
     },
     "fast": {
+      "damage": 2,
       "hp": 50,
       "velocity": 10,
       "size": [ 35, 35 ],
-      "texture": "./textures/img/fast.png"
+      "texture": "./textures/img/fast.png",
+      "money": 1,
+      "mobCount": 100
     },
     "tank": {
+      "damage": 11,
       "hp": 1000,
       "velocity": 5,
       "size": [ 65, 65 ],
-      "texture": "./textures/img/tank.png"
+      "texture": "./textures/img/tank.png",
+      "money": 6,
+      "mobCount": 30
     },
     "miniBoss": {
+      "damage": 22,
       "hp": 3000,
       "velocity": 3,
       "size": [ 80, 80 ],
-      "texture": "./textures/img/miniBoss.png"
+      "texture": "./textures/img/miniBoss2.png",
+      "money": 15,
+      "mobCount": 10
     },
     "boss": {
+      "damage": 33,
       "hp": 8000,
-      "velocity": 1,
-      "size": [ 100, 100 ],
-      "texture": "./textures/img/virus-d.png"
+      "velocity": 2,
+      "size": [ 90, 120 ],
+      "texture": "./textures/img/BOSS_lowPixel.png",
+      "money": 30,
+      "mobCount": 3,
+      "spawnSound": "./sound/haha.ogg"
+    }
+  },
+  "BULLET": {
+    "damageCoeficent": 10,
+    "velocityCoeficent": 4,
+    "layer": 31,
+    "shootSound": "./sound/shoot01.ogg",
+    "defender": {
+      "damage": 3,
+      "velocity": 5,
+      "texture": "./textures/img/bulldefender.png",
+      "size": [ 10, 10 ]
+    },
+    "avast": {
+      "damage": 4,
+      "velocity": 5,
+      "texture": "./textures/img/bullavast.png",
+      "size": [ 12, 12 ]
+    },
+    "drWeb": {
+      "damage": 12,
+      "velocity": 2,
+      "texture": "./textures/img/bulldrweb.png",
+      "size": [ 20, 20 ]
+    },
+    "kaspersky": {
+      "damage": 10,
+      "velocity": 3,
+      "texture": "./textures/img/bullkaspersky.png",
+      "size": [ 25, 25 ]
+    }
+  },
+  "TOWER": {
+    "framePerShootCoeficent": 30,
+    "rangeCoeficent": 300,
+    "layer": 23,
+    "shootScale": 0.1,
+    "upgrade": [ 1, 1.2, 1.5, 1.8, 2.0, 2.5 ],
+    "buyCellSize": [ 50, 50 ],
+    "buyDecsSize": [ 100, 100 ],
+    "levelBoxSize": [ 20, 20 ],
+    "selectTexture": "./textures/img/select.png",
+    "removeTexture": "./textures/img/remove.png",
+    "upgradeTexture": "./textures/img/upgrade.png",
+    "removeCoef": 0.9,
+    "defender": {
+      "framePerShoot": 1,
+      "texture": "./textures/img/defender.png",
+      "cellTexture": "./textures/img/defenderCell.png",
+      "size": [ 90, 90 ],
+      "price": 100,
+      "range": 1,
+      "descTexture": "./textures/img/defenderCell.png"
+    },
+    "avast": {
+      "framePerShoot": 1,
+      "texture": "./textures/img/avast.png",
+      "cellTexture": "./textures/img/avastCell.png",
+      "size": [ 90, 90 ],
+      "price": 150,
+      "range": 1.6,
+      "descTexture": "./textures/img/avastCell.png"
+    },
+    "drWeb": {
+      "framePerShoot": 1,
+      "texture": "./textures/img/dr web.png",
+      "cellTexture": "./textures/img/dr webCell.png",
+      "size": [ 90, 90 ],
+      "price": 250,
+      "range": 1.3,
+      "descTexture": "./textures/img/dr webCell.png"
+    },
+    "kaspersky": {
+      "framePerShoot": 1,
+      "texture": "./textures/img/kaspersky.png",
+      "cellTexture": "./textures/img/kasperskyCell.png",
+      "size": [ 90, 90 ],
+      "price": 450,
+      "range": 1.5,
+      "descTexture": "./textures/img/kasperskyCell.png"
+    }
+  },
+  "CORE": {
+    "coreTexture": "./textures/img/elbrus.png",
+    "coreSize": [ 150, 150 ],
+    "tickOfDamage": 30,
+    "coreMove": 30,
+    "caveSize": [ 210, 260 ],
+    "caveTexture": "./textures/img/Cave.png",
+    "sevenSegmentFont": "./textures/font/font2.ttf",
+    "graphFrame": "./textures/img/graph_frame.png"
+  },
+  "GUI": {
+    "money": {
+      "position": [ 308, 142 ],
+      "fontSize": 120
+    },
+    "health": {
+      "position": [ 0, 0 ],
+      "size": [ 100, 100 ]
     }
   }
 }

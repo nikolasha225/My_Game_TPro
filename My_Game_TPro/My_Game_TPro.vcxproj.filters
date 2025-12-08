@@ -14,10 +14,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Heder">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Libray">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -40,18 +36,43 @@
     <Filter Include="Textures\video">
       <UniqueIdentifier>{6a59c622-71e4-4053-8282-3f16a713e941}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Textures\img\tower">
+      <UniqueIdentifier>{a35c8f8c-2265-4b87-a42d-d0cfa3693531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Textures\img\virus">
+      <UniqueIdentifier>{827ba63b-3094-4eb1-969b-e3fd7414115b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Textures\img\bullet">
+      <UniqueIdentifier>{6f2cac96-2fff-41be-aad0-f1ae9901bac1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sound">
+      <UniqueIdentifier>{83e0058e-684f-4ebd-868a-da5fa83c2ff3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sound\source">
+      <UniqueIdentifier>{4716f792-419f-4db4-a2ec-c4a650f628a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Textures\img\map">
+      <UniqueIdentifier>{b11ab7c2-6c22-41d2-9248-4d93b00b5668}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Textures\font">
+      <UniqueIdentifier>{4e70eb11-a81e-425f-b84a-fe5bb86953af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>SourseCode</Filter>
-    </ClCompile>
     <ClCompile Include="game.cpp">
       <Filter>SourseCode</Filter>
     </ClCompile>
-    <ClCompile Include="CONSTANTS.cpp">
-      <Filter>Libray</Filter>
-    </ClCompile>
     <ClCompile Include="functions.cpp">
+      <Filter>SourseCode</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>SourseCode</Filter>
+    </ClCompile>
+    <ClCompile Include="allMenu.cpp">
       <Filter>SourseCode</Filter>
     </ClCompile>
   </ItemGroup>
@@ -74,13 +95,82 @@
     <None Include="config\score.json">
       <Filter>Configs</Filter>
     </None>
+    <None Include="sound\die.ogg">
+      <Filter>sound</Filter>
+    </None>
+    <None Include="sound\procDamage.ogg">
+      <Filter>sound</Filter>
+    </None>
+    <None Include="sound\shoot01.ogg">
+      <Filter>sound</Filter>
+    </None>
+    <None Include="sound\round3.ogg">
+      <Filter>sound</Filter>
+    </None>
+    <None Include="sound\round2.ogg">
+      <Filter>sound</Filter>
+    </None>
+    <None Include="sound\round1.ogg">
+      <Filter>sound</Filter>
+    </None>
+    <None Include="sound\victory.ogg">
+      <Filter>sound</Filter>
+    </None>
+    <None Include="sound\haha.ogg">
+      <Filter>sound</Filter>
+    </None>
+    <None Include="sound\towerSpawn.ogg">
+      <Filter>sound</Filter>
+    </None>
+    <None Include="sound\error.ogg">
+      <Filter>sound</Filter>
+    </None>
+    <None Include="sound\upgrade.ogg">
+      <Filter>sound</Filter>
+    </None>
+    <None Include="sound\delete.ogg">
+      <Filter>sound</Filter>
+    </None>
+    <None Include="textures\video\ad_01.avi">
+      <Filter>Textures\video</Filter>
+    </None>
+    <None Include="sound\lose.ogg">
+      <Filter>sound</Filter>
+    </None>
+    <None Include="textures\video\ad_02.avi">
+      <Filter>Textures\video</Filter>
+    </None>
+    <None Include="textures\video\ad_03.avi">
+      <Filter>Textures\video</Filter>
+    </None>
+    <None Include="textures\video\ad_04.avi">
+      <Filter>Textures\video</Filter>
+    </None>
+    <None Include="textures\video\ad_05.avi">
+      <Filter>Textures\video</Filter>
+    </None>
+    <None Include="textures\video\ad_06.avi">
+      <Filter>Textures\video</Filter>
+    </None>
+    <None Include="textures\video\ad_07.avi">
+      <Filter>Textures\video</Filter>
+    </None>
+    <None Include="textures\video\ad_08.avi">
+      <Filter>Textures\video</Filter>
+    </None>
+    <None Include="textures\video\ad_09.avi">
+      <Filter>Textures\video</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
-      <Filter>Heder</Filter>
+      <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="functions.h">
-      <Filter>Heder</Filter>
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="allMenu.h">
+      <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -90,23 +180,192 @@
     <Image Include="textures\debug\test1.png">
       <Filter>Textures\debug</Filter>
     </Image>
-    <Image Include="textures\img\tower-d.png">
-      <Filter>Textures\img</Filter>
-    </Image>
-    <Image Include="textures\img\virus-d.png">
-      <Filter>Textures\img</Filter>
+    <Image Include="textures\img\avast.png">
+      <Filter>Textures\img\tower</Filter>
     </Image>
     <Image Include="textures\img\basic.png">
-      <Filter>Textures\img</Filter>
+      <Filter>Textures\img\virus</Filter>
+    </Image>
+    <Image Include="textures\img\BOSS.png">
+      <Filter>Textures\img\virus</Filter>
+    </Image>
+    <Image Include="textures\img\defender.png">
+      <Filter>Textures\img\tower</Filter>
+    </Image>
+    <Image Include="textures\img\dr web.png">
+      <Filter>Textures\img\tower</Filter>
     </Image>
     <Image Include="textures\img\fast.png">
-      <Filter>Textures\img</Filter>
+      <Filter>Textures\img\virus</Filter>
+    </Image>
+    <Image Include="textures\img\kaspersky.png">
+      <Filter>Textures\img\tower</Filter>
     </Image>
     <Image Include="textures\img\miniBoss.png">
-      <Filter>Textures\img</Filter>
+      <Filter>Textures\img\virus</Filter>
+    </Image>
+    <Image Include="textures\img\miniBoss2.png">
+      <Filter>Textures\img\virus</Filter>
     </Image>
     <Image Include="textures\img\tank.png">
+      <Filter>Textures\img\virus</Filter>
+    </Image>
+    <Image Include="textures\img\tower-d.png">
+      <Filter>Textures\img\tower</Filter>
+    </Image>
+    <Image Include="textures\img\virus-d.png">
+      <Filter>Textures\img\virus</Filter>
+    </Image>
+    <Image Include="textures\img\bullkaspersky.gif">
+      <Filter>Textures\gif</Filter>
+    </Image>
+    <Image Include="textures\img\bullavast.gif">
+      <Filter>Textures\gif</Filter>
+    </Image>
+    <Image Include="textures\img\bulldefender.gif">
+      <Filter>Textures\gif</Filter>
+    </Image>
+    <Image Include="textures\img\bulldrweb.gif">
+      <Filter>Textures\gif</Filter>
+    </Image>
+    <Image Include="textures\img\bullavast.png">
+      <Filter>Textures\img\bullet</Filter>
+    </Image>
+    <Image Include="textures\img\bulldefender.png">
+      <Filter>Textures\img\bullet</Filter>
+    </Image>
+    <Image Include="textures\img\bulldrweb.png">
+      <Filter>Textures\img\bullet</Filter>
+    </Image>
+    <Image Include="textures\img\bullkaspersky.png">
+      <Filter>Textures\img\bullet</Filter>
+    </Image>
+    <Image Include="textures\img\icongame.png">
       <Filter>Textures\img</Filter>
     </Image>
+    <Image Include="textures\img\select.png">
+      <Filter>Textures\img</Filter>
+    </Image>
+    <Image Include="textures\img\avastCell.png">
+      <Filter>Textures\img\tower</Filter>
+    </Image>
+    <Image Include="textures\img\defenderCell.png">
+      <Filter>Textures\img\tower</Filter>
+    </Image>
+    <Image Include="textures\img\dr webCell.png">
+      <Filter>Textures\img\tower</Filter>
+    </Image>
+    <Image Include="textures\img\kasperskyCell.png">
+      <Filter>Textures\img\tower</Filter>
+    </Image>
+    <Image Include="textures\img\remove.png">
+      <Filter>Textures\img\tower</Filter>
+    </Image>
+    <Image Include="textures\img\upgrade.png">
+      <Filter>Textures\img\tower</Filter>
+    </Image>
+    <Image Include="textures\img\first.png">
+      <Filter>Textures\img\map</Filter>
+    </Image>
+    <Image Include="textures\img\firstone.png">
+      <Filter>Textures\img\map</Filter>
+    </Image>
+    <Image Include="textures\img\firsttwo.png">
+      <Filter>Textures\img\map</Filter>
+    </Image>
+    <Image Include="textures\img\second.png">
+      <Filter>Textures\img\map</Filter>
+    </Image>
+    <Image Include="textures\img\third.png">
+      <Filter>Textures\img\map</Filter>
+    </Image>
+    <Image Include="textures\img\graph_frame.png">
+      <Filter>Textures\img</Filter>
+    </Image>
+    <Image Include="textures\img\Cave.png">
+      <Filter>Textures\img</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="sound\source\(поражение) ist oficial, you suck.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\__doubleShoot.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\__manyShoot.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\forMaxPrivetstvie.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\forMaxStartGame.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\shoot01.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\shoot02.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\раунд 1.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\раунд 2.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\раунд 3.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\смех.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\чистая победа.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\truum.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\upgrade.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="sound\source\errr.mp3">
+      <Filter>sound\source</Filter>
+    </Media>
+    <Media Include="textures\video\ad_01.mp4">
+      <Filter>Textures\video</Filter>
+    </Media>
+    <Media Include="textures\video\ad_02.mp4">
+      <Filter>Textures\video</Filter>
+    </Media>
+    <Media Include="textures\video\ad_03.mp4">
+      <Filter>Textures\video</Filter>
+    </Media>
+    <Media Include="textures\video\ad_04.mp4">
+      <Filter>Textures\video</Filter>
+    </Media>
+    <Media Include="textures\video\ad_05.mp4">
+      <Filter>Textures\video</Filter>
+    </Media>
+    <Media Include="textures\video\ad_06.mp4">
+      <Filter>Textures\video</Filter>
+    </Media>
+    <Media Include="textures\video\ad_07.mp4">
+      <Filter>Textures\video</Filter>
+    </Media>
+    <Media Include="textures\video\ad_08.mp4">
+      <Filter>Textures\video</Filter>
+    </Media>
+    <Media Include="textures\video\ad_09.mp4">
+      <Filter>Textures\video</Filter>
+    </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="textures\font\font.ttf">
+      <Filter>Textures\font</Filter>
+    </Font>
+    <Font Include="textures\font\font2.ttf">
+      <Filter>Textures\font</Filter>
+    </Font>
   </ItemGroup>
 </Project>

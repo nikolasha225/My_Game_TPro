@@ -1,4 +1,4 @@
-﻿#include "mainMenu.h"
+ï»¿#include "mainMenu.h"
 
 int main() {
 
@@ -36,7 +36,7 @@ int main() {
 	auto audio = [&isSoundOn, &soundToggle, &res] {
 		isSoundOn = !isSoundOn;
 		if (soundToggle) {
-			soundToggle->text.setString(isSoundOn ? L"Вкл" : L"Выкл");
+			soundToggle->text.setString(isSoundOn ? L"ÐÐºÐ»" : L"ÐÑÐºÐ»");
 		}
 		res.soundclick.setVolume(isSoundOn ? 100.f : 0.f);
 		res.soundstart.setVolume(isSoundOn ? 100.f : 0.f);
@@ -50,7 +50,7 @@ int main() {
 		std::string diffParam = std::to_string(difficulty);
 		system(("start \"\" /B " + std::string("My_Game_TPro.exe ") + diffParam + " " + playerId + " 1 " + soundParam + " >nul 2>&1").c_str());
 
-		//system("My_Game_TPro.exe 1 7 1");//тут надо добавить параметры (глянь как они у меня идут, там id и уровень сложности) (просто через пробел как стринг добавить)
+		//system("My_Game_TPro.exe 1 7 1");//ÑÑÑ Ð½Ð°Ð´Ð¾ Ð´Ð¾Ð±Ð°Ð²Ð¸ÑÑ Ð¿Ð°ÑÐ°Ð¼ÐµÑÑÑ (Ð³Ð»ÑÐ½Ñ ÐºÐ°Ðº Ð¾Ð½Ð¸ Ñ Ð¼ÐµÐ½Ñ Ð¸Ð´ÑÑ, ÑÐ°Ð¼ id Ð¸ ÑÑÐ¾Ð²ÐµÐ½Ñ ÑÐ»Ð¾Ð¶Ð½Ð¾ÑÑÐ¸) (Ð¿ÑÐ¾ÑÑÐ¾ ÑÐµÑÐµÐ· Ð¿ÑÐ¾Ð±ÐµÐ» ÐºÐ°Ðº ÑÑÑÐ¸Ð½Ð³ Ð´Ð¾Ð±Ð°Ð²Ð¸ÑÑ)
 		window.close();
 		exit(0);
 		};
@@ -135,5 +135,6 @@ int main() {
 	}
 
 	return 0;
+
 
 }
