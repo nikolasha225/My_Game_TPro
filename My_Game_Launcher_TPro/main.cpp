@@ -48,7 +48,7 @@ int main() {
 		if (playerId.empty()) playerId = "1";
 		std::string soundParam = isSoundOn ? "1" : "0"; // 1 - vkl  0 - vikl
 		std::string diffParam = std::to_string(difficulty);
-		system(("start \"\" /B " + std::string("My_Game_TPro.exe ") + diffParam + " " + playerId + " " + soundParam + " >nul 2>&1").c_str());
+		system(("start \"\" /B " + std::string("My_Game_TPro.exe ") + diffParam + " " + playerId + " 1 " + soundParam + " >nul 2>&1").c_str());
 
 		//system("My_Game_TPro.exe 1 7 1");//тут надо добавить параметры (глянь как они у меня идут, там id и уровень сложности) (просто через пробел как стринг добавить)
 		window.close();
