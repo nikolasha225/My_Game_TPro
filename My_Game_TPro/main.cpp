@@ -8,11 +8,14 @@ int main(int argc, char* argv[])
     //������� ��������� 
     uint8_t __difficult = 1;
     unsigned __id = 0;
+    uint8_t __level = 1;
 
     if (argc > 1) __difficult = static_cast<uint8_t>(std::stoi(argv[1]));
     if (argc > 2) __id = static_cast<unsigned>(std::stoi(argv[2]));
-    if (argc > 3) VOLUMEI = static_cast<bool>(std::stoi(argv[3]));
+    if (argc > 3) __level = static_cast<bool>(std::stoi(argv[3]));
+    if (argc > 4) VOLUMEI = static_cast<bool>(std::stoi(argv[4]));
 
+    LEVEL = __level;
 
     // SF ������� �����������
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
@@ -80,7 +83,8 @@ int main(int argc, char* argv[])
         std::string command = std::string("\"") + exePath + "\" " +
             std::to_string(__difficult) + " " +
             std::to_string(__id) + " " +
-            std::to_string(LEVEL);
+            std::to_string(LEVEL);+ " " +
+            std::to_string(VOLUMEI);
 
         system(("start \"\" /B " + command + " >nul 2>&1").c_str());
         exit(0); // ��������� ������� �������
@@ -111,16 +115,16 @@ int main(int argc, char* argv[])
             }
         }
 
-            if (OBJ_STACK.getCountOf(enemy) == 0 && TIME == 0) {// || (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::W)) {
+            if (OBJ_STACK.getCountOf(enemy) == 0 && TIME == 0 || (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::W)) {
                 if(LEVEL == 3)
                     GAME_STATE = OVER;
                 else
                     GAME_STATE = WIN;
                 break;
             }
-            if (HEALTH <= 0){// || (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::L))
+            if (HEALTH <= 0 || (EVENT.type == sf::Event::KeyPressed && EVENT.key.code == sf::Keyboard::L))
                 GAME_STATE = LOSE;
-        }
+        
 
         //##########CLEAR####################
 
