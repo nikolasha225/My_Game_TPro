@@ -13,10 +13,48 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="assets">
+      <UniqueIdentifier>{af2baf49-446e-470f-bf35-5df23bc7ace2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\img">
+      <UniqueIdentifier>{065caa44-3a2a-4bca-ab36-c178d628d180}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\sound">
+      <UniqueIdentifier>{a195c0dc-699b-414e-9d2f-0c2edf932120}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="mainMenu.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="mainMenu.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\img\icon.png">
+      <Filter>assets\img</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="assets\sound\click.wav">
+      <Filter>assets\sound</Filter>
+    </Media>
+    <Media Include="assets\sound\hello.wav">
+      <Filter>assets\sound</Filter>
+    </Media>
+    <Media Include="assets\sound\startgame.wav">
+      <Filter>assets\sound</Filter>
+    </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="records.json">
+      <Filter>Исходные файлы</Filter>
+    </None>
   </ItemGroup>
 </Project>

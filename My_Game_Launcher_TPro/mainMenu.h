@@ -1,0 +1,95 @@
+#pragma once
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+#include <vector>
+#include <functional>
+#include <cmath> // для sin
+#include <nlohmann/json.hpp>
+#include "Windows.h"
+
+using json = nlohmann::json;
+
+class MenuItem;
+class AdvancedMatrixBackground;
+
+struct GameRes {
+	sf::Font font;
+	sf::Sound soundclick;
+	sf::Sound soundhello;
+	sf::Sound soundstart;
+
+	sf::SoundBuffer bufferclick;
+	sf::SoundBuffer bufferhello;
+	sf::SoundBuffer bufferstart;
+};
+
+//working?)
+bool loadAssets(sf::RenderWindow& window, GameRes& assets);
+void handleMenu(sf::Event& event, sf::RenderWindow& window, std::string& screen, bool& needsRedraw, GameRes& res, std::vector<MenuItem>& mainmenu, std::vector<MenuItem>& settingsmenu, std::vector<MenuItem>& recordsmenu, std::vector<MenuItem>& ownersmenu, std::vector<MenuItem>& difficultyMenu, std::string& playerId, bool& editingId, sf::Text& idText, sf::Clock& cursorClock, bool& showCursor);
+void clickMenu(sf::RenderWindow& window, std::string& screen, bool& needsRedraw, GameRes& res, std::vector<MenuItem>& mainmenu, std::vector<MenuItem>& settingsmenu, std::vector<MenuItem>& recordsmenu, std::vector<MenuItem>& ownersmenu, std::vector<MenuItem>& difficultyMenu);
+void updateMenu(sf::RenderWindow& window, std::string& screen, float time, std::vector<MenuItem>& mainmenu, std::vector<MenuItem>& settingsmenu, std::vector<MenuItem>& recordsmenu, std::vector<MenuItem>& ownersmenu, std::vector<MenuItem>& difficultyMenu, std::string& playerId, bool& editingId, sf::Text& idText, sf::Clock& cursorClock, bool& showCursor);
+void drawMenu(sf::RenderWindow& window, std::string& screen, std::vector<MenuItem>& mainmenu, std::vector<MenuItem>& settingsmenu, std::vector<MenuItem>& recordsmenu, std::vector<MenuItem>& ownersmenu, std::vector<MenuItem>& difficultyMenu, sf::Text idText, bool editingId, GameRes& res);
+void updateRecords(std::vector<MenuItem>& recordsmenu, sf::Font& font);
+
+//all punkts of menus
+std::vector<MenuItem> createMain(GameRes& res, std::function<void()> difficultiesFunc, std::function<void()> settingsFunc, std::function<void()> recordsFunc, std::function<void()> ownersFunc, std::function<void()> exitFunc);
+std::vector<MenuItem> createDiff(GameRes& res, std::function<void()> easy, std::function<void()> medium, std::function<void()> hard, std::function<void()> back);
+std::vector<MenuItem> createSettings(GameRes& res, MenuItem*& soundToggle, std::function<void()> audio, std::function<void()> back);
+std::vector<MenuItem> createRecords(GameRes& res, std::function<void()> back);
+std::vector<MenuItem> createOwners(GameRes& res, std::function<void()> back);
+
+//for Items
+class MenuItem {
+public:
+    sf::Text text;
+    std::function<void()> onClick;
+    bool title;
+    bool hovered = false;
+    MenuItem(const sf::String& label, sf::Font& font, unsigned int size, const sf::Vector2f& pos, std::function<void()> callback, bool title);
+    bool isMouseOver(const sf::RenderWindow& window) const;
+    void update(float time);
+	bool gettitle() const;
+};
+
+//for RECORDS
+struct Record {
+	std::string playerId;
+	int total_kills;
+};
+
+//for matrix ;D
+struct SymbolChain {
+	std::vector<sf::Text> symbols;
+	std::vector<int> switchCounters;
+	std::vector<int> switchIntervals;
+	float positionY;
+	float speed;
+	bool active;
+};
+
+//sama matrix
+class AdvancedMatrixBackground {
+private:
+	struct SymbolChain {
+		std::vector<sf::Text> symbols;
+		std::vector<int> switchCounters;
+		std::vector<int> switchIntervals;
+		float positionY;
+		float speed;
+		bool active;
+	};
+	std::vector<SymbolChain> chains;
+	sf::Font font;
+	float spawnTimer;
+	float spawnInterval;
+	int columns;
+	std::vector<float> columnPositions;
+public:
+	AdvancedMatrixBackground();
+	void createNewChain(int column);
+	void updating(float deltaTime);
+	void draw(sf::RenderWindow& window);
+};

@@ -128,6 +128,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mainMenu.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="mainMenu.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\img\icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="assets\sound\click.wav" />
+    <Media Include="assets\sound\hello.wav" />
+    <Media Include="assets\sound\startgame.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="records.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

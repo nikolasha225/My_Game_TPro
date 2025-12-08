@@ -1,230 +1,140 @@
-#include <SFML/Graphics.hpp>
-#include <vector>
-#include <sstream>
-#include <iostream>
+ГЇВ»Вї#include "mainMenu.h"
 
-const std::vector<sf::Vector2f> wayPoints[3] =
-{
-    {
-        sf::Vector2f(200, 980),   // start
-        sf::Vector2f(200, 300),   // point1
-        sf::Vector2f(1720, 300),  // point2  
-        sf::Vector2f(1720, 880),  // point3
-        sf::Vector2f(500, 880),   // point4
-        sf::Vector2f(500, 520),   // point5
-        sf::Vector2f(1520, 520),  // point6
-        sf::Vector2f(1520, 600)   // end
-    },
-    {
-        sf::Vector2f(200, 980),   // start
-        sf::Vector2f(580, 300),   // point1
-        sf::Vector2f(960, 980),   // point2  
-        sf::Vector2f(1340, 300),  // point3
-        sf::Vector2f(1720, 880)   // end
-    },
-    {
-        sf::Vector2f(200, 980),   // start
-        sf::Vector2f(200, 300),   // point1
-        sf::Vector2f(1720, 300),  // point2
-        sf::Vector2f(1720, 600)   // end
-    }
-};
+int main() {
 
-int main(){
-    // Создаем окно
-    sf::RenderWindow window(sf::VideoMode(1920, 1080), "WayPoints Visualization - Press 1,2,3 to switch paths");
-    window.setFramerateLimit(60);
+	sf::RenderWindow window(sf::VideoMode(1020, 640), "LauncherMenu", sf::Style::None);
 
-    // Цвета для каждого пути
-    sf::Color pathColors[3] = {
-        sf::Color::Red,      // Путь 1
-        sf::Color::Green,    // Путь 2
-        sf::Color::Blue      // Путь 3
-    };
+	window.setFramerateLimit(60);
+	window.setVerticalSyncEnabled(true);
+	AdvancedMatrixBackground matrixBackground;
 
-    int currentPath = 0; // Текущий отображаемый путь (0, 1, 2)
-    bool showAllPaths = false; // Показывать все пути или только один
+	//sound, font
+	GameRes res;
+	if (!loadAssets(window, res)) {
+		return 1;
+	}
 
-    // Пробуем загрузить шрифт
-    sf::Font font;
-    bool fontLoaded = false;
+	std::string screen = "main";
+	bool needsRedraw = true;
+	std::vector<MenuItem> recordsmenu;
+	//============= function point menu =============
+	bool isSoundOn = true;
+	MenuItem* soundToggle = nullptr;
 
-    // Пробуем разные пути к шрифту
-    const char* fontPaths[] = {
-        "arial.ttf",
-        "C:/Windows/Fonts/arial.ttf",
-        "/usr/share/fonts/truetype/freefont/FreeMono.ttf"  // для Linux
-    };
+	// ============= SIMPLE ID =============
+	std::string playerId = "1";
+	bool editingId = false;
+	sf::Clock cursorClock;
+	bool showCursor = true;
+	sf::Text idText;
+	idText.setFont(res.font);
+	idText.setCharacterSize(18);
+	idText.setFillColor(sf::Color::White);
+	idText.setString("ID: " + playerId);
+	idText.setPosition(700.f, 570.f);
 
-    for (const char* fontPath : fontPaths) {
-        if (font.loadFromFile(fontPath)) {
-            fontLoaded = true;
-            break;
-        }
-    }
+	auto audio = [&isSoundOn, &soundToggle, &res] {
+		isSoundOn = !isSoundOn;
+		if (soundToggle) {
+			soundToggle->text.setString(isSoundOn ? L"ГђВ’ГђВєГђВ»" : L"ГђВ’Г‘В‹ГђВєГђВ»");
+		}
+		res.soundclick.setVolume(isSoundOn ? 100.f : 0.f);
+		res.soundstart.setVolume(isSoundOn ? 100.f : 0.f);
+		};
+	auto startGame = [&res, &window, &isSoundOn, &playerId](int difficulty) {
+		Sleep(100);//for progryz
+		res.soundstart.play();
+		
+		if (playerId.empty()) playerId = "1";
+		std::string soundParam = isSoundOn ? "1" : "0"; // 1 - vkl  0 - vikl
+		std::string diffParam = std::to_string(difficulty);
+		system(("start \"\" /B " + std::string("My_Game_TPro.exe ") + diffParam + " " + playerId + " 1 " + soundParam + " >nul 2>&1").c_str());
 
-    // Основной цикл
-    while (window.isOpen())
-    {
-        // Получаем позицию курсора мыши
-        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+		//system("My_Game_TPro.exe 1 7 1");//Г‘В‚Г‘ВѓГ‘В‚ ГђВЅГђВ°ГђВґГђВѕ ГђВґГђВѕГђВ±ГђВ°ГђВІГђВёГ‘В‚Г‘ВЊ ГђВїГђВ°Г‘ВЂГђВ°ГђВјГђВµГ‘В‚Г‘ВЂГ‘В‹ (ГђВіГђВ»Г‘ВЏГђВЅГ‘ВЊ ГђВєГђВ°ГђВє ГђВѕГђВЅГђВё Г‘Вѓ ГђВјГђВµГђВЅГ‘ВЏ ГђВёГђВґГ‘ВѓГ‘В‚, Г‘В‚ГђВ°ГђВј id ГђВё Г‘ВѓГ‘ВЂГђВѕГђВІГђВµГђВЅГ‘ВЊ Г‘ВЃГђВ»ГђВѕГђВ¶ГђВЅГђВѕГ‘ВЃГ‘В‚ГђВё) (ГђВїГ‘ВЂГђВѕГ‘ВЃГ‘В‚ГђВѕ Г‘В‡ГђВµГ‘ВЂГђВµГђВ· ГђВїГ‘ВЂГђВѕГђВ±ГђВµГђВ» ГђВєГђВ°ГђВє Г‘ВЃГ‘В‚Г‘ВЂГђВёГђВЅГђВі ГђВґГђВѕГђВ±ГђВ°ГђВІГђВёГ‘В‚Г‘ВЊ)
+		window.close();
+		exit(0);
+		};
 
-        // Обработка событий
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
+	auto easy = [&startGame]() {
+		startGame(1);
+		};
+	auto medium = [&startGame]() {
+		startGame(2);
+		};
+	auto hard = [&startGame]() {
+		startGame(3);
+		};
+	auto difficulties = [&screen]() {
+		screen = "difficulty";
+		};
+	auto openSettings = [&screen]() {
+		screen = "settings";
+		};
+	auto records = [&screen, &recordsmenu, &res]() {
+		updateRecords(recordsmenu, res.font);
+		screen = "records";
+		};
+	auto owners = [&screen]() {
+		screen = "owners";
+		};
+	auto exitGame = [&window]() {
+		window.close(); 
+		exit(0);
+		};
+	auto back = [&screen]() {
+		screen = "main";
+		};
+	
+	//==================MENU==================
+	std::vector<MenuItem> mainmenu = createMain(res, difficulties, openSettings, records, owners, exitGame);
+	std::vector<MenuItem> difficultyMenu = createDiff(res, easy, medium, hard, back);
+	std::vector<MenuItem> settingsmenu = createSettings(res, soundToggle, audio, back);
+	recordsmenu = createRecords(res, back);
+	std::vector<MenuItem> ownersmenu = createOwners(res, back);
+
+	sf::Clock clock;
+
+	screen = "main";//na vsyakiy
+
+	while (window.isOpen()) {
+		float time = clock.getElapsedTime().asSeconds();
+		float deltaTime = clock.restart().asSeconds();
+		sf::Event event;
+        while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
-
-            if (event.type == sf::Event::KeyPressed)
-            {
-                if (event.key.code == sf::Keyboard::Num1)
-                    currentPath = 0;
-                else if (event.key.code == sf::Keyboard::Num2)
-                    currentPath = 1;
-                else if (event.key.code == sf::Keyboard::Num3)
-                    currentPath = 2;
-                else if (event.key.code == sf::Keyboard::A)
-                    showAllPaths = !showAllPaths; // Переключение режима показа всех путей
-            }
-        }
-
-        // Очистка экрана
-        window.clear(sf::Color::White);
-
-        // Рисуем сетку для удобства
-        for (int x = 0; x <= 1920; x += 100)
-        {
-            sf::Vertex line[] = {
-                sf::Vertex(sf::Vector2f(x, 0), sf::Color(200, 200, 200)),
-                sf::Vertex(sf::Vector2f(x, 1080), sf::Color(200, 200, 200))
-            };
-            window.draw(line, 2, sf::Lines);
-        }
-        for (int y = 0; y <= 1080; y += 100)
-        {
-            sf::Vertex line[] = {
-                sf::Vertex(sf::Vector2f(0, y), sf::Color(200, 200, 200)),
-                sf::Vertex(sf::Vector2f(1920, y), sf::Color(200, 200, 200))
-            };
-            window.draw(line, 2, sf::Lines);
-        }
-
-        // Определяем какие пути рисовать
-        int startPath = showAllPaths ? 0 : currentPath;
-        int endPath = showAllPaths ? 3 : currentPath + 1;
-
-        // Рисуем выбранные пути
-        for (int pathIndex = startPath; pathIndex < endPath; ++pathIndex)
-        {
-            const auto& path = wayPoints[pathIndex];
-            sf::Color pathColor = pathColors[pathIndex];
-
-            // Рисуем линии между точками
-            for (size_t i = 0; i < path.size() - 1; ++i)
-            {
-                sf::Vertex line[] = {
-                    sf::Vertex(path[i], pathColor),
-                    sf::Vertex(path[i + 1], pathColor)
-                };
-                window.draw(line, 2, sf::Lines);
-            }
-
-            // Рисуем точки
-            for (size_t i = 0; i < path.size(); ++i)
-            {
-                sf::CircleShape point(8);
-                point.setFillColor(pathColor);
-                point.setOrigin(8, 8); // Центрируем точку
-                point.setPosition(path[i]);
-                window.draw(point);
-
-                // Подписи точек (только если шрифт загружен)
-                if (fontLoaded)
-                {
-                    sf::Text label;
-                    label.setFont(font);
-                    label.setString("P" + std::to_string(pathIndex + 1) + "-" + std::to_string(i));
-                    label.setCharacterSize(14);
-                    label.setFillColor(sf::Color::Black);
-                    label.setPosition(path[i].x + 15, path[i].y - 15);
-                    window.draw(label);
-                }
-            }
-        }
-
-        // Отображаем информацию о текущем режиме и координаты
-        if (fontLoaded)
-        {
-            // Информация о режиме
-            sf::Text infoText;
-            infoText.setFont(font);
-
-            std::string infoString;
-            if (showAllPaths) {
-                infoString = "Showing ALL paths (Press A to switch)";
+            //for id
+            if (screen == "main") {
+				handleMenu(event, window, screen, needsRedraw, res, mainmenu, settingsmenu, recordsmenu, ownersmenu, difficultyMenu, playerId, editingId, idText, cursorClock, showCursor);
             }
             else {
-                infoString = "Showing Path " + std::to_string(currentPath + 1) + " (Press 1,2,3 to switch, A for all)";
-            }
-
-            infoText.setString(infoString);
-            infoText.setCharacterSize(24);
-            infoText.setFillColor(sf::Color::Black);
-            infoText.setPosition(50, 30);
-            window.draw(infoText);
-
-            // Легенда цветов (только в режиме показа всех путей)
-            if (showAllPaths)
-            {
-                for (int i = 0; i < 3; ++i)
-                {
-                    sf::Text legendText;
-                    legendText.setFont(font);
-                    legendText.setString("Path " + std::to_string(i + 1));
-                    legendText.setCharacterSize(20);
-                    legendText.setFillColor(pathColors[i]);
-                    legendText.setPosition(50, 70 + i * 30);
-                    window.draw(legendText);
+                //for other
+                if (event.type == sf::Event::MouseButtonPressed &&
+                    event.mouseButton.button == sf::Mouse::Left) {
+                    clickMenu(window, screen, needsRedraw, res,
+                        mainmenu, settingsmenu, recordsmenu,
+                        ownersmenu, difficultyMenu);
                 }
             }
-
-            // Координаты курсора
-            std::stringstream coordStream;
-            coordStream << "Mouse: (" << mousePos.x << ", " << mousePos.y << ")";
-
-            sf::Text mouseCoordText;
-            mouseCoordText.setFont(font);
-            mouseCoordText.setString(coordStream.str());
-            mouseCoordText.setCharacterSize(20);
-            mouseCoordText.setFillColor(sf::Color::Black);
-            mouseCoordText.setPosition(50, 1080 - 40); // В нижнем левом углу
-            window.draw(mouseCoordText);
-        }
-        else
-        {
-            // Альтернативный способ отображения координат без шрифта
-            // Рисуем прямоугольник с координатами
-            std::stringstream coordStream;
-            coordStream << "X: " << mousePos.x << " Y: " << mousePos.y;
-
-            // Простой вывод в консоль (для отладки)
-            static sf::Vector2i lastMousePos(-1, -1);
-            if (mousePos != lastMousePos) {
-                std::cout << "Mouse coordinates: (" << mousePos.x << ", " << mousePos.y << ")" << std::endl;
-                lastMousePos = mousePos;
-            }
-
-            // Рисуем простой индикатор координат (квадратик с цветом)
-            sf::RectangleShape coordIndicator(sf::Vector2f(20, 20));
-            coordIndicator.setFillColor(sf::Color(mousePos.x % 255, mousePos.y % 255, 128));
-            coordIndicator.setPosition(1800, 20);
-            window.draw(coordIndicator);
         }
 
-        // Отображаем все на экране
-        window.display();
-    }
+		matrixBackground.updating(deltaTime);
+		//when naveli
+		updateMenu(window, screen, time, mainmenu, settingsmenu, recordsmenu, ownersmenu, difficultyMenu, playerId, editingId, idText, cursorClock, showCursor);
 
-    return 0;
+		// ============= RENDER =============
+		window.clear(sf::Color(30, 30, 30)); //fon navsyakiy
+		matrixBackground.draw(window);
+		sf::RectangleShape overlay(sf::Vector2f(1020, 640));
+		overlay.setFillColor(sf::Color(0, 0, 0, 128)); //dark
+		window.draw(overlay);
+
+		drawMenu(window, screen, mainmenu, settingsmenu, recordsmenu, ownersmenu, difficultyMenu, idText, editingId, res);
+
+		window.display();
+	}
+
+	return 0;
+
+
 }
