@@ -569,6 +569,94 @@ void renderOver(sf::RenderWindow* window, EnumGameState& gameState, std::functio
         return;
     }
 
+    sf::String player = L"Unknown";
+    int totalKilled = 0;
+
+    //#######################jSON#######################
+    try {
+        std::ifstream scoreFile("config/score.json");
+        if (scoreFile.is_open()) {
+            nlohmann::json scoreData;
+            scoreFile >> scoreData;
+            scoreFile.close();
+
+            if (scoreData.contains("players") && !scoreData["players"].empty()) {
+                auto players = scoreData["players"];
+
+                //find current
+                std::string currentPlayerId;
+
+                //if timestamp
+#ifdef TIME_STAMP_SCORE
+                std::string currentTimestamp = TIME_STAMP_SCORE;
+
+                for (auto& playerEntry : players.items()) {
+                    std::string playerId = playerEntry.key();
+                    auto& sessions = playerEntry.value();
+
+                    //check timestamp
+                    if (sessions.contains(currentTimestamp)) {
+                        currentPlayerId = playerId;
+                        auto& currentSession = sessions[currentTimestamp];
+
+                        player = sf::String::fromUtf8(playerId.begin(), playerId.end());
+
+                        //take killed
+                        if (currentSession.contains("enemies") &&
+                            currentSession["enemies"].contains("total_killed")) {
+                            totalKilled = currentSession["enemies"]["total_killed"];
+                        }
+                        break;
+                    }
+                }
+#endif
+
+                //if no found timestamp
+                if (currentPlayerId.empty()) {
+                    std::string lastPlayerId;
+                    long long maxTimestamp = 0;
+
+                    for (auto& playerEntry : players.items()) {
+                        std::string playerId = playerEntry.key();
+                        auto& sessions = playerEntry.value();
+
+                        for (auto& session : sessions.items()) {
+                            std::string timestampStr = session.key();
+                            try {
+                                long long timestamp = std::stoll(timestampStr);
+
+                                //exist game
+                                if (session.value().contains("game_result") &&
+                                    timestamp > maxTimestamp) {
+                                    maxTimestamp = timestamp;
+                                    lastPlayerId = playerId;
+
+                                    auto& lastSession = session.value();
+                                    player = sf::String::fromUtf8(playerId.begin(), playerId.end());
+
+                                    if (lastSession.contains("enemies") &&
+                                        lastSession["enemies"].contains("total_killed")) {
+                                        totalKilled = lastSession["enemies"]["total_killed"];
+                                    }
+                                }
+                            }
+                            catch (...) {
+                                continue;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Ошибка загрузки score.json: " << e.what() << std::endl;
+        player = L"Ошибка";
+        totalKilled = 0;
+    }
+
+    sf::String Killed = std::to_wstring(totalKilled);
+
     sf::RectangleShape overlay(sf::Vector2f(window->getSize()));
     overlay.setFillColor(sf::Color(0, 50, 0, 150)); // green
 
@@ -603,7 +691,16 @@ void renderOver(sf::RenderWindow* window, EnumGameState& gameState, std::functio
         MenuItem(L"Техническая информация:", font, 16, {centerX, startY + 5 * itemSpacing}, []() {}, true,
         sf::Color(200, 200, 200), sf::Color(200, 200, 200)),
 
-        MenuItem(L"Оператор: Alex, Убито мобов: 42", font, 14, {centerX, startY + 6 * itemSpacing}, []() {}, true,
+        MenuItem(L"ID Оператора:", font, 14, {centerX - 250.f, startY + 7 * itemSpacing - 30.f}, []() {}, true,
+        sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
+
+        MenuItem(player, font, 14, {centerX + 250.f, startY + 7 * itemSpacing - 30.f}, []() {}, true,
+        sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
+
+        MenuItem(L"Убито мобов:", font, 14, {centerX - 250.f, startY + 7 * itemSpacing}, []() {}, true,
+        sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
+
+        MenuItem(Killed, font, 14, {centerX + 250.f, startY + 7 * itemSpacing}, []() {}, true,
         sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
 
         //MenuItem(L"Оставить на произвол судьбы", font, 24, {centerX, startY + 8 * itemSpacing}, [&window]() { window->close(); }, false,
