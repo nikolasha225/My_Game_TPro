@@ -144,7 +144,7 @@
 			std::vector<Record> records;
 			try {
 				//read json)
-				std::ifstream file("../My_Game_TPro/config/score.json");
+				std::ifstream file("config/score.json");
 				if (!file.is_open()) {
 					std::cerr << "Не удалось открыть файл со статистикой" << std::endl;
 					return records;
