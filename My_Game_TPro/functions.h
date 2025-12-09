@@ -17,6 +17,7 @@
 #include <map>
 #include <random>
 #include <chrono>
+#include <ctime>
 
 // Очередь значений для графика
 #include <deque>
