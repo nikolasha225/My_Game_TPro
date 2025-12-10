@@ -345,94 +345,6 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
         return;
     }
 
-    sf::String player = L"Unknown";
-    int totalKilled = 0;
-
-    //#######################jSON#######################
-    try {
-        std::ifstream scoreFile("config/score.json");
-        if (scoreFile.is_open()) {
-            nlohmann::json scoreData;
-            scoreFile >> scoreData;
-            scoreFile.close();
-
-            if (scoreData.contains("players") && !scoreData["players"].empty()) {
-                auto players = scoreData["players"];
-
-                //find current
-                std::string currentPlayerId;
-
-                //if timestamp
-#ifdef TIME_STAMP_SCORE
-                std::string currentTimestamp = TIME_STAMP_SCORE;
-
-                for (auto& playerEntry : players.items()) {
-                    std::string playerId = playerEntry.key();
-                    auto& sessions = playerEntry.value();
-
-                    //check timestamp
-                    if (sessions.contains(currentTimestamp)) {
-                        currentPlayerId = playerId;
-                        auto& currentSession = sessions[currentTimestamp];
-
-                        player = sf::String::fromUtf8(playerId.begin(), playerId.end());
-
-                        //take killed
-                        if (currentSession.contains("enemies") &&
-                            currentSession["enemies"].contains("total_killed")) {
-                            totalKilled = currentSession["enemies"]["total_killed"];
-                        }
-                        break;
-                    }
-                }
-#endif
-
-                //if no found timestamp
-                if (currentPlayerId.empty()) {
-                    std::string lastPlayerId;
-                    long long maxTimestamp = 0;
-
-                    for (auto& playerEntry : players.items()) {
-                        std::string playerId = playerEntry.key();
-                        auto& sessions = playerEntry.value();
-
-                        for (auto& session : sessions.items()) {
-                            std::string timestampStr = session.key();
-                            try {
-                                long long timestamp = std::stoll(timestampStr);
-
-                                //exist game
-                                if (session.value().contains("game_result") &&
-                                    timestamp > maxTimestamp) {
-                                    maxTimestamp = timestamp;
-                                    lastPlayerId = playerId;
-
-                                    auto& lastSession = session.value();
-                                    player = sf::String::fromUtf8(playerId.begin(), playerId.end());
-
-                                    if (lastSession.contains("enemies") &&
-                                        lastSession["enemies"].contains("total_killed")) {
-                                        totalKilled = lastSession["enemies"]["total_killed"];
-                                    }
-                                }
-                            }
-                            catch (...) {
-                                continue;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    catch (const std::exception& e) {
-        std::cerr << "Ошибка загрузки score.json: " << e.what() << std::endl;
-        player = L"Ошибка";
-        totalKilled = 0;
-    }
-
-    sf::String Killed = std::to_wstring(totalKilled);
-
     // zatmenie
     sf::RectangleShape overlay(sf::Vector2f(window->getSize()));
     overlay.setFillColor(sf::Color(50, 0, 0, 150)); //red
@@ -463,6 +375,29 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
         restart = 2;
     }
 
+    std::vector<std::wstring> Phrases = {
+    L"Система пала! Обновите антивирус и попробуйте снова.",
+    L"Враг прорвал оборону! Надеемся, у вас есть бэкап.",
+    L"Поражение! Даже Касперский не смог бы спасти ситуацию.",
+    L"Ваш компьютер захвачен! Рекомендуем сменить пароль.",
+    L"Все пропало! Вирусы празднуют победу на вашем ПК.",
+    L"Киберпространство пало! Попробуйте после перезагрузки.",
+    L"Ваш антивирус нуждается в антивирусе! Система пала.",
+    L"Поражение! Но помните: учение свет, а неучение - тьма.",
+    L"Системные файлы в панике! Они уже эвакуируются.",
+    L"Хакеры ликуют! Ваши данные теперь на темном форуме.",
+    L"Брандмауэр погас! В следующий раз не экономьте на защите.",
+    L"Вирусы устроили вечеринку на диске C:! Форматируйте.",
+    L"Поражение! Зато теперь есть интересная история.",
+    L"Защита провалена! Но не волнуйтесь - это симуляция."
+    };
+
+    //random
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, Phrases.size() - 1);
+    std::wstring selectedPhrase = Phrases[dis(gen)];
+
     std::vector<MenuItem> loseMenu = {
         MenuItem(L"FATAL ERROR", font, 36, {centerX, startY - 50.f}, []() {}, true,
         sf::Color(255, 100, 100), sf::Color(255, 100, 100)),
@@ -473,19 +408,7 @@ void renderLose(sf::RenderWindow* window, EnumGameState& gameState, uint8_t Leve
         MenuItem(L"Попробовать снова", font, 32, {centerX, startY + 3 * itemSpacing}, [&gameState, &restart]() { LEVEL -= restart;IS_RESTART = 1; }, false,
         sf::Color(255, 255, 100), sf::Color(255, 255, 0)),
 
-        MenuItem(L"Техническая информация:", font, 16, {centerX, startY + 6 * itemSpacing}, []() {}, true,
-        sf::Color(200, 200, 200), sf::Color(200, 200, 200)),
-
-        MenuItem(L"ID Оператора:", font, 14, {centerX - 250.f, startY + 7 * itemSpacing - 30.f}, []() {}, true,
-        sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
-
-        MenuItem(player, font, 14, {centerX + 250.f, startY + 7 * itemSpacing - 30.f}, []() {}, true,
-        sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
-
-        MenuItem(L"Убито мобов:", font, 14, {centerX - 250.f, startY + 7 * itemSpacing}, []() {}, true,
-        sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
-
-        MenuItem(Killed, font, 14, {centerX + 250.f, startY + 7 * itemSpacing}, []() {}, true,
+        MenuItem(selectedPhrase, font, 14, {centerX, startY + 7 * itemSpacing - 30.f}, []() {}, true,
         sf::Color(150, 150, 150), sf::Color(150, 150, 150)),
 
         MenuItem(L"Оставить на произвол судьбы", font, 24, {centerX, startY + 8 * itemSpacing}, [&window]() { window->close(); }, false,
@@ -570,7 +493,7 @@ void renderOver(sf::RenderWindow* window, EnumGameState& gameState, std::functio
     }
 
     sf::RectangleShape overlay(sf::Vector2f(window->getSize()));
-    overlay.setFillColor(sf::Color(0, 50, 0, 150)); // green
+    overlay.setFillColor(sf::Color(0, 50, 0, 150)); //green
 
     sf::Vector2u windowSize = window->getSize();
     float menuWidth = 900.f;
