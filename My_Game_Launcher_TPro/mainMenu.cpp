@@ -727,7 +727,7 @@
 			MenuItem(L"Bucktor74", res.font, 28, { 100.f, 200.f }, []() {}, true),
 			MenuItem(L"Designer/Dev", res.font, 22, { 650.f, 200.f }, []() {}, true),
 			MenuItem(L"Broguss", res.font, 28, { 100.f, 250.f }, []() {}, true),
-			MenuItem(L"Developer", res.font, 22, { 650.f, 250.f }, []() {}, true),
+			MenuItem(L"Debugger/Dev", res.font, 22, { 650.f, 250.f }, []() {}, true),
 			MenuItem(L"Назад", res.font, 36, { 100.f, 550.f }, back, false)
 			};
 		}
